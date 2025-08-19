@@ -47,7 +47,7 @@ export default function Home() {
       <Hero />
       <Impact />
       
-      <section id="tech" className="py-24 bg-white">
+      <section id="tech" className="py-24 bg-gray-soft">
         <div className="container-custom space-y-32">
           <ProjectSticky
             title="Argus"

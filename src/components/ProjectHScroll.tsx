@@ -54,7 +54,16 @@ export default function ProjectHScroll({
   };
 
   return (
-    <div ref={containerRef} className="bg-white py-24">
+    <div 
+      ref={containerRef} 
+      className="py-24"
+      style={{
+        backgroundColor: '#FFFFFF',
+        backgroundImage: `
+          radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(250, 250, 250) 90%)
+        `,
+      }}
+    >
       <div className="container-custom">
         <motion.div
           className="text-center mb-16"

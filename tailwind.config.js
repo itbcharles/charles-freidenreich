@@ -13,6 +13,7 @@ module.exports = {
         'text-primary': '#111111',
         'text-secondary': '#666666',
         'border-light': '#E5E5E5',
+        'gray-soft': '#F9FAFB',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

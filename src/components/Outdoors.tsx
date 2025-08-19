@@ -74,7 +74,7 @@ export default function Outdoors() {
       </div>
 
       {/* Expeditions section */}
-      <div className="py-24 bg-white">
+      <div className="py-24 bg-gray-soft">
         <div className="container-custom">
           <motion.div
             className="text-center mb-16"
