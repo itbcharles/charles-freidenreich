@@ -48,7 +48,7 @@ function AnimatedCounter({ value, suffix, title, description, delay = 0 }: Metri
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
       transition={{ duration: 0.6, delay: delay * 0.1 }}
     >
-      <div className="text-metric text-[var(--accent-green)] mb-2">
+      <div className="text-metric text-accent-green mb-2">
         +{displayValue}{suffix}
       </div>
       <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>

@@ -96,7 +96,7 @@ export default function ProjectHScroll({
                     ) : (
                       <div className="h-full flex items-center justify-center">
                         <div className="text-center">
-                          <div className="w-16 h-16 bg-[var(--accent-green)] rounded-xl mx-auto mb-4 flex items-center justify-center">
+                          <div className="w-16 h-16 bg-accent-green rounded-xl mx-auto mb-4 flex items-center justify-center">
                             <span className="text-white text-xl font-bold">
                               {index + 1}
                             </span>
@@ -125,7 +125,7 @@ export default function ProjectHScroll({
                   onClick={() => scrollToSlide(index)}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
                     index === currentSlide
-                      ? 'bg-[var(--accent-green)] w-6'
+                      ? 'bg-accent-green w-6'
                       : 'bg-gray-300 hover:bg-gray-400'
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
@@ -176,7 +176,7 @@ export default function ProjectHScroll({
                   ) : (
                     <div className="h-full flex items-center justify-center">
                       <div className="text-center">
-                        <div className="w-12 h-12 bg-[var(--accent-green)] rounded-lg mx-auto mb-3 flex items-center justify-center">
+                        <div className="w-12 h-12 bg-accent-green rounded-lg mx-auto mb-3 flex items-center justify-center">
                           <span className="text-white font-bold">
                             {index + 1}
                           </span>
@@ -204,7 +204,7 @@ export default function ProjectHScroll({
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-16 text-center"
         >
-          <div className="bg-[var(--accent-green)]/5 rounded-xl p-8 max-w-3xl mx-auto mb-8">
+          <div className="bg-accent-green/5 rounded-xl p-8 max-w-3xl mx-auto mb-8">
             <h4 className="text-lg font-semibold text-gray-900 mb-3">Result</h4>
             <p className="text-gray-700 mb-4">{result}</p>
             <p className="text-sm text-gray-500">

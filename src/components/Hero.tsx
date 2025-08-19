@@ -36,7 +36,7 @@ export default function Hero() {
         style={{ y }}
         data-parallax
       >
-        <div className="w-full h-full bg-gradient-to-br from-[var(--accent-green)] to-transparent"></div>
+        <div className="w-full h-full bg-gradient-to-br from-accent-green to-transparent"></div>
       </motion.div>
 
       <div className="container-custom text-center relative z-10" id="main-content">
@@ -68,7 +68,7 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
-                className="text-[var(--accent-green)] font-medium text-lg"
+                className="text-accent-green font-medium text-lg"
               >
                 {keywords[currentKeyword]}
               </motion.span>
@@ -120,7 +120,7 @@ export default function Hero() {
 
       <motion.button
         onClick={handleSmoothScroll}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-gray-400 hover:text-[var(--accent-green)] transition-colors"
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-gray-400 hover:text-accent-green transition-colors"
         animate={{ y: [0, 5, 0] }}
         transition={{ repeat: Infinity, duration: 2 }}
         whileHover={{ scale: 1.1 }}

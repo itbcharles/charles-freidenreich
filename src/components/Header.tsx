@@ -57,7 +57,7 @@ export default function Header() {
           <div className="flex items-center justify-between">
             <motion.a
               href="#home"
-              className="text-xl font-semibold text-gray-900 hover:text-[var(--accent-green)] transition-colors"
+              className="text-xl font-semibold text-gray-900 hover:text-accent-green transition-colors"
               onClick={(e) => handleSmoothScroll(e, '#home')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -70,7 +70,7 @@ export default function Header() {
                 <motion.a
                   key={item.name}
                   href={item.href}
-                  className="text-sm font-medium text-gray-700 hover:text-[var(--accent-green)] transition-colors"
+                  className="text-sm font-medium text-gray-700 hover:text-accent-green transition-colors"
                   onClick={(e) => handleSmoothScroll(e, item.href)}
                   whileHover={{ y: -2 }}
                   whileTap={{ y: 0 }}
@@ -81,7 +81,7 @@ export default function Header() {
             </div>
 
             <motion.button
-              className="md:hidden p-2 text-gray-700 hover:text-[var(--accent-green)]"
+              className="md:hidden p-2 text-gray-700 hover:text-accent-green"
               whileTap={{ scale: 0.95 }}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

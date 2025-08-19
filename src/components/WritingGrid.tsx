@@ -67,7 +67,7 @@ export default function WritingGrid({ posts }: WritingGridProps) {
                     {formatDate(post.date)}
                   </div>
 
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-[var(--accent-green)] transition-colors">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-accent-green transition-colors">
                     {post.title}
                   </h3>
 
@@ -89,7 +89,7 @@ export default function WritingGrid({ posts }: WritingGridProps) {
                   )}
                 </div>
 
-                <div className="flex items-center text-[var(--accent-green)] text-sm font-medium group-hover:translate-x-1 transition-transform">
+                <div className="flex items-center text-accent-green text-sm font-medium group-hover:translate-x-1 transition-transform">
                   Read more
                   <ArrowRight size={16} className="ml-2" />
                 </div>

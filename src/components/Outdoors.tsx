@@ -99,8 +99,8 @@ export default function Outdoors() {
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                 transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
               >
-                <div className="w-16 h-16 bg-[var(--accent-green)]/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <div className="text-[var(--accent-green)]">
+                <div className="w-16 h-16 bg-accent-green/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <div className="text-accent-green">
                     {expedition.icon}
                   </div>
                 </div>
@@ -118,12 +118,12 @@ export default function Outdoors() {
 
           {/* Eagle Scout badge section */}
           <motion.div
-            className="text-center mt-16 p-8 bg-gradient-to-r from-[var(--accent-green)]/5 to-transparent rounded-2xl"
+            className="text-center mt-16 p-8 bg-gradient-to-r from-accent-green/5 to-transparent rounded-2xl"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <div className="w-20 h-20 bg-[var(--accent-green)] rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-20 h-20 bg-accent-green rounded-full flex items-center justify-center mx-auto mb-6">
               <span className="text-white text-2xl font-bold">ES</span>
             </div>
             

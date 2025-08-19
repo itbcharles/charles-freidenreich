@@ -76,13 +76,13 @@ export default function AboutContact() {
 
             {/* Profile image placeholder */}
             <motion.div
-              className="mt-8 w-48 h-48 bg-gradient-to-br from-[var(--accent-green)]/20 to-[var(--accent-green)]/5 rounded-2xl flex items-center justify-center"
+              className="mt-8 w-48 h-48 bg-gradient-to-br from-accent-green/20 to-accent-green/5 rounded-2xl flex items-center justify-center"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
               <div className="text-center">
-                <div className="w-20 h-20 bg-[var(--accent-green)] rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-20 h-20 bg-accent-green rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-2xl font-bold">CF</span>
                 </div>
                 <p className="text-gray-500 text-sm">Professional headshot</p>
@@ -157,7 +157,7 @@ export default function AboutContact() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--accent-green)] focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-green focus:border-transparent transition-colors"
                     placeholder="Your name"
                   />
                 </div>
@@ -173,7 +173,7 @@ export default function AboutContact() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--accent-green)] focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-green focus:border-transparent transition-colors"
                     placeholder="your@email.com"
                   />
                 </div>
@@ -189,7 +189,7 @@ export default function AboutContact() {
                     onChange={handleChange}
                     required
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--accent-green)] focus:border-transparent transition-colors resize-vertical"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-green focus:border-transparent transition-colors resize-vertical"
                     placeholder="Your message..."
                   />
                 </div>
@@ -229,7 +229,7 @@ export default function AboutContact() {
           animate={isInView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <p className="text-[var(--accent-green)] font-medium">
+          <p className="text-accent-green font-medium">
             Open to tech + business internships
           </p>
           <p className="text-gray-500 text-sm mt-2">

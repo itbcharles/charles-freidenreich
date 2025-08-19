@@ -58,7 +58,7 @@ export default function ProjectSticky({
             />
           ) : (
             <div className="text-center">
-              <div className="w-20 h-20 bg-[var(--accent-green)] rounded-2xl mx-auto mb-4 flex items-center justify-center">
+              <div className="w-20 h-20 bg-accent-green rounded-2xl mx-auto mb-4 flex items-center justify-center">
                 <span className="text-white text-2xl font-bold">
                   {title.charAt(0)}
                 </span>
@@ -87,7 +87,7 @@ export default function ProjectSticky({
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true, margin: '-50px' }}
-                className="border-l-2 border-[var(--accent-green)] pl-6"
+                className="border-l-2 border-accent-green pl-6"
               >
                 <h4 className="text-xl font-semibold text-gray-900 mb-3">
                   {step.title}
@@ -104,7 +104,7 @@ export default function ProjectSticky({
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true, margin: '-100px' }}
-            className="bg-[var(--accent-green)]/5 rounded-xl p-6"
+            className="bg-accent-green/5 rounded-xl p-6"
           >
             <h4 className="text-lg font-semibold text-gray-900 mb-3">Result</h4>
             <p className="text-gray-700 mb-4">{result}</p>
