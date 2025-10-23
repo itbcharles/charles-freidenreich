@@ -78,14 +78,8 @@ class SlideScroller {
             console.warn(`[slides] Wrapped ${wrapped} card(s) content inside .card-content for consistency.`);
         }
 
-        // 3) Normalize data-card attributes in DOM order (purely informational)
-        const normalized = Array.from(this.container.querySelectorAll('.card'));
-        normalized.forEach((card, i) => {
-            card.dataset.card = String(i + 1);
-        });
-
-        // Refresh references
-        this.cards = normalized;
+        // 3) Refresh card references - preserve user's data-card order
+        this.cards = Array.from(this.container.querySelectorAll('.card'));
         this.total = this.cards.length;
     }
 
