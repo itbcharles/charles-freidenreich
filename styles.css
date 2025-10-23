@@ -1,0 +1,267 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* No native smooth scroll; we control slides */
+
+body {
+    font-family: 'Oxygen', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #0a0a0a;
+    color: #e0e0e0;
+    /* Hide native scrollbars entirely */
+    overflow: hidden;
+    cursor: default;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Fixed viewport stack; JS drives transitions */
+.scroll-container {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.05);
+    z-index: 100;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 12.5%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    opacity: 0;
+    transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+}
+
+.card[data-card="1"],
+.card.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 2;
+}
+
+.card.prev,
+.card.next {
+    opacity: 0;
+    z-index: 1;
+}
+
+.card-content {
+    max-width: 650px;
+    width: 100%;
+    text-align: center;
+}
+
+/* keyframes no longer used; using transitions */
+
+h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #ffffff 0%, #888888 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+h2 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+p {
+    font-size: clamp(1rem, 2vw, 1.125rem);
+    line-height: 1.7;
+    font-weight: 300;
+    color: #b0b0b0;
+    letter-spacing: 0.01em;
+}
+
+.contact-links {
+    margin-top: 2rem;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.contact-links a {
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0.5rem 0;
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+.contact-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #ffffff;
+    transition: width 0.2s ease;
+}
+
+.contact-links a:hover {
+    color: #ffffff;
+}
+
+.contact-links a:hover::after {
+    width: 100%;
+}
+
+.nav-dots {
+    position: fixed;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 100;
+
+    /* Design tokens for dot rail */
+    --dot-size: 9px;              /* base diameter of each dot */
+    --rail-gap: calc(var(--dot-size) * 1.6);
+    --ring-min: 2px;              /* min ring thickness */
+    --ring-max: calc(var(--dot-size) * 0.9); /* max ring thickness */
+    --ring-range: calc(var(--ring-max) - var(--ring-min));
+    --scale-min: 1;               /* min active scale */
+    --scale-max: 1.25;            /* max active scale */
+    --scale-range: calc(var(--scale-max) - var(--scale-min));
+    --glow-min: 0px;              /* min glow radius */
+    --glow-max: calc(var(--dot-size) * 1.2);
+    --glow-range: calc(var(--glow-max) - var(--glow-min));
+
+    gap: var(--rail-gap);
+}
+
+.nav-dot {
+    width: var(--dot-size);
+    height: var(--dot-size);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.nav-dot::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.nav-dot:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.nav-dot.active {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* Integrated progress around active nav dot */
+.nav-dot { --p: 0; }
+
+.nav-dot.active::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--dot-size);
+    height: var(--dot-size);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(calc(var(--scale-min) + var(--scale-range) * var(--p)));
+    box-shadow:
+        0 0 0 calc(var(--ring-min) + var(--ring-range) * var(--p)) rgba(255,255,255,0.16),
+        0 0 calc(var(--glow-min) + var(--glow-range) * var(--p)) rgba(255,255,255, 0.12);
+    pointer-events: none;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .card {
+        padding: 20px;
+    }
+
+    .nav-dots {
+        right: 20px;
+        --dot-size: 7px;
+    }
+
+    .contact-links {
+        gap: 1.5rem;
+    }
+
+    
+}
+
+/* Smooth scrolling hint */
+@keyframes scrollHint {
+    0%, 100% {
+        transform: translateY(0);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translateY(10px);
+        opacity: 0.7;
+    }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .card,
+    .card-content,
+    .progress-bar {
+        transition: none !important;
+    }
+}
+
+.scroll-hint {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.875rem;
+    animation: scrollHint 2s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 50;
+}
+/* end integrated progress */
