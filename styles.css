@@ -38,9 +38,28 @@ body {
 .progress-bar {
     height: 100%;
     width: 12.5%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.22) 12%,
+        rgba(255, 255, 255, 0.5) 45%,
+        rgba(255, 255, 255, 0.22) 88%,
+        rgba(255, 255, 255, 0) 100%
+    );
     box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
     transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: inherit;
+    filter: blur(6px);
+    opacity: 0.55;
+    pointer-events: none;
 }
 
 .card {
