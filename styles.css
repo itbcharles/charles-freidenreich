@@ -73,6 +73,77 @@ body {
     max-width: 650px;
     width: 100%;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+/* Imagery */
+.hero-photo {
+    width: clamp(180px, 32vw, 280px);
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 1.25rem;
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.35),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    outline: 1px solid rgba(255, 255, 255, 0.08);
+    outline-offset: -1px;
+}
+
+.media-grid {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 1.25rem;
+}
+
+@media (min-width: 700px) {
+    .media-grid {
+        gap: 18px;
+    }
+}
+
+.image-card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0f0f0f;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    max-width: 500px;
+}
+
+.image-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-height: 50vh;
+    object-fit: contain;
+}
+
+.wide-media {
+    margin-top: 1.25rem;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0f0f0f;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wide-media img {
+    width: 100%;
+    height: auto;
+    max-height: 35vh;
+    object-fit: contain;
+    display: block;
 }
 
 /* keyframes no longer used; using transitions */
