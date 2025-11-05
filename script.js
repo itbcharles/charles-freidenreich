@@ -308,4 +308,187 @@ class SlideScroller {
 
 document.addEventListener('DOMContentLoaded', () => {
     new SlideScroller();
+    initEmailGuard();
 });
+
+function initEmailGuard() {
+    const trigger = document.getElementById('reveal-email');
+    const overlay = document.getElementById('email-guard');
+    if (!trigger || !overlay) return;
+
+    const dialog = overlay.querySelector('.email-guard__dialog');
+    const aEl = document.getElementById('eg-a');
+    const bEl = document.getElementById('eg-b');
+    const form = document.getElementById('email-guard-form');
+    const answer = document.getElementById('eg-answer');
+    const submit = document.getElementById('eg-submit');
+    const holdWrap = document.getElementById('eg-hold');
+    const holdBtn = document.getElementById('eg-hold-btn');
+    const holdProg = document.getElementById('eg-hold-progress');
+    const result = document.getElementById('eg-result');
+    const emailText = document.getElementById('eg-email-text');
+    const copyBtn = document.getElementById('eg-copy');
+    const copied = document.getElementById('eg-copied');
+    const closeBtn = document.getElementById('eg-close');
+
+    const EMAIL_B64 = 'Y2FmcmVpZGVucmVpY2grd0BnbWFpbC5jb20='; // cafreidenreich+w@gmail.com
+    const HOLD_MS = 2200;
+
+    let expected = 0;
+    let holdAnim = 0;
+    let holdStart = 0;
+    let holding = false;
+    let revealed = false;
+
+    function openGuard() {
+        // Generate a small random math question each time
+        const a = 7 + Math.floor(Math.random() * 13);  // 3..15
+        const b = 3 + Math.floor(Math.random() * 9);   // 3..11
+        expected = a + b;
+        aEl.textContent = String(a);
+        bEl.textContent = String(b);
+
+        // Reset UI
+        form.hidden = false;
+        holdWrap.hidden = true;
+        result.hidden = true;
+        submit.disabled = true;
+        answer.value = '';
+        copied.hidden = true;
+        copyBtn.disabled = true;
+        emailText.textContent = '';
+        revealed = false;
+
+        dialog.classList.remove('revealed');
+        overlay.setAttribute('aria-labelledby', 'email-guard-title');
+        overlay.hidden = false;
+        // Focus input after frame
+        setTimeout(() => answer.focus(), 0);
+    }
+
+    function closeGuard() {
+        overlay.hidden = true;
+        cancelHold();
+        revealed = false;
+        dialog.classList.remove('revealed');
+        overlay.setAttribute('aria-labelledby', 'email-guard-title');
+    }
+
+    function revealEmail() {
+        const email = atob(EMAIL_B64);
+        emailText.textContent = email;
+        copyBtn.disabled = false;
+        result.hidden = false;
+        revealed = true;
+        dialog.classList.add('revealed');
+        overlay.setAttribute('aria-labelledby', 'eg-email-text');
+        setTimeout(() => copyBtn.focus(), 0);
+    }
+
+    function mapProgress(p) {
+        if (p <= 0.2) {
+            return p;
+        }
+        if (p <= 0.35) {
+            return 0.2 + (p - 0.2) * 0.2; // 80% slowdown between 20-35%
+        }
+        if (p <= 0.6) {
+            const span = 0.25;
+            const start = 0.23;
+            return start + ((p - 0.35) / span) * (0.6 - start);
+        }
+        if (p <= 0.7) {
+            return 0.6 + (p - 0.6) * 0.1; // 90% slowdown between 60-70%
+        }
+        const normalized = (p - 0.7) / 0.3;
+        return 0.61 + normalized * (1 - 0.61);
+    }
+
+    function startHold() {
+        if (holding) return;
+        holding = true;
+        holdStart = performance.now();
+        holdProg.style.width = '0%';
+        const step = (ts) => {
+            if (!holding) return;
+            const elapsed = ts - holdStart;
+            const p = Math.max(0, Math.min(1, elapsed / HOLD_MS));
+            const display = mapProgress(p);
+            holdProg.style.width = `${(display * 100).toFixed(1)}%`;
+            if (p >= 1) {
+                holding = false;
+                revealEmail();
+                return;
+            }
+            holdAnim = requestAnimationFrame(step);
+        };
+        holdAnim = requestAnimationFrame(step);
+    }
+
+    function cancelHold() {
+        holding = false;
+        if (holdAnim) cancelAnimationFrame(holdAnim);
+        holdAnim = 0;
+        holdProg.style.width = '0%';
+    }
+
+    // Events
+    trigger.addEventListener('click', (e) => { e.preventDefault(); openGuard(); });
+    closeBtn.addEventListener('click', closeGuard);
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeGuard();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (!overlay.hidden && e.key === 'Escape') closeGuard();
+    });
+
+    answer.addEventListener('input', () => {
+        const val = parseInt(answer.value.replace(/\D+/g, ''), 10);
+        submit.disabled = !(Number.isFinite(val) && val === expected);
+        if (answer.classList.contains('eg-error')) answer.classList.remove('eg-error');
+        answer.removeAttribute('aria-invalid');
+    });
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const val = parseInt(answer.value.replace(/\D+/g, ''), 10);
+        if (!(Number.isFinite(val) && val === expected)) {
+            // Wrong answer: indicate error and keep form visible
+            answer.classList.add('eg-error');
+            answer.setAttribute('aria-invalid', 'true');
+            answer.focus();
+            answer.select?.();
+            return;
+        }
+        // Correct: proceed to hold stage
+        form.hidden = true;
+        holdWrap.hidden = false;
+        holdBtn.focus();
+    });
+
+    holdBtn.addEventListener('pointerdown', () => startHold());
+    holdBtn.addEventListener('pointerup', () => cancelHold());
+    holdBtn.addEventListener('pointerleave', () => cancelHold());
+    holdBtn.addEventListener('blur', () => cancelHold());
+    holdBtn.addEventListener('keydown', (e) => {
+        if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            startHold();
+        }
+    });
+    holdBtn.addEventListener('keyup', () => cancelHold());
+
+    copyBtn.addEventListener('click', async () => {
+        if (copyBtn.disabled || !revealed) return;
+        const email = atob(EMAIL_B64);
+        try {
+            await navigator.clipboard.writeText(email);
+            copied.hidden = false;
+            setTimeout(() => (copied.hidden = true), 1500);
+        } catch {
+            copied.textContent = 'Copy failed';
+            copied.hidden = false;
+            setTimeout(() => (copied.hidden = true), 1500);
+        }
+    });
+}

@@ -20,7 +20,7 @@
             <div class="card-content">
                 <img
                     class="hero-photo"
-                    src="public/images/FrontalPhotoOfMe.png"
+                    src="https://i.postimg.cc/D8pP2hvx/Frontal-Photo-Of-Me.png"
                     alt="Portrait of Charles Freidenreich"
                     width="512" height="512"
                     decoding="async"
@@ -44,7 +44,7 @@
                 <p>I consider my life as an Eagle Scout to be among the most important. Becoming an Eagle Scout took a decade of my life. Long trips—canoeing in Minesota , trekking in Northern Sweden, it taught me – a spoiled kid – that I couldn't simply complain to make my way out of discomfort. I learned to work really hard, for a long period of time. I consider Scouting to be my source of grit, determination, and willpower.</p>
                 <figure class="wide-media">
                     <img
-                        src="public/images/EagleScoutProject.png"
+                        src="https://i.postimg.cc/qzDxkrJZ/Eagle-Scout-Project.png"
                         alt="Eagle Scout project"
                         decoding="async"
                         loading="lazy"
@@ -60,7 +60,7 @@
                 <div class="media-grid">
                     <figure class="image-card">
                         <img
-                            src="public/images/SwedenNaturePhoto.png"
+                            src="https://i.postimg.cc/CzrsF0hr/Sweden-Nature-Photo.png"
                             alt="Northern Sweden nature scene"
                             decoding="async"
                             loading="lazy"
@@ -69,14 +69,16 @@
                 </div>
             </div>
         </div>
-
+ <!-- Maybe we'll add this back in later..........
         <div class="card" data-card="5">
             <div class="card-content">
                 <h2>Argus</h2>
                 <p>My main side project is Argus. I'm trying to build a tool that automates database compilation. The goal is to help people compile massive databases of niche information by searching the web with some elegant new techniques. The name Argus comes from Greek Mythos – a man who sees everything.</p>
             </div>
         </div>
-
+        
+        For those curious, I *am* still working on it, I just haven't established a public presence for it yet.
+-->
         <div class="card" data-card="6">
             <div class="card-content">
                 <h2>Now</h2>
@@ -90,7 +92,7 @@
                 <p>If you're working on something cool or are following up about a previous discussion we had, feel free to contact me here.</p>
                 <div class="contact-links">
                     <a href="https://linkedin.com/in/charles-freidenreich" target="_blank" rel="noopener">LinkedIn</a>
-                    <a href="mailto:cafreidenreich+w@gmail.com">Email</a>
+                    <a href="#" id="reveal-email" data-email-guard>Email</a>
                     <a href="https://instagram.com/charles.freiden" target="_blank" rel="noopener">Instagram</a>
                     <a href="https://github.com/itbcharles" target="_blank" rel="noopener">GitHub</a>
                 </div>
@@ -105,6 +107,30 @@
             <span class="nav-dot" data-target="6"></span>
             <span class="nav-dot" data-target="7"></span>
         </nav>
+    </div>
+
+    <!-- Email reveal guard (hidden by default) -->
+    <div id="email-guard" class="email-guard" role="dialog" aria-modal="true" aria-labelledby="email-guard-title" hidden>
+        <div class="email-guard__dialog">
+            <button class="email-guard__close" id="eg-close" aria-label="Close">✕</button>
+            <h3 id="email-guard-title">Are you real?</h3>
+            <p class="email-guard__prompt">What is <span id="eg-a"></span> + <span id="eg-b"></span>?</p>
+            <form id="email-guard-form" class="email-guard__form">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" id="eg-answer" autocomplete="off" placeholder="Your answer" required>
+                <button type="submit" id="eg-submit" disabled>Continue</button>
+            </form>
+            <div class="email-guard__hold" id="eg-hold" hidden>
+                <button id="eg-hold-btn" class="hold-btn" aria-label="Press and hold to reveal">
+                    Press and hold
+                    <span class="hold-progress" id="eg-hold-progress"></span>
+                </button>
+            </div>
+            <div class="email-guard__result" id="eg-result" hidden>
+                <span id="eg-email-text" class="email-text" aria-live="polite"></span>
+                <button id="eg-copy" disabled>Copy email</button>
+                <span id="eg-copied" class="copied" aria-live="polite" hidden>Copied</span>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

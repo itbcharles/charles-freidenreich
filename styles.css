@@ -30,15 +30,16 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.05);
+    height: 3px;
+    background: rgba(255, 255, 255, 0.06);
     z-index: 100;
 }
 
 .progress-bar {
     height: 100%;
     width: 12.5%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
     transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -126,24 +127,24 @@ body {
 }
 
 .wide-media {
-    margin-top: 1.25rem;
+    margin: 1.25rem auto 0 auto;
     border-radius: 12px;
     overflow: hidden;
     background: #0f0f0f;
     border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    width: fit-content;
     max-width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .wide-media img {
-    width: 100%;
+    width: auto;
     height: auto;
     max-height: 35vh;
+    max-width: 100%;
     object-fit: contain;
     display: block;
+    border-radius: 12px;
 }
 
 /* keyframes no longer used; using transitions */
@@ -223,8 +224,8 @@ p {
     z-index: 100;
 
     /* Design tokens for dot rail */
-    --dot-size: 9px;              /* base diameter of each dot */
-    --rail-gap: calc(var(--dot-size) * 1.6);
+    --dot-size: 11px;              /* base diameter of each dot */
+    --rail-gap: calc(var(--dot-size) * 1.8);
     --ring-min: 2px;              /* min ring thickness */
     --ring-max: calc(var(--dot-size) * 0.9); /* max ring thickness */
     --ring-range: calc(var(--ring-max) - var(--ring-min));
@@ -242,10 +243,11 @@ p {
     width: var(--dot-size);
     height: var(--dot-size);
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.4);
     cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
 }
 
 .nav-dot::before {
@@ -260,11 +262,13 @@ p {
 }
 
 .nav-dot:hover {
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
 }
 
 .nav-dot.active {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.4);
 }
 
 /* Integrated progress around active nav dot */
@@ -336,3 +340,145 @@ p {
     z-index: 50;
 }
 /* end integrated progress */
+
+/* Email reveal guard */
+.email-guard[hidden] { display: none; }
+.email-guard {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+    display: grid;
+    place-items: center;
+    z-index: 200;
+}
+.email-guard__dialog {
+    width: min(92vw, 420px);
+    background: #0f0f0f;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    padding: 16px;
+    color: #e0e0e0;
+    position: relative;
+}
+.email-guard__close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    color: #9a9a9a;
+    font-size: 18px;
+    cursor: pointer;
+}
+.email-guard__prompt { margin-top: 8px; color: #c8c8c8; }
+.email-guard__form {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+#eg-answer {
+    flex: 1;
+    background: #121212;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #e0e0e0;
+    border-radius: 8px;
+    padding: 8px 10px;
+}
+#eg-answer.eg-error {
+    border-color: #e57373;
+    box-shadow: 0 0 0 2px rgba(229, 115, 115, 0.15);
+}
+#eg-submit {
+    background: #1a1a1a;
+    border: 1px solid rgba(255,255,255,0.16);
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 0.7;
+}
+#eg-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.email-guard__hold { margin-top: 12px; text-align: left; }
+.hold-btn {
+    width: 100%;
+    position: relative;
+    background: #121212;
+    border: 1px solid rgba(255,255,255,0.16);
+    color: #fff;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    overflow: hidden;
+}
+.hold-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.14), rgba(255,255,255,0.35));
+    opacity: 0.6;
+    transition: width 0.05s linear;
+    pointer-events: none;
+}
+.email-guard__hold .hint {
+    margin-top: 6px;
+    color: #9a9a9a;
+    font-size: 0.9rem;
+}
+
+.email-guard__result {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+#eg-result .email-text {
+    color: #ffffff;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+}
+#eg-copy {
+    background: #1a1a1a;
+    border: 1px solid rgba(255,255,255,0.16);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+#eg-copy:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.copied { color: #9ae6b4; font-size: 0.9rem; }
+
+.email-guard__dialog.revealed {
+    width: min(92vw, 360px);
+    padding: 28px 20px;
+    text-align: center;
+}
+.email-guard__dialog.revealed > .email-guard__close,
+.email-guard__dialog.revealed > h3,
+.email-guard__dialog.revealed > .email-guard__prompt,
+.email-guard__dialog.revealed > .email-guard__form,
+.email-guard__dialog.revealed > .email-guard__hold {
+    display: none;
+}
+.email-guard__dialog.revealed .email-guard__result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+.email-guard__dialog.revealed .email-text {
+    font-size: 1.1rem;
+    word-break: break-word;
+}
+.email-guard__dialog.revealed #eg-copy {
+    width: 100%;
+}
