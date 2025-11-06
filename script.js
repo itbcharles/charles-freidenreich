@@ -7,15 +7,19 @@ class SlideScroller {
         this.dots = Array.from(document.querySelectorAll('.nav-dot'));
         this.total = this.cards.length;
         this.current = 1;
-        
+
+        // Detect mobile/touch device
+        this.isMobile = this.detectMobile();
+
         // Sidebar-dot progress: accumulate input into a non-directional progress ring.
         this.locked = false;
         this.lockTimer = null;
-        this.cooldown = 160; // brief guard after stepping to absorb momentum
+        this.cooldown = this.isMobile ? 120 : 160; // Faster response on mobile
 
         // Progress toward the next/prev step
         this.accumulated = 0; // pixels, positive=down, negative=up
-        this.pxPerStep = 900; // slower fill for deliberate step
+        // Much smaller threshold for mobile devices for easier swiping
+        this.pxPerStep = this.isMobile ? 280 : 900;
 
         // Minimal delta to consider (noise filter)
         this.wheelThreshold = 0.5; // accept tiny deltas; smooth visually
@@ -30,8 +34,18 @@ class SlideScroller {
         // Touch swipe thresholds
         this.touchThreshold = 20;
         this.touchVelocity = 0.25;
+        this.touchAmplify = this.isMobile ? 2.2 : 1.5; // More amplification on mobile
 
         this.init();
+    }
+
+    detectMobile() {
+        // Check for touch capability and screen size
+        const hasTouchScreen = ('ontouchstart' in window) ||
+                               (navigator.maxTouchPoints > 0) ||
+                               (navigator.msMaxTouchPoints > 0);
+        const isMobileScreen = window.innerWidth <= 768;
+        return hasTouchScreen || isMobileScreen;
     }
 
     init() {
@@ -110,6 +124,21 @@ class SlideScroller {
         window.addEventListener('touchmove', (e) => this.onTouchMove(e), { passive: false });
         window.addEventListener('touchend', (e) => this.onTouchEnd(e), { passive: true });
 
+        // Re-detect mobile on resize (e.g., device rotation)
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                const wasMobile = this.isMobile;
+                this.isMobile = this.detectMobile();
+                if (wasMobile !== this.isMobile) {
+                    this.pxPerStep = this.isMobile ? 280 : 900;
+                    this.cooldown = this.isMobile ? 120 : 160;
+                    this.touchAmplify = this.isMobile ? 2.2 : 1.5;
+                }
+            }, 150);
+        });
+
         window.addEventListener('keydown', (e) => {
             // Ignore auto-repeat so holding a key doesn't skip multiple
             if (e.repeat) return;
@@ -162,13 +191,38 @@ class SlideScroller {
         e.preventDefault();
         if (this.locked) return;
         const y = e.touches[0].clientY;
-        const dy = (this.touchPrevY - y) * 1.5; // subtle amplify for mobile feel
+        const dy = (this.touchPrevY - y) * this.touchAmplify; // amplify for mobile feel
         this.touchPrevY = y;
         if (Math.abs(dy) > 1) this.addInput(dy);
     }
 
     onTouchEnd(e) {
-        // no-op; accumulation already handled in move
+        // Velocity-based navigation for mobile: if user swipes fast enough, complete the step
+        if (!this.isMobile || this.locked) {
+            this.accumulated = 0;
+            this.setDotProgressTarget(0);
+            return;
+        }
+
+        const touchEndY = this.touchPrevY;
+        const touchDuration = performance.now() - this.touchStartTime;
+        const touchDistance = this.touchStartY - touchEndY;
+
+        // Calculate velocity (pixels per millisecond)
+        const velocity = Math.abs(touchDistance / touchDuration);
+
+        // If the swipe was fast enough (> 0.8 px/ms) and in a clear direction (> 50px),
+        // complete the navigation even if we haven't reached the full threshold
+        if (velocity > 0.8 && Math.abs(touchDistance) > 50) {
+            const direction = touchDistance > 0 ? 1 : -1;
+            this.completeStep(direction);
+        } else {
+            // Not fast enough - reset if we haven't reached the threshold
+            if (Math.abs(this.accumulated) < this.pxPerStep) {
+                this.accumulated = 0;
+                this.setDotProgressTarget(0);
+            }
+        }
     }
 
     addInput(deltaY) {

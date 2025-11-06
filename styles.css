@@ -316,19 +316,95 @@ p {
 /* Mobile Optimizations */
 @media (max-width: 768px) {
     .card {
-        padding: 20px;
+        padding: 24px 16px;
+        height: 100dvh; /* Use dynamic viewport height for mobile browsers */
+    }
+
+    .card-content {
+        max-height: 90vh;
+        overflow-y: auto;
+        /* Enable momentum scrolling on iOS */
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        padding: 0 8px;
     }
 
     .nav-dots {
-        right: 20px;
-        --dot-size: 7px;
+        right: 16px;
+        --dot-size: 10px; /* Larger for better touch targets */
+        gap: calc(var(--dot-size) * 2.2); /* More spacing for easier tapping */
+    }
+
+    /* Ensure touch targets are at least 44x44px */
+    .nav-dot::before {
+        width: 44px;
+        height: 44px;
     }
 
     .contact-links {
-        gap: 1.5rem;
+        gap: 1rem;
+        flex-direction: column;
+        align-items: center;
     }
 
-    
+    .contact-links a {
+        font-size: 1.125rem;
+        padding: 0.75rem 0;
+        min-height: 44px; /* Better touch target */
+        display: flex;
+        align-items: center;
+    }
+
+    .hero-photo {
+        width: clamp(160px, 50vw, 220px);
+        margin-bottom: 1rem;
+    }
+
+    .wide-media img {
+        max-height: 30vh;
+    }
+
+    .image-card img {
+        max-height: 40vh;
+    }
+
+    h1 {
+        font-size: clamp(1.75rem, 8vw, 2.5rem);
+        margin-bottom: 1.5rem;
+    }
+
+    h2 {
+        font-size: clamp(1.35rem, 6vw, 1.75rem);
+        margin-bottom: 1rem;
+    }
+
+    p {
+        font-size: clamp(1rem, 4vw, 1.125rem);
+        line-height: 1.6;
+    }
+
+    .progress-indicator {
+        height: 4px; /* Slightly thicker on mobile for visibility */
+    }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 400px) {
+    .card {
+        padding: 20px 12px;
+    }
+
+    .card-content {
+        padding: 0 4px;
+    }
+
+    .nav-dots {
+        right: 12px;
+    }
+
+    .contact-links {
+        gap: 0.75rem;
+    }
 }
 
 /* Smooth scrolling hint */
