@@ -394,14 +394,15 @@ p {
     .hero-photo {
         width: clamp(160px, 50vw, 220px);
         margin-bottom: 1rem;
+        max-height: 25vh;
     }
 
     .wide-media img {
-        max-height: 30vh;
+        max-height: 20vh;
     }
 
     .image-card img {
-        max-height: 40vh;
+        max-height: 22vh;
     }
 
     h1 {
@@ -590,6 +591,15 @@ p {
     .hero-photo {
         width: clamp(120px, 35vw, 180px);
         margin-bottom: 0.5rem;
+        max-height: 18vh;
+    }
+
+    .wide-media img {
+        max-height: 18vh !important;
+    }
+
+    .image-card img {
+        max-height: 18vh !important;
     }
 
     .nav-dots {
@@ -621,11 +631,11 @@ p {
     }
 
     .wide-media img {
-        max-height: 35vh !important;
+        max-height: 25vh !important;
     }
 
     .image-card img {
-        max-height: 35vh !important;
+        max-height: 25vh !important;
     }
 
     h1 {
