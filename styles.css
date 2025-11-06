@@ -316,7 +316,7 @@ p {
 /* Mobile Optimizations */
 @media (max-width: 768px) {
     .card {
-        padding: 24px 16px;
+        padding: 24px 16px 80px 16px; /* Extra bottom padding for nav dots */
         height: 100dvh; /* Use dynamic viewport height for mobile browsers */
     }
 
@@ -330,9 +330,15 @@ p {
     }
 
     .nav-dots {
-        right: 16px;
+        /* Move to bottom center on mobile */
+        right: auto;
+        left: 50%;
+        top: auto;
+        bottom: 24px;
+        transform: translateX(-50%);
+        flex-direction: row; /* Horizontal layout */
         --dot-size: 10px; /* Larger for better touch targets */
-        gap: calc(var(--dot-size) * 2.2); /* More spacing for easier tapping */
+        gap: calc(var(--dot-size) * 2.5); /* More spacing for easier tapping */
     }
 
     /* Ensure touch targets are at least 44x44px */
@@ -391,7 +397,7 @@ p {
 /* Extra small mobile devices */
 @media (max-width: 400px) {
     .card {
-        padding: 20px 12px;
+        padding: 20px 12px 80px 12px; /* Keep bottom padding for nav dots */
     }
 
     .card-content {
@@ -399,7 +405,8 @@ p {
     }
 
     .nav-dots {
-        right: 12px;
+        bottom: 20px; /* Slightly less bottom spacing on smaller screens */
+        gap: calc(var(--dot-size) * 2); /* Slightly tighter spacing */
     }
 
     .contact-links {
