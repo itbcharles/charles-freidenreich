@@ -57,20 +57,20 @@ class SlideScroller {
         // Configure scroll sensitivity based on device type
         switch (this.deviceType) {
             case 'mobile':
-                this.pxPerStep = 280;
+                this.pxPerStep = 224; // 20% less input than before
                 this.cooldown = 120;
                 this.touchAmplify = 2.2;
                 this.accumulated = 0; // Reset accumulation
                 break;
             case 'tablet':
-                this.pxPerStep = 500;
+                this.pxPerStep = 400; // 20% less input than before
                 this.cooldown = 140;
                 this.touchAmplify = 1.8;
                 this.accumulated = 0; // Reset accumulation
                 break;
             case 'desktop':
             default:
-                this.pxPerStep = 900;
+                this.pxPerStep = 720; // 20% less input than before
                 this.cooldown = 160;
                 this.touchAmplify = 1.5;
                 this.accumulated = 0; // Reset accumulation
