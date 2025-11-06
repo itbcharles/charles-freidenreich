@@ -349,12 +349,14 @@ p {
     }
 
     .card-content {
-        max-height: 90vh;
+        max-height: calc(100vh - 104px); /* 100vh - top padding - bottom padding */
         overflow-y: auto;
         /* Enable momentum scrolling on iOS */
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
         padding: 0 8px;
+        justify-content: flex-start; /* Align to top instead of center */
+        padding-top: 12px; /* Small top offset for breathing room */
     }
 
     .nav-dots {
@@ -564,6 +566,12 @@ p {
         padding: 16px 16px 70px 16px;
     }
 
+    .card-content {
+        max-height: calc(100vh - 86px);
+        justify-content: flex-start;
+        padding-top: 8px;
+    }
+
     h1 {
         font-size: 1.5rem;
         margin-bottom: 1rem;
@@ -597,8 +605,10 @@ p {
     }
 
     .card-content {
-        max-height: 80vh;
+        max-height: calc(100vh - 72px); /* 100vh - top and bottom padding */
         padding: 0 12px;
+        justify-content: flex-start;
+        padding-top: 8px;
     }
 
     .hero-photo {
