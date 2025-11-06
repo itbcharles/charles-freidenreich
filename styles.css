@@ -108,9 +108,10 @@ body {
 /* Imagery */
 .hero-photo {
     width: clamp(180px, 32vw, 280px);
-    height: auto;
+    height: clamp(180px, 32vw, 280px);
     border-radius: 12px;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
     display: block;
     margin: 0 auto 1.25rem;
     box-shadow:
@@ -140,14 +141,16 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
     max-width: 500px;
+    max-height: 50vh;
 }
 
 .image-card img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
     max-height: 50vh;
     object-fit: contain;
+    object-position: center;
 }
 
 .wide-media {
@@ -159,14 +162,15 @@ body {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
     width: fit-content;
     max-width: 100%;
+    max-height: 35vh;
 }
 
 .wide-media img {
     width: auto;
-    height: auto;
-    max-height: 35vh;
+    height: 100%;
     max-width: 100%;
     object-fit: contain;
+    object-position: center;
     display: block;
     border-radius: 12px;
 }
