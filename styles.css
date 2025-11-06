@@ -95,7 +95,7 @@ body {
 }
 
 .card-content {
-    max-width: 650px;
+    max-width: min(650px, 90vw);
     width: 100%;
     text-align: center;
     display: flex;
@@ -313,8 +313,36 @@ p {
     pointer-events: none;
 }
 
-/* Mobile Optimizations */
-@media (max-width: 768px) {
+/* Tablet Optimizations (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .card {
+        padding: 32px 24px;
+    }
+
+    .card-content {
+        max-width: min(600px, 85vw);
+    }
+
+    .nav-dots {
+        right: 24px;
+        --dot-size: 10px;
+    }
+
+    .hero-photo {
+        width: clamp(200px, 28vw, 260px);
+    }
+
+    h1 {
+        font-size: clamp(2.25rem, 4.5vw, 2.75rem);
+    }
+
+    h2 {
+        font-size: clamp(1.65rem, 3.5vw, 1.9rem);
+    }
+}
+
+/* Mobile Optimizations (max 767px) */
+@media (max-width: 767px) {
     .card {
         padding: 24px 16px 80px 16px; /* Extra bottom padding for nav dots */
         height: 100dvh; /* Use dynamic viewport height for mobile browsers */
@@ -445,6 +473,121 @@ p {
     animation: scrollHint 2s ease-in-out infinite;
     pointer-events: none;
     z-index: 50;
+}
+/* Large Desktop Optimizations (1440px+) */
+@media (min-width: 1440px) {
+    .card-content {
+        max-width: 750px;
+    }
+
+    .card {
+        padding: 50px;
+    }
+
+    .nav-dots {
+        right: 50px;
+        --dot-size: 12px;
+    }
+
+    h1 {
+        font-size: 3.25rem;
+        margin-bottom: 2.5rem;
+    }
+
+    h2 {
+        font-size: 2.25rem;
+        margin-bottom: 1.75rem;
+    }
+
+    p {
+        font-size: 1.2rem;
+        line-height: 1.75;
+    }
+
+    .contact-links {
+        gap: 2.5rem;
+    }
+
+    .contact-links a {
+        font-size: 1.125rem;
+    }
+}
+
+/* Ultra-wide Desktop (1920px+) */
+@media (min-width: 1920px) {
+    .card-content {
+        max-width: 850px;
+    }
+
+    .card {
+        padding: 60px;
+    }
+
+    .nav-dots {
+        right: 60px;
+    }
+}
+
+/* Short screens - reduce vertical spacing */
+@media (max-height: 700px) and (min-width: 768px) {
+    .card {
+        padding: 24px 40px;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero-photo {
+        width: clamp(150px, 25vw, 220px);
+        margin-bottom: 0.75rem;
+    }
+
+    .wide-media img {
+        max-height: 25vh;
+    }
+
+    .image-card img {
+        max-height: 30vh;
+    }
+}
+
+/* Very short mobile screens */
+@media (max-height: 600px) and (max-width: 767px) {
+    .card {
+        padding: 16px 16px 70px 16px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+    }
+
+    p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .hero-photo {
+        width: clamp(120px, 35vw, 180px);
+        margin-bottom: 0.5rem;
+    }
+
+    .nav-dots {
+        bottom: 16px;
+        --dot-size: 8px;
+    }
 }
 /* end integrated progress */
 
@@ -588,4 +731,25 @@ p {
 }
 .email-guard__dialog.revealed #eg-copy {
     width: 100%;
+}
+
+/* Responsive adjustments for email guard on large screens */
+@media (min-width: 1024px) {
+    .email-guard__dialog {
+        width: min(92vw, 480px);
+        padding: 20px;
+    }
+
+    #eg-answer {
+        padding: 10px 12px;
+    }
+
+    #eg-submit {
+        padding: 10px 16px;
+    }
+
+    .email-guard__dialog.revealed {
+        width: min(92vw, 420px);
+        padding: 32px 24px;
+    }
 }

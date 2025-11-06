@@ -8,18 +8,15 @@ class SlideScroller {
         this.total = this.cards.length;
         this.current = 1;
 
-        // Detect mobile/touch device
-        this.isMobile = this.detectMobile();
+        // Detect device type and screen size
+        this.deviceType = this.detectDeviceType();
 
         // Sidebar-dot progress: accumulate input into a non-directional progress ring.
         this.locked = false;
         this.lockTimer = null;
-        this.cooldown = this.isMobile ? 120 : 160; // Faster response on mobile
 
-        // Progress toward the next/prev step
-        this.accumulated = 0; // pixels, positive=down, negative=up
-        // Much smaller threshold for mobile devices for easier swiping
-        this.pxPerStep = this.isMobile ? 280 : 900;
+        // Set parameters based on device type
+        this.updateDeviceSettings();
 
         // Minimal delta to consider (noise filter)
         this.wheelThreshold = 0.5; // accept tiny deltas; smooth visually
@@ -34,18 +31,56 @@ class SlideScroller {
         // Touch swipe thresholds
         this.touchThreshold = 20;
         this.touchVelocity = 0.25;
-        this.touchAmplify = this.isMobile ? 2.2 : 1.5; // More amplification on mobile
 
         this.init();
     }
 
-    detectMobile() {
-        // Check for touch capability and screen size
+    detectDeviceType() {
+        // Check for touch capability
         const hasTouchScreen = ('ontouchstart' in window) ||
                                (navigator.maxTouchPoints > 0) ||
                                (navigator.msMaxTouchPoints > 0);
-        const isMobileScreen = window.innerWidth <= 768;
-        return hasTouchScreen || isMobileScreen;
+
+        const width = window.innerWidth;
+
+        // Categorize by screen width
+        if (width < 768) {
+            return 'mobile';
+        } else if (width < 1024) {
+            return hasTouchScreen ? 'tablet' : 'desktop';
+        } else {
+            return 'desktop';
+        }
+    }
+
+    updateDeviceSettings() {
+        // Configure scroll sensitivity based on device type
+        switch (this.deviceType) {
+            case 'mobile':
+                this.pxPerStep = 280;
+                this.cooldown = 120;
+                this.touchAmplify = 2.2;
+                this.accumulated = 0; // Reset accumulation
+                break;
+            case 'tablet':
+                this.pxPerStep = 500;
+                this.cooldown = 140;
+                this.touchAmplify = 1.8;
+                this.accumulated = 0; // Reset accumulation
+                break;
+            case 'desktop':
+            default:
+                this.pxPerStep = 900;
+                this.cooldown = 160;
+                this.touchAmplify = 1.5;
+                this.accumulated = 0; // Reset accumulation
+                break;
+        }
+    }
+
+    get isMobile() {
+        // Backwards compatibility - treat both mobile and tablet as "mobile" for touch handling
+        return this.deviceType === 'mobile' || this.deviceType === 'tablet';
     }
 
     init() {
@@ -124,17 +159,17 @@ class SlideScroller {
         window.addEventListener('touchmove', (e) => this.onTouchMove(e), { passive: false });
         window.addEventListener('touchend', (e) => this.onTouchEnd(e), { passive: true });
 
-        // Re-detect mobile on resize (e.g., device rotation)
+        // Re-detect device type on resize (e.g., device rotation, browser resize)
         let resizeTimer;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(() => {
-                const wasMobile = this.isMobile;
-                this.isMobile = this.detectMobile();
-                if (wasMobile !== this.isMobile) {
-                    this.pxPerStep = this.isMobile ? 280 : 900;
-                    this.cooldown = this.isMobile ? 120 : 160;
-                    this.touchAmplify = this.isMobile ? 2.2 : 1.5;
+                const previousType = this.deviceType;
+                this.deviceType = this.detectDeviceType();
+                if (previousType !== this.deviceType) {
+                    this.updateDeviceSettings();
+                    // Reset progress visual on device type change
+                    this.setDotProgressTarget(0);
                 }
             }, 150);
         });
