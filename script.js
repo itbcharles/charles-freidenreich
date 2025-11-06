@@ -208,7 +208,7 @@ class SlideScroller {
         const touchDuration = performance.now() - this.touchStartTime;
         const touchDistance = this.touchStartY - touchEndY;
 
-        // Calculate velocity (pixels per millisecond)
+        // Calculate velocity (pixels/ms)
         const velocity = Math.abs(touchDistance / touchDuration);
 
         // If the swipe was fast enough (> 0.8 px/ms) and in a clear direction (> 50px),
@@ -385,7 +385,7 @@ function initEmailGuard() {
     const copied = document.getElementById('eg-copied');
     const closeBtn = document.getElementById('eg-close');
 
-    const EMAIL_B64 = 'Y2FmcmVpZGVucmVpY2grd0BnbWFpbC5jb20='; // cafreidenreich+w@gmail.com
+    const EMAIL_B64 = 'Y2FmcmVpZGVucmVpY2grd0BnbWFpbC5jb20=';
     const HOLD_MS = 2200;
 
     let expected = 0;
@@ -395,7 +395,7 @@ function initEmailGuard() {
     let revealed = false;
 
     function openGuard() {
-        // Generate a small random math question each time
+        // Math generator for the captcha thing because I didnt want to use API
         const a = 7 + Math.floor(Math.random() * 13);  // 3..15
         const b = 3 + Math.floor(Math.random() * 9);   // 3..11
         expected = a + b;
@@ -416,7 +416,6 @@ function initEmailGuard() {
         dialog.classList.remove('revealed');
         overlay.setAttribute('aria-labelledby', 'email-guard-title');
         overlay.hidden = false;
-        // Focus input after frame
         setTimeout(() => answer.focus(), 0);
     }
 
@@ -507,14 +506,14 @@ function initEmailGuard() {
         e.preventDefault();
         const val = parseInt(answer.value.replace(/\D+/g, ''), 10);
         if (!(Number.isFinite(val) && val === expected)) {
-            // Wrong answer: indicate error and keep form visible
+            // Wrong answer
             answer.classList.add('eg-error');
             answer.setAttribute('aria-invalid', 'true');
             answer.focus();
             answer.select?.();
             return;
         }
-        // Correct: proceed to hold stage
+        // Correct answer, reveal the hold button 
         form.hidden = true;
         holdWrap.hidden = false;
         holdBtn.focus();
