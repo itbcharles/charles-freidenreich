@@ -1,4 +1,4 @@
-Well, it's a personal website, but having a lawyer for a mother has impacted how I see liability.
+Well, it's a personal website, but my mom (a lawyer) would kill me if I didn't have the license.
 
 
 
