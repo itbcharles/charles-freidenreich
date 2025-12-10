@@ -1,148 +1,11 @@
-<!-- A Charles Freidenreich creation. Enjoy your stay. -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charles Freidenreich</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div class="scroll-container" id="scrollContainer">
-        <div class="progress-indicator">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-
-        <div class="card" data-card="1">
-            <div class="card-content">
-                <img
-                    class="hero-photo"
-                    src="public/images/FrontalPhotoOfMe.png"
-                    alt="Portrait of Charles Freidenreich"
-                    decoding="async"
-                    loading="eager"
-                />
-                <h1>Charles Freidenreich</h1>
-                <p>I've always been curious about how things work, especially how businesses make decisions. I spend my time learning about difficult problems, AI, politics, and business. I also enjoy going on really hard hikes. My record is 29 miles & 15,000ft in a day.</p>
-            </div>
-        </div>
-
-        <div class="card" data-card="2">
-            <div class="card-content">
-                <h2>What I'm Drawn To</h2>
-                <p>I'm drawn to the puzzle of efficiency. I think we should be able to use good information to make better decisions – in businesses, NGOs, and governments.
-                     Solving complex problems and making difficult deicisons is what I tend to be interested in.</p>
-            </div>
-        </div>
-
-        <div class="card" data-card="3">
-            <div class="card-content">
-                <h2>Eagle Scout</h2>
-                <p>I consider being an Eagle Scout to be a big part of who I am. Becoming an Eagle Scout took a decade of my life. Long trips—canoeing in Minnesota, trekking in Northern Sweden, it taught me – a spoiled kid – that I couldn't simply complain to make my way out of discomfort. I learned to work really hard, for a long period of time. I consider Scouting to be my source of grit, determination, and willpower.</p>
-                <figure class="wide-media">
-                    <img
-                        src="public/images/EagleScoutProject.png"
-                        alt="Eagle Scout project"
-                        decoding="async"
-                        loading="lazy"
-                    />
-                </figure>
-            </div>
-        </div>
-
-        <div class="card" data-card="4">
-            <div class="card-content">
-                <h2>Outdoors</h2>
-                <p>I spent a lot of time outdoors as a Scout – I still do – but as I get older I realize what it means to me. I deeply care about the outdors, and being able to spend time in remote areas of it helps make me who I am. There's nothing quite like almost dying on a cliff side with your closest friends, or getting sniffed by a black bear in the middle of the night.</p>
-                <div class="media-grid">
-                    <figure class="image-card">
-                        <img
-                            src="public/images/SwedenNaturePhoto.png"
-                            alt="Northern Sweden nature scene"
-                            decoding="async"
-                            loading="lazy"
-                        />
-                    </figure>
-                </div>
-            </div>
-        </div>
- <!-- Maybe we'll add this back in later..........
-        <div class="card" data-card="5">
-            <div class="card-content">
-                <h2>Argus</h2>
-                <p>My main side project is Argus. I'm trying to build a tool that automates database compilation. The goal is to help people compile massive databases of niche information by searching the web with some elegant new techniques. The name Argus comes from Greek Mythos – a man who sees everything.</p>
-            </div>
-        </div>
-        
-        For those curious, I *am* still working on it, I just haven't established a public presence for it yet.
--->
-        <div class="card" data-card="6">
-            <div class="card-content">
-                <h2>Now</h2>
-                <p>Right now, I'm an undergraduate studying business and continuing to tinker with side projects. I'm mostly focused on learning, understanding our world, and meeting people I can learn from.</p>
-            </div>
-        </div>
-
-        <div class="card" data-card="7">
-            <div class="card-content">
-                <h2>Contact</h2>
-                <p>If you're working on something cool or are following up about a previous discussion we had, feel free to contact me here.</p>
-                <div class="contact-links">
-                    <a href="https://linkedin.com/in/charles-freidenreich" target="_blank" rel="noopener">LinkedIn</a>
-                    <a href="#" id="reveal-email" data-email-guard>Email</a>
-                    <a href="https://instagram.com/charles.freiden" target="_blank" rel="noopener">Instagram</a>
-                    <a href="https://github.com/itbcharles" target="_blank" rel="noopener">GitHub</a>
-                </div>
-            </div>
-        </div>
-        <nav class="nav-dots">
-            <span class="nav-dot active" data-target="1"></span>
-            <span class="nav-dot" data-target="2"></span>
-            <span class="nav-dot" data-target="3"></span>
-            <span class="nav-dot" data-target="4"></span>
-            <span class="nav-dot" data-target="5"></span>
-            <span class="nav-dot" data-target="6"></span>
-            <span class="nav-dot" data-target="7"></span>
-        </nav>
-    </div>
-
-    <!-- Email reveal guard (hidden by default) -->
-    <div id="email-guard" class="email-guard" role="dialog" aria-modal="true" aria-labelledby="email-guard-title" hidden>
-        <div class="email-guard__dialog">
-            <button class="email-guard__close" id="eg-close" aria-label="Close">✕</button>
-            <h3 id="email-guard-title">Are you real?</h3>
-            <p class="email-guard__prompt">What is <span id="eg-a"></span> + <span id="eg-b"></span>?</p>
-            <form id="email-guard-form" class="email-guard__form">
-                <input type="text" inputmode="numeric" pattern="[0-9]*" id="eg-answer" autocomplete="off" placeholder="Your answer" required>
-                <button type="submit" id="eg-submit" disabled>Continue</button>
-            </form>
-            <div class="email-guard__hold" id="eg-hold" hidden>
-                <button id="eg-hold-btn" class="hold-btn" aria-label="Press and hold to reveal">
-                    Press and hold
-                    <span class="hold-progress" id="eg-hold-progress"></span>
-                </button>
-            </div>
-            <div class="email-guard__result" id="eg-result" hidden>
-                <span id="eg-email-text" class="email-text" aria-live="polite"></span>
-                <button id="eg-copy" disabled>Copy email</button>
-                <span id="eg-copied" class="copied" aria-live="polite" hidden>Copied</span>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Charles Freidenreich</title><link rel="stylesheet" href="styles.css"></head><body><button id="theme">☀</button><main><div class="row"><div class="col-text"><h1>Charles Freidenreich</h1><section><h2>About</h2><ul><li>Business undergraduate</li><li>Interested in AI and business</li><li>Eagle Scout</li><li>Record hike: 29 miles, 15,000ft elevation in one day</li></ul></section><section><h2>Interests</h2><ul><li>Using good information to make better decisions</li><li>Efficiency in businesses, NGOs, governments</li><li>Solving complex problems</li></ul></section></div><div class="col-img"><img src="public/images/FrontalPhotoOfMe.png" alt="Charles Freidenreich" class="photo-large"></div></div><div class="row reverse"><div class="col-text"><section><h2>Scouting</h2><ul><li>Backpacking, canoeing, sailing; Sweden, Minnesota, Florida</li><li>Learned grit and determination through extended discomfort</li><li>Care deeply about remote outdoor areas</li></ul></section></div><div class="col-img"><img src="public/images/SwedenNaturePhoto.png" alt="Northern Sweden" class="photo-large"></div></div><div class="row"><div class="col-text"><section><h2>Now</h2><ul><li>Studying business</li><li>Working on AI projects</li><li>Learning as much as I can, as quickly as possible</li></ul></section><section><h2>Contact</h2><ul><li><a href="https://linkedin.com/in/charles-freidenreich" target="_blank">LinkedIn</a></li><li><a href="#" id="email-link">Email</a></li><li><a href="https://github.com/itbcharles" target="_blank">GitHub</a></li><li><a href="https://instagram.com/charles.freiden" target="_blank">Instagram</a></li></ul></section></div></div><div id="captcha" hidden><p>Verify: <span id="q"></span> = ?</p><input type="text" id="ans" autocomplete="off"><button id="verify">Submit</button><button id="close">Cancel</button><p id="email-result"></p></div></main><script src="script.js"></script></body></html>
 <!--                                                                              
           ::::::::::::::::+xxx;;+xxxXx:::::::::::::::::::::::::::::::::          
           ::::::::::::::;Xx+;:::;;:::;+++;:::::::::::::::::::::::::::::          
           :::::::::::;x+X$$X+xxx;::::::::::X&X:::::::::::::::::::::::::          
           :::::::::::+$&&&&x+xxxXXxx;:::;:+$&&x::::::::::::::::::::::::          
           ::::::::::;$&&&&&&&&&&&$$$XX$$x;;;+xXXx::::::::::::::::::::::          
-          :::::::::::x$&&&&&&&&&&&&&&&&&$$+;:::;;X&+::::::::::::::::::          
+          :::::::::::x$&&&&&&&&&&&&&&&&&$$+;:::;;X&+:::::::::::::::::::          
           :::::::::::x$&$x:::+X$&&&$&&&&&&$+;xX;;;$&+::::::::::::::::::          
           :::::::::::::+;++::::+&&$xX&&&&&x;x;;;:::+;::::::::::::::::::          
           ::::::::::::xx;::::::;&XX$$&&&&x;+xXX;:::;;::::::::::::::::::          
@@ -193,5 +56,4 @@
           ::::::::::::::+&&&&&$XXx+;:::::X$$$$$$$x+;:::::::::::::::::::          
           :::::::::::::::xXXx+;::::::::::::;;+x+++;::::::::::::::::::::          
           :::::::::::::::xXx+::::::::::::::::::::::::::::::::::::::::::          
-A Charles Freidenreich creation. Enjoy your stay.
--->  
+-->
