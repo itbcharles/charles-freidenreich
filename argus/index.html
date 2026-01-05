@@ -2,99 +2,1150 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ArgusSheets Alpha</title>
+    <meta name="description" content="ArgusSheets alpha preview: run a mission and get a structured dataset.">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; line-height: 1.6; color: #333; }
-        h1 { margin-bottom: 20px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="text"], input[type="password"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { background-color: #0070f3; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
-        button:hover { background-color: #005bb5; }
-        button:disabled { background-color: #ccc; cursor: not-allowed; }
-        #status { margin-top: 20px; padding: 15px; border-radius: 4px; display: none; }
-        .loading { color: #666; background: #f9f9f9; }
-        .error { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
-        .success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
-        .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid #ccc; border-top-color: #333; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 8px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Space+Grotesk:wght@400;500;600&display=swap');
+
+        :root {
+            --bg: #f6f0e6;
+            --bg-2: #f0e1d2;
+            --ink: #1a1a1a;
+            --muted: #5b5047;
+            --accent: #e05a2a;
+            --accent-2: #14736b;
+            --card: #fffaf4;
+            --outline: #e3d4c5;
+            --shadow: 0 24px 60px rgba(34, 21, 12, 0.16);
+            --serif: "Fraunces", "Times New Roman", serif;
+            --sans: "Space Grotesk", "Helvetica Neue", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: var(--sans);
+            color: var(--ink);
+            background: var(--bg);
+            line-height: 1.5;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(224, 90, 42, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 10%, rgba(20, 115, 107, 0.18), transparent 50%),
+                linear-gradient(120deg, var(--bg) 0%, var(--bg-2) 45%, var(--bg) 100%);
+            z-index: -1;
+        }
+
+        .frame {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 32px 20px 80px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            font-family: var(--serif);
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
+        }
+
+        .alpha-badge {
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: #1f1a16;
+            color: #fef8f2;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 28px;
+            margin-bottom: 28px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--outline);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero h1 {
+            font-family: var(--serif);
+            font-size: clamp(2.2rem, 3vw, 3.3rem);
+            margin: 0 0 12px;
+        }
+
+        .hero p {
+            margin: 0 0 20px;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .metrics {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .metric {
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: #f7e9da;
+            border: 1px solid #e9d2bd;
+            font-weight: 600;
+        }
+
+        .feature-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .feature {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .feature .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-2);
+            margin-top: 7px;
+            flex: 0 0 10px;
+        }
+
+        .form-card h2,
+        .output h2 {
+            font-size: 1.2rem;
+            margin: 0 0 6px;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .muted.small {
+            font-size: 0.85rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin: 16px 0 6px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--outline);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background: #fff;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .chip {
+            border: 1px solid #e2cbb4;
+            background: #fdf6ee;
+            color: #5a3a22;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .chip:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .button {
+            border: none;
+            background: var(--accent);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 999px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .button.secondary {
+            background: transparent;
+            color: var(--ink);
+            border: 1px solid var(--outline);
+            box-shadow: none;
+        }
+
+        .button.small {
+            padding: 8px 14px;
+            font-size: 0.85rem;
+        }
+
+        .button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(224, 90, 42, 0.22);
+        }
+
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status {
+            margin-top: 18px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            display: none;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .status.loading {
+            display: flex;
+            background: #eff6f5;
+            border: 1px solid #c6ddda;
+            color: #1f4b4a;
+        }
+
+        .status.error {
+            display: flex;
+            background: #fff1f1;
+            border: 1px solid #f0b8b8;
+            color: #7a1e1e;
+        }
+
+        .status.success {
+            display: flex;
+            background: #eef8f0;
+            border: 1px solid #b8ddc1;
+            color: #1f5b2b;
+        }
+
+        .error-panel {
+            margin-top: 14px;
+            padding: 14px;
+            border-radius: 16px;
+            border: 1px solid #f0b8b8;
+            background: #fff9f9;
+        }
+
+        .error-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .error-title {
+            font-weight: 600;
+        }
+
+        .error-hint {
+            color: #7a1e1e;
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        .error-code {
+            margin: 0;
+            background: #fff4f4;
+            border: 1px dashed #f0b8b8;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(31, 75, 74, 0.3);
+            border-top-color: #1f4b4a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .advanced {
+            margin-top: 18px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            border: 1px dashed #e3d4c5;
+            background: #fff6ec;
+        }
+
+        .advanced summary {
+            cursor: pointer;
+            font-weight: 600;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .advanced summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .advanced summary::after {
+            content: "+";
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .advanced[open] summary::after {
+            content: "-";
+        }
+
+        .control-grid {
+            margin-top: 14px;
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .control {
+            padding: 12px;
+            border-radius: 14px;
+            border: 1px solid #eadccf;
+            background: #fff;
+        }
+
+        .control.full {
+            grid-column: 1 / -1;
+        }
+
+        .control-title {
+            font-weight: 600;
+        }
+
+        .segmented {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .segmented label {
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .segmented input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .segmented span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid #e2cbb4;
+            background: #fdf6ee;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .segmented input:checked + span {
+            background: #1f1a16;
+            color: #fef8f2;
+            border-color: #1f1a16;
+        }
+
+        .radio-stack {
+            display: grid;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .radio-stack label {
+            margin: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .control label.control-label {
+            margin: 0 0 6px;
+        }
+
+        .output-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .meta {
+            font-size: 0.85rem;
+            color: var(--muted);
+            background: #f4e8dc;
+            padding: 6px 12px;
+            border-radius: 999px;
+        }
+
+        .preview {
+            margin-top: 16px;
+            overflow-x: auto;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .preview-table th,
+        .preview-table td {
+            text-align: left;
+            padding: 8px 10px;
+            border-bottom: 1px solid #eadccf;
+            vertical-align: top;
+        }
+
+        .preview-table th {
+            font-weight: 600;
+            background: #f9efe4;
+        }
+
+        .preview-caption {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .download {
+            margin-top: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .footer {
+            margin-top: 32px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero,
+        .form-card,
+        .output {
+            animation: rise 0.7s ease both;
+        }
+
+        .form-card {
+            animation-delay: 0.08s;
+        }
+
+        .output {
+            animation-delay: 0.16s;
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>ArgusSheets Alpha</h1>
-    <p>Enter your mission and access code to generate a dataset.</p>
-    
-    <div class="form-group">
-        <label for="mission">Mission Statement</label>
-        <input type="text" id="mission" placeholder="e.g., Find 50 AI startups in San Francisco with founders from Stanford" required>
+    <div class="frame">
+        <header class="topbar">
+            <div class="logo">ArgusSheets</div>
+            <div class="alpha-badge">Alpha Preview</div>
+        </header>
+
+        <main class="layout">
+            <section class="hero">
+                <h1>Turn a mission into a clean, investor-ready dataset.</h1>
+                <p>ArgusSheets scans the web, builds a schema, and returns a structured CSV you can validate in minutes.</p>
+                <div class="metrics">
+                    <div class="metric">Lean or full schema</div>
+                    <div class="metric">Adaptive row targets</div>
+                    <div class="metric">Runs in 2-5 minutes</div>
+                </div>
+                <div class="feature-list">
+                    <div class="feature">
+                        <div class="dot"></div>
+                        <div>Automatic schema inference, filters, and relevance scoring.</div>
+                    </div>
+                    <div class="feature">
+                        <div class="dot"></div>
+                        <div>Evidence-backed rows with citations for faster review.</div>
+                    </div>
+                    <div class="feature">
+                        <div class="dot"></div>
+                        <div>CSV output ready for import into Sheets, Airtable, or BI tools.</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card form-card">
+                <h2>Launch a mission</h2>
+                <p class="muted">Keep it specific. The clearer the mission, the better the dataset.</p>
+                <form id="missionForm" novalidate>
+                    <label for="mission">Mission statement</label>
+                    <textarea id="mission" placeholder="Find 50 AI startups in San Francisco with founders from Stanford" required></textarea>
+                    <div class="chips">
+                        <button type="button" class="chip" data-mission="List 40 logistics startups in Europe that raised Series A or later since 2021">Logistics in Europe</button>
+                        <button type="button" class="chip" data-mission="Find 30 climate tech companies in New York with recent hiring posts">Climate tech in NY</button>
+                        <button type="button" class="chip" data-mission="Identify 25 AI infrastructure vendors with open source repos and pricing pages">AI infrastructure</button>
+                    </div>
+
+                    <label for="password">Access code</label>
+                    <input type="password" id="password" placeholder="Enter your alpha access code" required>
+
+                    <details class="advanced" id="advancedControls">
+                        <summary>Advanced controls</summary>
+                        <div class="control-grid">
+                            <div class="control">
+                                <div class="control-title">Schema mode</div>
+                                <div class="segmented">
+                                    <label>
+                                        <input type="radio" name="schemaMode" value="lean" checked>
+                                        <span>Lean</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="schemaMode" value="full">
+                                        <span>Full</span>
+                                    </label>
+                                </div>
+                                <p class="muted small">Lean keeps essentials. Full adds summaries and tags.</p>
+                            </div>
+
+                            <div class="control">
+                                <div class="control-title">Target rows</div>
+                                <div class="radio-stack">
+                                    <label>
+                                        <input type="radio" name="rowsMode" value="auto" checked>
+                                        Auto (adaptive)
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="rowsMode" value="fixed">
+                                        Set a target
+                                    </label>
+                                </div>
+                                <input type="number" id="numRows" min="1" placeholder="e.g. 50" disabled>
+                                <p class="muted small">Recommended 10-100 for a crisp demo.</p>
+                            </div>
+
+                            <div class="control">
+                                <div class="control-title">Output destination</div>
+                                <div class="segmented">
+                                    <label>
+                                        <input type="radio" name="outputMode" value="local" checked>
+                                        <span>Local download</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="outputMode" value="remote">
+                                        <span>Drive only</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="outputMode" value="both">
+                                        <span>Drive + local</span>
+                                    </label>
+                                </div>
+                                <p class="muted small">Drive upload requires server configuration.</p>
+                            </div>
+
+                            <div class="control full">
+                                <label for="filters" class="control-label">Filters (optional)</label>
+                                <textarea id="filters" placeholder="Only include items where funding >= Series A"></textarea>
+                                <p class="muted small">Natural language rules are parsed into structured filters.</p>
+                            </div>
+                        </div>
+                    </details>
+
+                    <div class="form-actions">
+                        <button class="button" id="submitBtn" type="submit">Start research</button>
+                        <button class="button secondary" id="cancelBtn" type="button" hidden>Cancel</button>
+                    </div>
+
+                    <div id="status" class="status" role="status" aria-live="polite">
+                        <span class="spinner" id="statusSpinner" aria-hidden="true"></span>
+                        <span id="statusText"></span>
+                    </div>
+
+                    <div class="error-panel" id="errorPanel" hidden>
+                        <div class="error-panel-header">
+                            <div>
+                                <div class="error-title">Diagnostics</div>
+                                <div class="error-hint" id="errorHint"></div>
+                            </div>
+                            <button class="button secondary small" id="copyErrorBtn" type="button">Copy error</button>
+                        </div>
+                        <pre class="error-code" id="errorPayload"></pre>
+                    </div>
+                </form>
+            </section>
+        </main>
+
+        <section class="card output">
+            <div class="output-header">
+                <h2>Output</h2>
+                <span class="meta" id="meta" hidden></span>
+            </div>
+            <div class="muted" id="outputNote">Results appear here after the run completes.</div>
+            <div class="preview" id="preview"></div>
+            <div class="download" id="downloadWrap" hidden>
+                <a class="button" id="downloadLink" href="#" download>Download CSV</a>
+                <span class="muted">Click to save the file locally.</span>
+            </div>
+        </section>
+
+        <footer class="footer">ArgusSheets Alpha preview. For internal review only.</footer>
     </div>
-
-    <div class="form-group">
-        <label for="password">Access Code</label>
-        <input type="password" id="password" placeholder="Enter your alpha password" required>
-    </div>
-
-    <button id="submitBtn" onclick="runArgus()">Start Research Mission</button>
-
-    <div id="status"></div>
 
     <script>
-        const API_URL = "https://argus-brain-604165507874.us-central1.run.app"; 
+        const API_URL = "/Users/charlesfreidenreich/Desktop/Developer/Argus/index.html";
+        const REQUEST_TIMEOUT_MS = 12 * 60 * 1000;
+        const PREVIEW_ROWS = 8;
 
-        async function runArgus() {
-            const mission = document.getElementById('mission').value;
-            const password = document.getElementById('password').value;
-            const btn = document.getElementById('submitBtn');
-            const statusDiv = document.getElementById('status');
+        const form = document.getElementById("missionForm");
+        const missionInput = document.getElementById("mission");
+        const passwordInput = document.getElementById("password");
+        const submitBtn = document.getElementById("submitBtn");
+        const cancelBtn = document.getElementById("cancelBtn");
+        const statusEl = document.getElementById("status");
+        const statusSpinner = document.getElementById("statusSpinner");
+        const statusText = document.getElementById("statusText");
+        const filtersInput = document.getElementById("filters");
+        const numRowsInput = document.getElementById("numRows");
+        const errorPanel = document.getElementById("errorPanel");
+        const errorPayload = document.getElementById("errorPayload");
+        const errorHint = document.getElementById("errorHint");
+        const copyErrorBtn = document.getElementById("copyErrorBtn");
+        const previewEl = document.getElementById("preview");
+        const downloadWrap = document.getElementById("downloadWrap");
+        const downloadLink = document.getElementById("downloadLink");
+        const metaEl = document.getElementById("meta");
+        const outputNote = document.getElementById("outputNote");
 
-            if (!mission || !password) {
-                alert("Please fill in both fields.");
+        let currentController = null;
+        let currentTimeout = null;
+        let currentObjectUrl = null;
+
+        const apiBase = new URLSearchParams(window.location.search).get("api") || API_URL;
+        const apiRoot = apiBase.replace(/\/+$/, "");
+
+        document.querySelectorAll(".chip").forEach((chip) => {
+            chip.addEventListener("click", () => {
+                missionInput.value = chip.dataset.mission || "";
+                missionInput.focus();
+            });
+        });
+
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            runArgus();
+        });
+
+        cancelBtn.addEventListener("click", () => {
+            if (currentController) {
+                currentController.abort();
+            }
+        });
+
+        document.querySelectorAll('input[name="rowsMode"]').forEach((input) => {
+            input.addEventListener("change", () => {
+                syncRowInputState();
+            });
+        });
+
+        copyErrorBtn.addEventListener("click", async () => {
+            const text = errorPayload.textContent || "";
+            if (!text) {
+                return;
+            }
+            try {
+                if (navigator.clipboard) {
+                    await navigator.clipboard.writeText(text);
+                    copyErrorBtn.textContent = "Copied";
+                } else {
+                    window.prompt("Copy diagnostics:", text);
+                }
+            } catch (error) {
+                window.prompt("Copy diagnostics:", text);
+            }
+        });
+
+        function getSelectedValue(name) {
+            const selected = document.querySelector(`input[name="${name}"]:checked`);
+            return selected ? selected.value : "";
+        }
+
+        function setStatus(message, variant) {
+            statusText.textContent = message || "";
+            statusEl.className = "status";
+            if (variant) {
+                statusEl.classList.add(variant);
+            }
+            statusSpinner.style.display = variant === "loading" ? "inline-block" : "none";
+            statusEl.style.display = message ? "flex" : "none";
+        }
+
+        function setMeta(message) {
+            metaEl.textContent = message || "";
+            metaEl.hidden = !message;
+        }
+
+        function setOutputNote(message) {
+            outputNote.textContent = message || "";
+            outputNote.hidden = !message;
+        }
+
+        function setBusy(isBusy) {
+            const fields = form.querySelectorAll("input, textarea, button");
+            fields.forEach((field) => {
+                if (field.id === "cancelBtn") {
+                    return;
+                }
+                field.disabled = isBusy;
+            });
+            cancelBtn.hidden = !isBusy;
+            cancelBtn.disabled = !isBusy;
+            if (!isBusy) {
+                syncRowInputState();
+            }
+        }
+
+        function clearErrorDetails() {
+            errorPanel.hidden = true;
+            errorPayload.textContent = "";
+            errorHint.textContent = "";
+            copyErrorBtn.textContent = "Copy error";
+        }
+
+        function setErrorDetails(payload, hint) {
+            if (!payload) {
+                clearErrorDetails();
+                return;
+            }
+            errorPayload.textContent = payload;
+            errorHint.textContent = hint || "";
+            errorPanel.hidden = false;
+        }
+
+        function resetOutput() {
+            previewEl.innerHTML = "";
+            downloadWrap.hidden = true;
+            setMeta("");
+            clearErrorDetails();
+            if (currentObjectUrl) {
+                URL.revokeObjectURL(currentObjectUrl);
+                currentObjectUrl = null;
+            }
+        }
+
+        function formatDuration(ms) {
+            const totalSeconds = Math.round(ms / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            if (minutes <= 0) {
+                return `${seconds}s`;
+            }
+            return `${minutes}m ${seconds}s`;
+        }
+
+        function slugify(value) {
+            return value
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/(^-|-$)/g, "")
+                .slice(0, 32);
+        }
+
+        function extractFileName(response, mission) {
+            const header = response.headers.get("content-disposition") || "";
+            const filenameMatch = header.match(/filename\*?=(?:UTF-8''|\")?([^;\"]+)/i);
+            if (filenameMatch && filenameMatch[1]) {
+                try {
+                    return decodeURIComponent(filenameMatch[1]);
+                } catch (error) {
+                    return filenameMatch[1];
+                }
+            }
+            const stamp = new Date().toISOString().slice(0, 10);
+            const slug = slugify(mission);
+            return `Argus_Results_${stamp}${slug ? `_${slug}` : ""}.csv`;
+        }
+
+        async function buildHttpError(response) {
+            const contentType = response.headers.get("content-type") || "";
+            let detail = "";
+            if (contentType.includes("application/json")) {
+                try {
+                    const data = await response.json();
+                    detail = data.detail || data.message || JSON.stringify(data);
+                } catch (error) {
+                    detail = "";
+                }
+            } else {
+                try {
+                    detail = (await response.text()).trim();
+                } catch (error) {
+                    detail = "";
+                }
+            }
+            const message = detail || `Request failed (${response.status} ${response.statusText})`;
+            const err = new Error(message);
+            err.status = response.status;
+            err.statusText = response.statusText;
+            err.detail = detail;
+            err.url = response.url;
+            return err;
+        }
+
+        function parseCSV(text) {
+            const rows = [];
+            let row = [];
+            let cell = "";
+            let inQuotes = false;
+
+            for (let i = 0; i < text.length; i += 1) {
+                const char = text[i];
+                const next = text[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && next === '"') {
+                        cell += '"';
+                        i += 1;
+                        continue;
+                    }
+                    inQuotes = !inQuotes;
+                    continue;
+                }
+
+                if (char === ',' && !inQuotes) {
+                    row.push(cell);
+                    cell = "";
+                    continue;
+                }
+
+                if ((char === "\n" || char === "\r") && !inQuotes) {
+                    if (char === "\r" && next === "\n") {
+                        i += 1;
+                    }
+                    row.push(cell);
+                    if (row.some((value) => value !== "")) {
+                        rows.push(row);
+                    }
+                    row = [];
+                    cell = "";
+                    continue;
+                }
+
+                cell += char;
+            }
+
+            row.push(cell);
+            if (row.some((value) => value !== "")) {
+                rows.push(row);
+            }
+
+            return rows;
+        }
+
+        function renderPreview(rows) {
+            previewEl.innerHTML = "";
+
+            if (!rows.length) {
+                previewEl.textContent = "No rows returned.";
                 return;
             }
 
-            // UI: Loading State
-            btn.disabled = true;
-            btn.innerText = "Researching... (This may take 2-5 minutes)";
-            statusDiv.className = 'loading';
-            statusDiv.style.display = 'block';
-            statusDiv.innerHTML = '<span class="spinner"></span> Argus is browsing the web. Do not close this tab.';
+            const header = rows[0];
+            const dataRows = rows.slice(1);
+
+            if (!dataRows.length) {
+                previewEl.textContent = "No data rows returned.";
+                return;
+            }
+
+            const table = document.createElement("table");
+            table.className = "preview-table";
+
+            const thead = document.createElement("thead");
+            const headRow = document.createElement("tr");
+            header.forEach((value) => {
+                const th = document.createElement("th");
+                th.textContent = value;
+                headRow.appendChild(th);
+            });
+            thead.appendChild(headRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement("tbody");
+            dataRows.slice(0, PREVIEW_ROWS).forEach((row) => {
+                const tr = document.createElement("tr");
+                header.forEach((_, index) => {
+                    const td = document.createElement("td");
+                    td.textContent = row[index] || "";
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            previewEl.appendChild(table);
+
+            const caption = document.createElement("div");
+            caption.className = "preview-caption";
+            caption.textContent = `Showing ${Math.min(PREVIEW_ROWS, dataRows.length)} of ${dataRows.length} rows.`;
+            previewEl.appendChild(caption);
+        }
+
+        function buildErrorHint(error) {
+            if (!error) {
+                return "";
+            }
+            if (error.name === "AbortError") {
+                return "Request canceled or timed out. Try again or narrow the mission.";
+            }
+            if (error.status === 401) {
+                return "Access code not recognized. Confirm the latest alpha code.";
+            }
+            const detail = (error.detail || error.message || "").toLowerCase();
+            if (detail.includes("argus_user_map")) {
+                return "Server missing ARGUS_USER_MAP. Add it to the deployment env.";
+            }
+            if (detail.includes("openai_api_key")) {
+                return "Server missing OPENAI_API_KEY. Set it and redeploy.";
+            }
+            if (detail.includes("no csv output")) {
+                return "Run finished without CSV output. Try a narrower mission.";
+            }
+            if (detail.includes("cors") || detail.includes("failed to fetch")) {
+                return "Network or CORS error. Confirm API URL and CORS settings.";
+            }
+            return "";
+        }
+
+        function buildDiagnostics(error, context) {
+            const lines = [
+                `Timestamp: ${new Date().toISOString()}`,
+                `Endpoint: ${apiRoot}/run`,
+                `Schema mode: ${context.schemaMode}`,
+                `Rows mode: ${context.rowsMode === "auto" ? "auto" : context.numRows}`,
+                `Output mode: ${context.outputMode}`,
+                `Status: ${error.status || "n/a"} ${error.statusText || ""}`,
+                `Message: ${error.message || ""}`,
+                `Detail: ${error.detail || ""}`,
+            ];
+            return lines.join("\n");
+        }
+
+        function syncRowInputState() {
+            const mode = getSelectedValue("rowsMode");
+            const isFixed = mode === "fixed";
+            numRowsInput.disabled = !isFixed;
+            if (!isFixed) {
+                numRowsInput.value = "";
+            }
+        }
+
+        async function runArgus() {
+            const mission = missionInput.value.trim();
+            const password = passwordInput.value.trim();
+            const schemaMode = getSelectedValue("schemaMode") || "lean";
+            const rowsMode = getSelectedValue("rowsMode") || "auto";
+            const outputMode = getSelectedValue("outputMode") || "local";
+            const filtersText = filtersInput.value.trim();
+
+            let numRows = null;
+            if (rowsMode === "fixed") {
+                const parsed = parseInt(numRowsInput.value, 10);
+                if (!parsed || Number.isNaN(parsed) || parsed <= 0) {
+                    setStatus("Enter a valid target row count or switch to Auto.", "error");
+                    return;
+                }
+                numRows = parsed;
+            }
+
+            if (!mission || !password) {
+                setStatus("Please fill in both the mission statement and access code.", "error");
+                return;
+            }
+
+            if (currentController) {
+                currentController.abort();
+            }
+
+            resetOutput();
+            setStatus("Argus is running the mission. This can take a few minutes.", "loading");
+            setOutputNote("Running. Leave this tab open until the dataset is ready.");
+            submitBtn.textContent = "Researching...";
+            setBusy(true);
+
+            const startTime = performance.now();
+            const controller = new AbortController();
+            currentController = controller;
+            let didTimeout = false;
+            clearTimeout(currentTimeout);
+            currentTimeout = setTimeout(() => {
+                didTimeout = true;
+                controller.abort();
+            }, REQUEST_TIMEOUT_MS);
+
+            const requestBody = {
+                mission_statement: mission,
+                password: password,
+                schema_mode: schemaMode,
+                filters_text: filtersText,
+                num_rows: numRows,
+                output_mode: outputMode,
+            };
 
             try {
-                const response = await fetch(`${API_URL}/run`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mission_statement: mission, password: password })
+                const response = await fetch(`${apiRoot}/run`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(requestBody),
+                    cache: "no-store",
+                    signal: controller.signal,
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.detail || "Server error");
+                    throw await buildHttpError(response);
                 }
 
-                // UI: Success State (Download)
                 const blob = await response.blob();
-                const downloadUrl = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = downloadUrl;
-                a.download = `Argus_Results_${new Date().toISOString().slice(0,10)}.csv`;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
+                const csvText = await blob.text();
+                const rows = parseCSV(csvText);
+                const rowCount = Math.max(rows.length - 1, 0);
+                const duration = formatDuration(performance.now() - startTime);
 
-                statusDiv.className = 'success';
-                statusDiv.innerText = "Success! Your CSV has been downloaded.";
-                btn.innerText = "Run Another Mission";
+                renderPreview(rows);
 
+                const fileName = extractFileName(response, mission);
+                if (currentObjectUrl) {
+                    URL.revokeObjectURL(currentObjectUrl);
+                }
+                currentObjectUrl = URL.createObjectURL(blob);
+                downloadLink.href = currentObjectUrl;
+                downloadLink.download = fileName;
+                downloadWrap.hidden = false;
+
+                const filterLabel = filtersText ? "Filters: yes" : "Filters: none";
+                const targetLabel = rowsMode === "auto" ? "Target: auto" : `Target: ${numRows}`;
+                setMeta(`Rows: ${rowCount} | Time: ${duration} | Schema: ${schemaMode} | ${filterLabel} | ${targetLabel}`);
+                setStatus("Dataset ready. Review the preview or download the CSV.", "success");
+                setOutputNote("");
+                submitBtn.textContent = "Run another mission";
             } catch (error) {
                 console.error(error);
-                statusDiv.className = 'error';
-                statusDiv.innerText = `Error: ${error.message}`;
-                btn.innerText = "Start Research Mission";
+                const message = error.name === "AbortError"
+                    ? didTimeout
+                        ? "Request timed out. Try a smaller mission or retry."
+                        : "Request canceled."
+                    : error.message || "Request failed.";
+                setStatus(message, "error");
+                setOutputNote("Resolve the issue and try again.");
+                const diagnostics = buildDiagnostics(error, {
+                    schemaMode,
+                    rowsMode,
+                    numRows,
+                    outputMode,
+                });
+                setErrorDetails(diagnostics, buildErrorHint(error));
+                submitBtn.textContent = "Start research";
             } finally {
-                btn.disabled = false;
+                clearTimeout(currentTimeout);
+                setBusy(false);
             }
         }
+
+        syncRowInputState();
     </script>
 </body>
 </html>
