@@ -1,0 +1,78 @@
+Cities:
+a. New York
+b. Geneva
+c. Vienna
+d. Istanbul
+e. Moscow
+f. Berlin
+g. Beijing
+h. San Francisco
+i. Kyiv
+j. Sarajevo
+k. Kaliningrad
+I. The Hague
+m. Tokyo
+n. London
+o. Addis Ababa
+p. Caracas
+q. Mexico City
+2. Places
+a. Crimea
+b. Western Sahara
+c. Cyprus
+d. Afghanistan
+e. Gaza
+f. Ethiopia
+g. DR Congo
+h. North Korea
+i. Venezuela
+j. Gibraltar
+k. Chechnya
+1. Somalia
+m. Greenland
+n. Libya
+0. Yemen
+p. Sudan
+q. Kosovo
+
+Places:
+
+a. Crimea
+b. Western Sahara
+c. Cyprus
+d. Afghanistan
+e. Gaza
+f. Ethiopia
+g. DR Congo
+h. North Korea
+i. Venezuela
+j. Gibraltar
+k. Chechnya
+1. Somalia
+m. Greenland
+n. Libya
+o. Yemen
+p. Sudan
+q. Kosovo
+r. Iran
+s. Nagorno-Karabakh
+t. Somaliland
+u. Transnistria
+v. Angola
+w. Taiwan
+x. Syria
+y. Myanmar
+z. Bangladesh
+
+Features
+a. The Korean DMZ
+b. The Bosporus
+c. The Dardanelles
+d. The Black Sea
+e. South China Sea
+f. Red Sea
+g. Suez Canal
+h. Panama Canal
+i. Taiwan Strait
+j. Damansky/Zhenbao Island
+k. The Nile
