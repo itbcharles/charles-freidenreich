@@ -1,0 +1,28 @@
+[build]
+  command = "cd alittlela && npm ci && npm run build"
+  publish = "."
+
+# JS/CSS bundles
+[[redirects]]
+  from = "/alittlela/assets/*"
+  to = "/alittlela/dist/assets/:splat"
+  status = 200
+
+# Blog post images (from public/images/)
+[[redirects]]
+  from = "/alittlela/images/*"
+  to = "/alittlela/dist/images/:splat"
+  status = 200
+
+# Root path — force overrides the source alittlela/index.html
+[[redirects]]
+  from = "/alittlela"
+  to = "/alittlela/dist/index.html"
+  status = 200
+  force = true
+
+# SPA catch-all for client-side routes (about, archive, post/:slug, etc.)
+[[redirects]]
+  from = "/alittlela/*"
+  to = "/alittlela/dist/index.html"
+  status = 200
