@@ -8,7 +8,7 @@ import Post from './pages/Post';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/alittlela">
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />

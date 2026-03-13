@@ -3,7 +3,7 @@ export const allPosts = [
     slug: 'sunset-over-the-lake',
     title: 'Sunset Over the Lake',
     date: 'March 10, 2026',
-    image: '/images/IMG_4348.jpg',
+    image: '/alittlela/images/IMG_4348.jpg',
     featured: true,
     excerpt:
       'There is something about the way the sky catches fire over still water. This evening the colors stretched from deep orange to soft pink, reflected perfectly on the surface below.',
@@ -19,7 +19,7 @@ By the time we left, the sky had gone from gold to violet to a deep, quiet blue.
     slug: 'storm-clouds-at-dusk',
     title: 'Storm Clouds at Dusk',
     date: 'March 5, 2026',
-    image: '/images/IMG_4350.jpg',
+    image: '/alittlela/images/IMG_4350.jpg',
     featured: false,
     excerpt:
       'Towering cumulonimbus clouds lit up from behind as the sun dipped below the treeline. A few birds crossed the frame just as the light was right.',
@@ -35,7 +35,7 @@ The storm never reached us. It drifted south and dissolved somewhere over the hi
     slug: 'rainbow-after-the-rain',
     title: 'Rainbow After the Rain',
     date: 'February 28, 2026',
-    image: '/images/IMG_4349.jpg',
+    image: '/alittlela/images/IMG_4349.jpg',
     featured: false,
     excerpt:
       'Paddling out on the lake after a brief afternoon storm. The clouds parted just enough to reveal a faint rainbow against the towering white clouds.',
@@ -51,7 +51,7 @@ That's when the rainbow showed up. Faint at first, just a smudge of color agains
     slug: 'twilight-swirl',
     title: 'Twilight Swirl',
     date: 'February 20, 2026',
-    image: '/images/IMG_4357.jpg',
+    image: '/alittlela/images/IMG_4357.jpg',
     featured: false,
     excerpt:
       'An unusual cloud formation caught the last warm light of the day, swirling upward like smoke against the cooling sky.',
@@ -67,7 +67,7 @@ I took a dozen photos. This one was the best — the one where the light was jus
     slug: 'silver-morning',
     title: 'Silver Morning',
     date: 'February 14, 2026',
-    image: '/images/IMG_4346.jpg',
+    image: '/alittlela/images/IMG_4346.jpg',
     featured: false,
     excerpt:
       'An overcast morning where the sun barely broke through, casting a silver glow across the wet flats. Quiet and still.',
