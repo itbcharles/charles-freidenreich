@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOMHP — Club Plan</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', 'Avenir', 'Segoe UI', sans-serif; background: #FAFAF8; }
+    #gate {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 24px;
+    }
+    #gate h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 32px; font-weight: 900; margin-bottom: 8px; letter-spacing: -0.02em;
+    }
+    #gate p { color: #777; font-size: 14px; margin-bottom: 24px; }
+    #gate form { display: flex; gap: 8px; }
+    #gate input {
+      padding: 10px 16px; border: 1.5px solid #ddd; border-radius: 8px;
+      font-size: 15px; font-family: inherit; outline: none; width: 220px;
+      transition: border-color 0.2s;
+    }
+    #gate input:focus { border-color: #A3472E; }
+    #gate button {
+      padding: 10px 20px; border: none; border-radius: 8px;
+      background: #A3472E; color: #fff; font-size: 14px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: background 0.2s;
+    }
+    #gate button:hover { background: #7B3A36; }
+    #gate .error { color: #c0392b; font-size: 13px; margin-top: 12px; }
+    #gate.shake input { animation: shake 0.4s ease; border-color: #c0392b; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div id="gate">
+    <h1>SOMHP</h1>
+    <p>Enter password to view the club plan.</p>
+    <form id="pw-form">
+      <input type="password" id="pw-input" placeholder="Password" autocomplete="off" autofocus />
+      <button type="submit">Enter</button>
+    </form>
+    <div class="error" id="pw-error"></div>
+  </div>
+  <div id="root" style="display:none;"></div>
+
+  <script>
+    (function() {
+      var H = "a2be475368d9180680a0529296d96fdcb80dd18833c01d21396465d3d2eb1c48";
+      var attempts = 0;
+      var locked = false;
+
+      document.getElementById("pw-form").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        if (locked) return;
+
+        var pw = document.getElementById("pw-input").value;
+        var enc = new TextEncoder();
+        var buf = await crypto.subtle.digest("SHA-256", enc.encode(pw));
+        var arr = Array.from(new Uint8Array(buf));
+        var hex = arr.map(function(b) { return b.toString(16).padStart(2, "0"); }).join("");
+
+        if (hex === H) {
+          document.getElementById("gate").style.display = "none";
+          document.getElementById("root").style.display = "block";
+          loadApp();
+        } else {
+          attempts++;
+          var gate = document.getElementById("gate");
+          gate.classList.remove("shake");
+          void gate.offsetWidth;
+          gate.classList.add("shake");
+
+          if (attempts >= 5) {
+            locked = true;
+            document.getElementById("pw-error").textContent = "Too many attempts. Refresh to try again.";
+            document.getElementById("pw-input").disabled = true;
+          } else {
+            document.getElementById("pw-error").textContent = "Incorrect password.";
+          }
+        }
+      });
+
+      function loadApp() {
+        var s1 = document.createElement("script");
+        s1.src = "https://unpkg.com/react@18/umd/react.production.min.js";
+        s1.crossOrigin = "";
+        s1.onload = function() {
+          var s2 = document.createElement("script");
+          s2.src = "https://unpkg.com/react-dom@18/umd/react-dom.production.min.js";
+          s2.crossOrigin = "";
+          s2.onload = function() {
+            var s3 = document.createElement("script");
+            s3.src = "https://unpkg.com/@babel/standalone/babel.min.js";
+            s3.onload = function() {
+              var s4 = document.createElement("script");
+              s4.type = "text/babel";
+              s4.src = "app.jsx";
+              document.body.appendChild(s4);
+              // Babel standalone processes scripts after they load
+              // We need to manually trigger processing for dynamically added scripts
+              setTimeout(function() { Babel.transformScriptTags(); }, 100);
+            };
+            document.body.appendChild(s3);
+          };
+          document.body.appendChild(s2);
+        };
+        document.body.appendChild(s1);
+      }
+    })();
+  </script>
+</body>
+</html>
