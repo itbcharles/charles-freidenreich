@@ -1,1 +1,292 @@
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:monospace;background:#000;color:#fff;max-width:1000px;margin:0 auto;padding:40px;line-height:1.6;font-size:16px;transition:background .3s,color .3s}h1{font-size:2em;margin-bottom:20px;line-height:1.2}h2{font-size:1.2em;margin:30px 0 15px;border-bottom:1px solid #333;padding-bottom:5px;text-transform:uppercase;letter-spacing:1px}ul{margin-left:0;list-style:none}li{margin:8px 0;padding-left:15px;position:relative}li::before{content:">";position:absolute;left:0;color:#4af}a{color:#4af;text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}a:hover{border-bottom-color:#4af}.row{display:flex;gap:60px;align-items:start;margin-bottom:60px}.col-text{flex:1}.col-img{flex:1;max-width:400px}.photo-large{width:100%;height:auto;display:block;border-radius:8px;filter:grayscale(10%);transition:filter .3s}.photo-large:hover{filter:grayscale(0%)}.reverse{flex-direction:row-reverse}@media(max-width:768px){.row{flex-direction:column;gap:30px}.col-img{max-width:100%}.reverse{flex-direction:column}}
+:root {
+  --ground: oklch(0.18 0.014 70);
+  --ink: oklch(0.92 0.012 80);
+  --ink-quiet: oklch(0.66 0.014 80);
+  --ink-faint: oklch(0.48 0.012 70);
+  --ink-rule: oklch(0.30 0.012 70);
+
+  --serif: 'Source Serif 4', 'Source Serif Pro', 'Iowan Old Style', 'Charter', Georgia, serif;
+  --sans: 'Inter Tight', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --ease-out: cubic-bezier(0.2, 0.8, 0.25, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--ground);
+  -webkit-text-size-adjust: 100%;
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100svh;
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--ink);
+  font-feature-settings: "ss01", "cv11", "kern";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+main {
+  max-width: 86rem;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 4vw, 2.25rem) clamp(1.25rem, 4vw, 2.5rem);
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  row-gap: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+main > * {
+  min-width: 0;
+}
+
+@media (min-width: 880px) {
+  main {
+    grid-template-columns: minmax(18rem, 28rem) minmax(0, 1fr);
+    column-gap: clamp(2.5rem, 5vw, 4rem);
+    row-gap: 0;
+    padding: clamp(2rem, 4vw, 3rem) clamp(2rem, 5vw, 4rem);
+    align-content: center;
+    align-items: stretch;
+  }
+}
+
+/* Portrait */
+.portrait {
+  margin: 0;
+}
+
+.portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1504 / 1959;
+  background: var(--ink-rule);
+  max-width: 22rem;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+@media (min-width: 880px) {
+  .portrait {
+    align-self: start;
+  }
+  .portrait img {
+    max-width: 100%;
+    margin: 0;
+  }
+}
+
+/* Content column */
+.content {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  row-gap: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.identity {
+  margin: 0;
+}
+
+h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(2.125rem, 4.4vw, 3.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* Section grid (2x2 on desktop) */
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.5rem, 3vw, 2rem);
+}
+
+@media (min-width: 880px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: clamp(1.75rem, 3vw, 2.75rem);
+    row-gap: clamp(1.5rem, 3vw, 2.25rem);
+  }
+}
+
+.block {
+  margin: 0;
+  min-width: 0;
+}
+
+h2 {
+  margin: 0 0 0.875rem;
+  padding-bottom: 0.45rem;
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-quiet);
+  border-bottom: 1px solid var(--ink-rule);
+}
+
+.lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.lines li {
+  padding: 0.05rem 0;
+}
+
+.scouting p {
+  margin: 0 0 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.sweden {
+  margin: 0;
+}
+
+.sweden img {
+  display: block;
+  width: 100%;
+  max-width: 14rem;
+  height: auto;
+  aspect-ratio: 1280 / 960;
+  background: var(--ink-rule);
+  border-radius: 8px;
+}
+
+/* Contact */
+.contact {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 1.25rem;
+  row-gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  align-items: baseline;
+  font-size: 0.9375rem;
+}
+
+.contact dt {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-quiet);
+}
+
+.contact dd {
+  margin: 0;
+  line-height: 1.4;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: var(--ink-faint);
+  transition: text-decoration-color 200ms var(--ease-out);
+}
+
+a:hover {
+  text-decoration-color: var(--ink);
+}
+
+a:focus-visible {
+  outline: 1.5px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 1px;
+  text-decoration-color: var(--ink);
+}
+
+.tail {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-quiet);
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--ground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media print {
+  html {
+    background: white;
+    color-scheme: light;
+  }
+  body {
+    color: black;
+    font-size: 10pt;
+  }
+  main {
+    display: block;
+    max-width: none;
+    padding: 0;
+    min-height: 0;
+  }
+  .portrait img {
+    max-width: 2.5in;
+    aspect-ratio: 1504 / 1959;
+    object-fit: contain;
+    height: auto;
+    width: auto;
+  }
+  h1 {
+    font-size: 22pt;
+  }
+  h2 {
+    color: black;
+    border-color: black;
+  }
+  .sweden img {
+    filter: grayscale(100%);
+  }
+  a {
+    color: black;
+    text-decoration-color: black;
+  }
+  @page {
+    margin: 0.6in;
+  }
+}

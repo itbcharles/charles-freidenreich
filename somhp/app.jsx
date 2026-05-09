@@ -97,7 +97,206 @@ const PLAN = {
 
 const tagOrder = ["panel", "tour", "skill", "competition", "community", "ops"];
 
+// ---------- Member Insights data ----------
+const HEATMAP_DATA = [
+  ['Wealth Management',           [38, 56, 25, 29, 37], [9, 5, 1, 4, 19]],
+  ['IB / Private Equity',         [46, 44, 25, 21, 37], [11, 4, 1, 3, 19]],
+  ['Accounting',                  [29, 56, 25, 29, 33], [7, 5, 1, 4, 17]],
+  ['Venture Capital',             [38, 33,  0, 21, 29], [9, 3, 0, 3, 15]],
+  ['Marketing',                   [25, 22, 25, 29, 25], [6, 2, 1, 4, 13]],
+  ['Management Consulting',       [25, 11, 25, 29, 24], [6, 1, 1, 4, 12]],
+  ['Product Management',          [17, 33,  0, 14, 18], [4, 3, 0, 2, 9]],
+  ['Entrepreneurship',            [21,  0,  0, 21, 16], [5, 0, 0, 3, 8]],
+  ['Supply Chain / Operations',   [ 8, 33,  0, 14, 14], [2, 3, 0, 2, 7]],
+  ['Go-To-Market / Sales',        [ 8,  0,  0,  7,  6], [2, 0, 0, 1, 3]],
+  ['Finance (write-in)',          [ 8,  0,  0,  0,  4], [2, 0, 0, 0, 2]],
+  ['Legal',                       [ 0,  0,  0,  7,  2], [0, 0, 0, 1, 1]],
+];
+
+const CLUSTER_DATA = [
+  ['Wealth Management',           19,  1, 5, 13],
+  ['IB / Private Equity',         19,  1, 4, 14],
+  ['Accounting',                  17,  5, 4,  8],
+  ['Venture Capital',             15,  1, 1, 13],
+  ['Marketing',                   13,  6, 3,  4],
+  ['Management Consulting',       12,  2, 1,  9],
+  ['Product Management',           9,  0, 2,  7],
+  ['Entrepreneurship',             8,  1, 1,  6],
+  ['Supply Chain / Operations',    7,  0, 1,  6],
+  ['Go-To-Market / Sales',         3,  0, 0,  3],
+];
+
+const COMPANY_DATA = [
+  ['Google',          [5, 2, 0, 0]],
+  ['Sephora',         [2, 2, 1, 0]],
+  ['JPMorgan Chase',  [5, 0, 0, 0]],
+  ['Salesforce',      [0, 3, 0, 0]],
+  ['Big 4 (generic)', [3, 0, 0, 0]],
+  ['Deloitte',        [0, 1, 0, 1]],
+  ['LinkedIn',        [0, 1, 0, 0]],
+  ['Meta',            [1, 0, 0, 0]],
+  ['KPMG',            [2, 0, 0, 0]],
+  ['EY',              [2, 0, 0, 0]],
+  ['McKinsey',        [0, 1, 0, 0]],
+  ['BlackRock',       [0, 0, 1, 0]],
+  ['PwC',             [0, 0, 0, 1]],
+];
+
+const COHORT_HEADERS = [
+  { label: "Rising", sub: "Soph",   n: 24 },
+  { label: "Rising", sub: "Junior", n: 9 },
+  { label: "Rising", sub: "Senior", n: 4 },
+  { label: "Grad",   sub: "Senior", n: 14 },
+  { label: "Total",  sub: "",       n: 51 },
+];
+const COHORT_COLORS = ['#97C459', '#1D9E75', '#BA7517', '#888780'];
+const COHORT_LABELS = ['Rising Soph', 'Rising Junior', 'Rising Senior', 'Grad Senior'];
+
+function pctColor(pct) {
+  if (pct === 0) return { bg: 'transparent', fg: '#bbb', border: '0.5px solid #e8e8e4' };
+  if (pct < 15)  return { bg: '#E6F1FB', fg: '#0C447C', border: 'none' };
+  if (pct < 30)  return { bg: '#B5D4F4', fg: '#042C53', border: 'none' };
+  if (pct < 45)  return { bg: '#85B7EB', fg: '#042C53', border: 'none' };
+  if (pct < 60)  return { bg: '#378ADD', fg: '#FFFFFF', border: 'none' };
+  return { bg: '#185FA5', fg: '#FFFFFF', border: 'none' };
+}
+
+function SectionCard({ title, subtitle, children }) {
+  return (
+    <div style={{
+      background: "#fff",
+      borderRadius: 14,
+      border: "1px solid #e8e8e4",
+      padding: "24px 24px",
+      boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+      marginBottom: 20,
+    }}>
+      <h3 style={{ margin: "0 0 4px", fontSize: 16, fontWeight: 700, color: "#1a1a1a" }}>{title}</h3>
+      <p style={{ fontSize: 13, color: "#777", margin: "0 0 18px", fontWeight: 300 }}>{subtitle}</p>
+      {children}
+    </div>
+  );
+}
+
+function MemberInsights() {
+  const maxCo = Math.max(...COMPANY_DATA.map(([_, c]) => c.reduce((a,b) => a+b, 0)));
+
+  return (
+    <div style={{ maxWidth: 800, margin: "0 auto" }}>
+      <SectionCard
+        title="Career paths by cohort"
+        subtitle="% of cohort selecting each path. Darker = higher concentration."
+      >
+        <div style={{ overflowX: "auto" }}>
+          <div style={{ minWidth: 540 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "180px repeat(4, 1fr) 70px", gap: 4, fontSize: 12 }}>
+              <div></div>
+              {COHORT_HEADERS.map((h, i) => (
+                <div key={i} style={{ textAlign: "center", color: "#777", padding: 4, lineHeight: 1.2 }}>
+                  {h.label}<br/>{h.sub && <>{h.sub}<br/></>}
+                  <span style={{ fontSize: 11 }}>n={h.n}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "180px repeat(4, 1fr) 70px", gap: 4, fontSize: 13, marginTop: 4 }}>
+              {HEATMAP_DATA.map(([path, pcts, ns]) => (
+                <React.Fragment key={path}>
+                  <div style={{ display: "flex", alignItems: "center", paddingRight: 8, color: "#1a1a1a" }}>{path}</div>
+                  {pcts.map((p, i) => {
+                    const c = pctColor(p);
+                    const isTotal = i === 4;
+                    return (
+                      <div key={i} style={{
+                        background: isTotal ? "transparent" : c.bg,
+                        color: isTotal ? "#1a1a1a" : c.fg,
+                        border: isTotal ? "0.5px solid #e8e8e4" : c.border,
+                        borderRadius: 6,
+                        padding: "8px 4px",
+                        textAlign: "center",
+                        fontWeight: 500,
+                        lineHeight: 1.1,
+                        minHeight: 36,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}>
+                        <span>{p}%</span>
+                        <span style={{ fontSize: 10, opacity: 0.7, fontWeight: 400 }}>{ns[i]}</span>
+                      </div>
+                    );
+                  })}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        </div>
+      </SectionCard>
+
+      <SectionCard
+        title="Solo pick or part of a cluster?"
+        subtitle="For each path, how many of its selectors picked it alone vs. with 2+ other paths."
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13 }}>
+          {CLUSTER_DATA.map(([path, total, solo, pair, three]) => {
+            const soloPct = (solo / total) * 100;
+            const pairPct = (pair / total) * 100;
+            const threePct = (three / total) * 100;
+            return (
+              <div key={path} style={{ display: "grid", gridTemplateColumns: "160px 1fr 100px", gap: 12, alignItems: "center" }}>
+                <div style={{ color: "#1a1a1a" }}>{path}</div>
+                <div style={{ display: "flex", height: 22, borderRadius: 6, overflow: "hidden", background: "#f1f1f1" }}>
+                  {solo > 0 && <div style={{ width: `${soloPct}%`, background: "#888780", color: "white", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 500 }}>{solo}</div>}
+                  {pair > 0 && <div style={{ width: `${pairPct}%`, background: "#B5D4F4", color: "#042C53", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 500 }}>{pair}</div>}
+                  {three > 0 && <div style={{ width: `${threePct}%`, background: "#185FA5", color: "white", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 500 }}>{three}</div>}
+                </div>
+                <div style={{ fontSize: 12, color: "#777", textAlign: "right" }}>{Math.round(threePct)}% in cluster</div>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 16, marginTop: 14, fontSize: 12, color: "#777" }}>
+          <span style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 12, height: 12, borderRadius: 2, background: "#888780" }}></span>Solo (only path picked)</span>
+          <span style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 12, height: 12, borderRadius: 2, background: "#B5D4F4" }}></span>Pair (2 paths total)</span>
+          <span style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 12, height: 12, borderRadius: 2, background: "#185FA5" }}></span>Cluster (3+ paths)</span>
+        </div>
+      </SectionCard>
+
+      <SectionCard
+        title="Companies students want to tour"
+        subtitle="Mentions across 49 responses with suggestions. Bars show who's asking, by cohort."
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 13 }}>
+          {COMPANY_DATA.map(([name, counts]) => {
+            const total = counts.reduce((a,b) => a+b, 0);
+            const widthPct = (total / maxCo) * 100;
+            return (
+              <div key={name} style={{ display: "grid", gridTemplateColumns: "140px 1fr 30px", gap: 12, alignItems: "center" }}>
+                <div style={{ color: "#1a1a1a" }}>{name}</div>
+                <div style={{ display: "flex", height: 18, width: `${widthPct}%`, borderRadius: 6, overflow: "hidden", minWidth: 20 }}>
+                  {counts.map((c, i) => c > 0 && (
+                    <div key={i} style={{ width: `${(c/total)*100}%`, background: COHORT_COLORS[i] }}></div>
+                  ))}
+                </div>
+                <div style={{ fontSize: 12, color: "#777", textAlign: "right", fontWeight: 500 }}>{total}</div>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 14, fontSize: 12, color: "#777" }}>
+          {COHORT_LABELS.map((l, i) => (
+            <span key={l} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 12, height: 12, borderRadius: 2, background: COHORT_COLORS[i] }}></span>{l}
+            </span>
+          ))}
+        </div>
+      </SectionCard>
+    </div>
+  );
+}
+
 function ClubPlan() {
+  const [view, setView] = useState("calendar");
   const [selected, setSelected] = useState("sep");
   const [filter, setFilter] = useState(null);
 
@@ -144,6 +343,39 @@ function ClubPlan() {
           COVP Programming Calendar &mdash; May &rarr; April
         </p>
       </div>
+
+      {/* View toggle */}
+      <div style={{ maxWidth: 800, margin: "0 auto 20px", display: "flex", gap: 4, padding: 4, background: "#f1f1f1", borderRadius: 10, width: "fit-content" }}>
+        {[
+          { key: "calendar", label: "Programming Calendar" },
+          { key: "insights", label: "Member Insights" },
+        ].map((v) => {
+          const active = view === v.key;
+          return (
+            <button
+              key={v.key}
+              onClick={() => setView(v.key)}
+              style={{
+                padding: "8px 16px",
+                border: "none",
+                borderRadius: 7,
+                background: active ? "#fff" : "transparent",
+                color: active ? "#1a1a1a" : "#888",
+                fontSize: 13,
+                fontWeight: active ? 600 : 500,
+                fontFamily: "inherit",
+                cursor: "pointer",
+                boxShadow: active ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+                transition: "all 0.15s ease",
+              }}
+            >
+              {v.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {view === "insights" ? <MemberInsights /> : <>
 
       {/* Month selector */}
       <div style={{
@@ -363,6 +595,7 @@ function ClubPlan() {
           })}
         </div>
       </div>
+      </>}
     </div>
   );
 }
