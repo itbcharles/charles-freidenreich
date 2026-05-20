@@ -1,0 +1,33 @@
+# Large assets are hosted on Cloudflare R2 (bucket: rhet120).
+# Public base URL: https://pub-22d16303b0d647349ce1a5c50ef01aea.r2.dev
+# Every HTML file already references R2 URLs directly. We keep a local
+# mirror of these folders for backup, but exclude them from git so the
+# repo stays under GitHub's file-size limits.
+
+site/assets/
+assets/
+
+# Wrangler / Miniflare local R2 emulator caches
+.wrangler/
+site/.wrangler/
+
+# Original source files (videos and full archive of submissions)
+All assignments/
+*.mov
+*.mp4
+
+# Claude/CLI scratch
+.claude/
+
+# Local server logs and temp files
+srv.log
+srvpid
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
