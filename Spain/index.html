@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Spain — August 2026</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root{
+    --paper:#f7f4ec; --ink:#1c1b18; --muted:#7a7468; --hair:#ddd6c6;
+    --red:#c0361c; --slate:#39434e; --tint:#efe9da;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+       color:var(--ink);background:var(--paper);font-size:14px;line-height:1.45;
+       font-variant-numeric:tabular-nums}
+  a{color:inherit}
+
+  main{display:grid;grid-template-columns:424px 1fr;height:100vh}
+  #map{height:100%;background:#eceae3}
+
+  /* ---------- panel ---------- */
+  .panel{border-right:1px solid var(--hair);overflow-y:auto;display:flex;flex-direction:column;background:var(--paper)}
+  .pad{padding:0 22px}
+  .masthead{padding:20px 22px 14px;border-bottom:1px solid var(--hair)}
+  .masthead h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:23px;letter-spacing:.01em}
+  .masthead .sub{color:var(--muted);font-size:12.5px;margin-top:3px}
+  .masthead .links{margin-top:8px;font-size:11.5px}
+  .masthead .links a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--hair)}
+  .masthead .links a:hover{color:var(--ink)}
+
+  .seclabel{font-size:10px;font-weight:700;letter-spacing:.18em;color:var(--muted);
+            text-transform:uppercase;padding:18px 22px 8px}
+
+  /* route tabs */
+  .tabs{display:flex;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+  .tab{flex:1;padding:10px 8px 9px;text-align:center;cursor:pointer;border-bottom:2px solid transparent;
+       border-right:1px solid var(--hair)}
+  .tab:last-child{border-right:none}
+  .tab .l{font-family:Georgia,serif;font-size:16px}
+  .tab .n{display:block;font-size:10.5px;color:var(--muted);margin-top:1px}
+  .tab.on{border-bottom-color:var(--red)}
+  .tab.on .l{color:var(--red)}
+  .optnote{padding:10px 22px 0;font-size:12.5px;color:var(--muted)}
+  .optnote b{color:var(--ink);font-weight:600}
+
+  .ssrow{display:flex;gap:10px;align-items:flex-start;margin:12px 22px 0;padding:10px 12px;
+         border:1px solid var(--hair);background:var(--tint);cursor:pointer}
+  .ssrow input{margin-top:3px;accent-color:var(--red)}
+  .ssrow .t{font-size:12.5px}
+  .ssrow .t b{font-weight:600}
+  .ssrow .t small{color:var(--muted);display:block;margin-top:1px}
+
+  /* itinerary */
+  .day{display:grid;grid-template-columns:54px 1fr auto;gap:10px;padding:8px 22px;cursor:pointer;
+       border-bottom:1px solid transparent}
+  .day:hover{background:var(--tint)}
+  .day .d{color:var(--muted);font-size:12px;padding-top:1px;white-space:nowrap}
+  .day .c{font-weight:600;font-size:13.5px}
+  .day .w{color:var(--muted);font-size:12.5px}
+  .day .drv{color:var(--muted);font-size:11px;white-space:nowrap;padding-top:2px}
+  .day.ecl .c{color:var(--red)}
+  .day.ecl{background:var(--tint)}
+
+  /* hotels */
+  .stop{border-top:1px solid var(--hair);padding:12px 0 6px}
+  .stop:first-of-type{border-top:none}
+  .stophead{display:flex;justify-content:space-between;align-items:baseline;padding:0 22px 6px}
+  .stophead .name{font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+  .stophead .when{color:var(--muted);font-size:11.5px}
+  .hrow{display:grid;grid-template-columns:16px 1fr auto;gap:10px;padding:7px 22px;cursor:pointer;align-items:start}
+  .hrow:hover{background:var(--tint)}
+  .hrow.sel{background:var(--tint)}
+  .dot{width:13px;height:13px;border-radius:50%;border:1.5px solid var(--ink);margin-top:3px}
+  .hrow.sel .dot{background:var(--red);border-color:var(--red);box-shadow:inset 0 0 0 2.5px var(--paper)}
+  .hname{font-size:13px;font-weight:600}
+  .hname a{text-decoration:none;color:var(--muted);font-weight:400}
+  .hname a:hover{color:var(--ink)}
+  .hwhy{font-size:11.8px;color:var(--muted);margin-top:1px}
+  .hcav{font-size:11.3px;color:var(--red);margin-top:1px}
+  .hprice{font-size:13px;font-weight:600;white-space:nowrap}
+  .hprice small{display:block;font-weight:400;color:var(--muted);font-size:10.5px;text-align:right}
+  .booked{padding:7px 22px;font-size:12.5px;color:var(--muted)}
+  .presets{padding:0 22px 4px;font-size:11.5px;color:var(--muted)}
+  .presets a{cursor:pointer;text-decoration:none;border-bottom:1px solid var(--hair);margin-right:10px;color:var(--muted)}
+  .presets a:hover{color:var(--ink)}
+
+  /* book first */
+  .urgent{margin:4px 22px 14px;border-left:2px solid var(--red);padding-left:12px;display:grid;gap:7px}
+  .urgent .u{font-size:12.3px}
+  .urgent .u b{font-weight:600}
+  .urgent .u .when{color:var(--red);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-right:6px}
+  .urgent .u a{color:var(--muted)}
+
+  /* total */
+  .total{position:sticky;bottom:0;margin-top:auto;background:var(--paper);border-top:1px solid var(--ink);
+         padding:12px 22px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .total .num{font-family:Georgia,serif;font-size:21px}
+  .total .per{color:var(--muted);font-size:11.5px}
+  .total button{border:1px solid var(--ink);background:none;font:inherit;font-size:11px;letter-spacing:.08em;
+                text-transform:uppercase;padding:5px 10px;cursor:pointer}
+  .total button:hover{background:var(--ink);color:var(--paper)}
+
+  .fine{padding:10px 22px 18px;font-size:10.8px;color:var(--muted);line-height:1.5}
+
+  /* ---------- map labels ---------- */
+  .lbl{background:none;border:none;box-shadow:none;font-weight:700;font-size:10.5px;letter-spacing:.14em;
+       color:var(--ink);text-transform:uppercase;
+       text-shadow:0 0 2px #fff,0 0 4px #fff,0 0 6px #fff,1px 1px 2px #fff,-1px -1px 2px #fff}
+  .lbl.small{font-weight:600;font-size:9px;letter-spacing:.1em;color:#5e594e}
+  .lbl.ecl{color:var(--red)}
+  .lbl::before{display:none}
+  .lbl .nts{display:block;font-weight:400;font-size:8.5px;letter-spacing:.08em;color:var(--muted);text-align:inherit}
+  .leaflet-container{font:inherit}
+  .leaflet-control-attribution{background:rgba(247,244,236,.8);font-size:9px;color:var(--muted)}
+
+  /* ---------- mobile ---------- */
+  @media (max-width:860px){
+    body{height:auto}
+    main{display:block;height:auto}
+    #map{position:sticky;top:0;height:44vh;z-index:0;border-bottom:1px solid var(--hair)}
+    .panel{border-right:none;overflow:visible;height:auto}
+    .total{position:sticky;bottom:0;z-index:10}
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="panel">
+    <div class="masthead">
+      <h1>Spain, August 2026</h1>
+      <div class="sub">Barcelona → Basque coast → Soria, for the total eclipse → Andalusia → Seville. Twelve nights, the three of us, one car.</div>
+      <div class="links"><a href="https://docs.google.com/document/d/1F9uksReM9O_6DVDDxG-qECw8GuRE1Vds/edit" target="_blank">paper version (Google Doc)</a></div>
+    </div>
+
+    <div class="seclabel">The south — pick one</div>
+    <div class="tabs" id="tabs"></div>
+    <div class="optnote" id="optnote"></div>
+    <label class="ssrow">
+      <input type="checkbox" id="ssToggle">
+      <span class="t"><b>Sleep in San Sebastián, Aug 8</b>
+      <small>The city's biggest festival of the year opens that exact night — a cannon shot kicks it off at 7pm, fireworks over the bay at 10:45pm. Hotel beds run €400–650. Otherwise: sleep at the castle in Hondarribia, 20 min away, and taxi back after the show.</small></span>
+    </label>
+
+    <div class="seclabel">Day by day</div>
+    <div id="days"></div>
+
+    <div class="seclabel">Where we sleep <span style="float:right;font-weight:400;letter-spacing:0;text-transform:none">prices: all 3 of us, per night, est.</span></div>
+    <div class="presets">set all: <a onclick="applyPreset('saver')">save</a> <a onclick="applyPreset('mix')">recommended</a> <a onclick="applyPreset('splurge')">castles</a></div>
+    <div class="presets" style="padding-bottom:8px">"Parador" = Spain's state-run hotels inside real historic monuments — castles, convents, palaces. Usually the most interesting bed in town.</div>
+    <div id="hotels"></div>
+
+    <div class="seclabel">Book first</div>
+    <div class="urgent">
+      <div class="u"><span class="when">This week</span><b>Alhambra tickets</b> — passport-named, non-refundable, selling for months. Pick the route, buy same day. <a href="https://tickets.alhambra-patronato.es/en/" target="_blank">official site</a></div>
+      <div class="u"><span class="when">Today</span><b>Parador de Granada</b> — if anyone wants it, check now; the rate refunds. <a href="https://paradores.es/en/parador-de-granada" target="_blank">availability</a></div>
+      <div class="u"><span class="when">This week</span><b>Hondarribia castle</b> — 36 rooms, we need two, festival next door. <a href="https://paradores.es/en/parador-de-hondarribia" target="_blank">paradores.es</a></div>
+      <div class="u"><span class="when">This week</span><b>San Sebastián call</b> — Aug 8 beds go first of anything on this trip.</div>
+    </div>
+
+    <div class="total">
+      <div>
+        <div class="num" id="tNum"></div>
+        <div class="per" id="tPer"></div>
+      </div>
+      <button onclick="copyPicks(this)">Copy choices</button>
+    </div>
+
+    <div class="fine">
+      Estimates June 9, 2026, from hotel sites and rate aggregators — verify before booking. One room fits the three of us everywhere except the Hondarribia parador (two rooms, priced as such). Soria is booked; ten nights remain. Barcelona adds ~€5–7.50 per person per night in tourist tax. €1 ≈ $1.15. Eclipse: totality at 8:30pm with the sun low in the west-northwest — choose ground with a clear western view.
+    </div>
+  </div>
+
+  <div id="map"></div>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const USD = 1.15;
+const fmtE = n => "€" + n.toLocaleString("en-US");
+const fmtD = n => "$" + Math.round(n*USD).toLocaleString("en-US");
+
+const STOPS = {
+  bcn:{name:"Barcelona",ll:[41.3874,2.1686],dir:"right"},
+  hon:{name:"Hondarribia",ll:[43.3636,-1.7922],dir:"right"},
+  ss:{name:"San Sebastián",ll:[43.3183,-1.9812],dir:"left"},
+  bio:{name:"Bilbao",ll:[43.2630,-2.9350],dir:"top"},
+  sor:{name:"Soria",ll:[41.7665,-2.4790],dir:"right"},
+  gra:{name:"Granada",ll:[37.1773,-3.5986],dir:"right"},
+  cor:{name:"Córdoba",ll:[37.8882,-4.7794],dir:"top"},
+  sev:{name:"Seville",ll:[37.3891,-5.9845],dir:"left"},
+};
+const WAYPTS = [
+  {n:"Girona",ll:[41.9794,2.8214],dir:"right"},
+  {n:"Laguardia",ll:[42.5550,-2.5850],dir:"left"},
+  {n:"Zumaia · Getaria",ll:[43.2995,-2.23],dir:"top"},
+  {n:"Toledo",ll:[39.8628,-4.0273],dir:"left",opts:["A","C"]},
+  {n:"Ronda",ll:[36.7462,-5.1612],dir:"bottom"},
+];
+
+const OPTIONS = {
+  A:{name:"A",full:"Granada deep",
+     note:"<b>Two nights in Granada, a full Alhambra day.</b> Toledo at lunch on the way down. Seville gets one night; Córdoba drops. Driving Aug 13–15, ~10h20."},
+  B:{name:"B",full:"Seville slow",
+     note:"<b>Alhambra in a morning, two settled nights in Seville.</b> The easiest end of trip. No Córdoba, no Toledo. Driving ~10h."},
+  C:{name:"C",full:"Everything",
+     note:"<b>Granada, Córdoba, Ronda and Seville.</b> One night each, every day a driving day, the Alhambra rushed. Driving ~12h20."},
+};
+
+const HOTELS = {
+  bcn:[
+    {name:"Catalonia Portal de l'Àngel",price:240,why:"1872 palace by the cathedral; garden pool; a true triple.",caveat:"",url:"https://www.cataloniahotels.com/en/hotel/catalonia-portal-del-angel"},
+    {name:"Hotel España",price:240,why:"1859 landmark redone by one of Barcelona's great Art Nouveau architects — murals, marble, the works.",caveat:"Renovation due to finish just before our dates — confirm.",url:"https://www.hotelespanya.com/en/rooms/"},
+    {name:"Casa Neri Apartments",price:600,why:"A 12th-century palace deep in the Gothic Quarter; the apartment sleeps three, rooftop plunge pool.",caveat:"Six apartments exist. Days, not weeks.",url:"https://www.hotelneri.com/en/rooms"},
+  ],
+  hon:[
+    {name:"Parador de Hondarribia",price:550,why:"A 10th-century fortress, now a hotel. Ferdinand & Isabella and Emperor Charles V stayed here. Two rooms, priced here as two.",caveat:"36 rooms, festival weekend nearby. Book this week; refundable.",url:"https://paradores.es/en/parador-de-hondarribia"},
+    {name:"Hotel Palacio Obispo",price:180,why:"A 14th-century bishop's palace inside the town walls.",caveat:"Confirm a triple by phone.",url:"https://www.hotelpalacioobispo.com"},
+  ],
+  ss:[
+    {name:"Hotel Arbaso",price:480,why:"Handsome 19th-century building by the cathedral; real family suites.",caveat:"Opening-night pricing. Book instantly or skip.",url:"https://www.hotelarbaso.com/en/rooms/"},
+    {name:"Londres y de Inglaterra",price:550,why:"Grand 1865 hotel right on the main beach — watch the fireworks from a balcony.",caveat:"Highest sellout risk of the trip.",url:"https://www.hlondres.com"},
+  ],
+  bio:[
+    {name:"Hotel Carlton",price:230,why:"1919 landmark — the Basque government ran its side of the Civil War from this building. Einstein and Hemingway signed the guestbook. Family rooms.",caveat:"",url:"https://www.hotelcarlton.es/en/"},
+    {name:"Petit Palace Arana",price:155,why:"Bilbao's oldest hotel (1850 building) at the edge of the old town. True triple.",caveat:"",url:"https://www.petitpalace.com/en/petit-palace-arana/"},
+    {name:"The Artist (ex-Domine)",price:330,why:"Faces the Guggenheim across the street.",caveat:"Three adults means a suite.",url:"https://www.hoteldominebilbao.com"},
+  ],
+  gra:[
+    {name:"Palacio de Santa Inés",price:170,why:"Two joined 16th-century houses in the old Moorish quarter facing the Alhambra; frescoed courtyard; real triples.",caveat:"Small house — book soon.",url:"https://www.palaciosantaines.es/en/rooms/"},
+    {name:"Casa Morisca",price:230,why:"An actual 15th-century Moorish merchant's house — won Europe's top restoration prize.",caveat:"Only two rooms take a third bed (+€45). Email now.",url:"https://www.hotelcasamorisca.com/en/"},
+    {name:"Parador de Granada",price:520,why:"A 500-year-old convent inside the Alhambra's walls — the only hotel in the monument. Guests alone may drive in and park; the grounds go quiet at night.",caveat:"Likely sold out, ~2× budget. Refundable — check today.",url:"https://paradores.es/en/parador-de-granada"},
+  ],
+  cor:[
+    {name:"Las Casas de la Judería",price:150,why:"Linked old houses a 3-minute walk from the Mezquita; courtyard pool.",caveat:"",url:"https://www.lascasasdelajuderiadecordoba.com/en/"},
+    {name:"Balcón de Córdoba",price:260,why:"17th-century mansion with Roman stones built into its courtyards; rooftop level with the cathedral tower.",caveat:"Ten rooms.",url:"https://balcondecordoba.com/?lang=en"},
+  ],
+  sev:[
+    {name:"Casa 1800 Sevilla",price:240,why:"1864 mansion a block from the cathedral; rooftop plunge pool facing its bell tower.",caveat:"Summer rates run up to 30% off direct.",url:"https://www.hotelcasa1800sevilla.com/en/"},
+    {name:"Petit Palace Santa Cruz",price:150,why:"Old palace shell in the most walkable historic quarter; plain modern rooms; triples.",caveat:"",url:"https://www.petitpalace.com/en/petit-palace-santa-cruz/"},
+    {name:"Parador de Carmona",price:240,why:"An actual medieval castle — a 14th-century royal fortress on a bluff, 25 min from the airport, the right side for our flight.",caveat:"Trades Seville nights for a castle.",url:"https://paradores.es/en/parador-de-carmona"},
+  ],
+};
+
+let state = {opt:"A", ss:false, picks:{bcn:0,hon:0,ss:0,bio:0,gra:0,cor:0,sev:0}};
+const PRESETS = {
+  saver:{picks:{bcn:0,hon:1,ss:0,bio:1,gra:0,cor:0,sev:1},ss:false},
+  mix:{picks:{bcn:0,hon:0,ss:0,bio:0,gra:0,cor:0,sev:0},ss:false},
+  splurge:{picks:{bcn:2,hon:0,ss:0,bio:2,gra:2,cor:1,sev:0},ss:true},
+};
+
+function nightsFor(stop){
+  const o = state.opt;
+  switch(stop){
+    case "bcn": return 3;
+    case "hon": return state.ss ? 1 : 2;
+    case "ss":  return state.ss ? 1 : 0;
+    case "bio": return 2;
+    case "gra": return o==="A" ? 2 : 1;
+    case "cor": return o==="C" ? 1 : 0;
+    case "sev": return o==="B" ? 2 : 1;
+  }
+}
+function datesFor(stop){
+  const o = state.opt;
+  switch(stop){
+    case "bcn": return "Aug 4–7";
+    case "hon": return state.ss ? "Aug 7–8" : "Aug 7–9";
+    case "ss":  return "Aug 8–9";
+    case "bio": return "Aug 9–11";
+    case "gra": return o==="A" ? "Aug 13–15" : "Aug 13–14";
+    case "cor": return "Aug 14–15";
+    case "sev": return o==="B" ? "Aug 14–16" : "Aug 15–16";
+  }
+}
+
+function buildDays(){
+  const north = [
+    {d:"Tue 4",city:"Barcelona",w:"Land midday. Walk the Gothic Quarter — the medieval old town — and eat early.",stop:"bcn"},
+    {d:"Wed 5",city:"Barcelona",w:"Gaudí's giant unfinished basilica at opening (timed ticket), then El Born: the boutique-and-tapas quarter next door.",stop:"bcn"},
+    {d:"Thu 6",city:"Girona",w:"Walled medieval city — Braavos in Game of Thrones. Climb the cathedral steps, walk the walls.",drv:"1h15 ea",stop:"bcn"},
+    {d:"Fri 7",city:"To Hondarribia",w:"Drive across the country; lunch in Laguardia, a tiny walled hilltop village in Rioja wine country. Land in Hondarribia — a fortified old fishing town on the French border.",drv:"5h30",stop:"hon"},
+    state.ss
+      ? {d:"Sat 8",city:"San Sebastián",w:"Into the beach city for the festival's opening night — cannon at 7pm, fireworks over the bay at 10:45pm.",drv:"20m",stop:"ss"}
+      : {d:"Sat 8",city:"San Sebastián",w:"Evening in the beach city for the festival's opening cannon shot and pintxos — Basque tapas. Taxi back to the castle.",drv:"20m ×2",stop:"hon"},
+    {d:"Sun 9",city:"Coast → Bilbao",w:"Zumaia's tilted sea cliffs (Dragonstone in Game of Thrones), lunch in Getaria — the fishing village Balenciaga came from, his museum on the hill.",drv:"1h15",stop:"bio"},
+    {d:"Mon 10",city:"Bilbao",w:"The Guggenheim — the swooping titanium museum that remade this city — then the old town. Cable railway up the hill at dusk for the view.",stop:"bio"},
+    {d:"Tue 11",city:"To Soria",w:"Stop at Numantia on the way in: ruins of the hilltop town that defied Rome for 20 years, then burned itself rather than surrender.",drv:"3h",stop:"sor"},
+    {d:"Wed 12",city:"Total eclipse",w:"Totality at 8:30pm with the sun low in the west. Find open ground with a clear western view; glasses on.",stop:"sor",ecl:true},
+  ];
+  const south = {
+    A:[
+      {d:"Thu 13",city:"To Granada",w:"Dawn start — all of Spain drives home from the eclipse today. Lunch in Toledo, the medieval ex-capital on a hill in a river bend. Granada by sunset.",drv:"6h20",stop:"gra"},
+      {d:"Fri 14",city:"The Alhambra",w:"All day in the hilltop palace-city of Spain's last Muslim kingdom — the royal palaces (your Lions fountain), the gardens, the fort. Flamenco in the old cave quarter at night.",stop:"gra"},
+      {d:"Sat 15",city:"Ronda → Seville",w:"Ronda: a town split by a 400-foot gorge, crossed by the huge stone bridge from the photos. Lunch overlooking it, then Seville by dusk.",drv:"4h",stop:"sev"},
+      {d:"Sun 16",city:"Fly home",w:"Climb the cathedral bell tower in the morning if the flight allows.",stop:"sev"},
+    ],
+    B:[
+      {d:"Thu 13",city:"To Granada",w:"Dawn start, straight south. Sunset from the viewpoint that faces the Alhambra across the valley.",drv:"6h",stop:"gra"},
+      {d:"Fri 14",city:"Alhambra → Seville",w:"First slot at 8:30am — palaces, gardens, fort — then Ronda's gorge and bridge at lunch. Seville by dark.",drv:"4h",stop:"sev"},
+      {d:"Sat 15",city:"Seville",w:"The royal palace early (the Alcázar — Dorne in Game of Thrones), pool through the heat of the day, flamenco late.",stop:"sev"},
+      {d:"Sun 16",city:"Fly home",w:"Slow morning. No packing panic.",stop:"sev"},
+    ],
+    C:[
+      {d:"Thu 13",city:"To Granada",w:"Dawn start; lunch in Toledo, the medieval ex-capital on a hill. Granada by sunset.",drv:"6h20",stop:"gra"},
+      {d:"Fri 14",city:"Alhambra → Córdoba",w:"Palaces early, then Córdoba: the Mezquita — a forest of 850 striped arches, a mosque with a cathedral planted in the middle of it.",drv:"2h15",stop:"cor"},
+      {d:"Sat 15",city:"Córdoba → Ronda → Seville",w:"Ronda's gorge and bridge at midday, Seville by evening.",drv:"3h45",stop:"sev"},
+      {d:"Sun 16",city:"Fly home",w:"Straight to the airport.",stop:"sev"},
+    ],
+  };
+  return north.concat(south[state.opt]);
+}
+
+/* ---------- render ---------- */
+function renderTabs(){
+  document.getElementById("tabs").innerHTML = Object.entries(OPTIONS).map(([k,o])=>
+    `<div class="tab ${state.opt===k?"on":""}" onclick="setOpt('${k}')"><span class="l">${k}</span><span class="n">${o.full}</span></div>`).join("");
+  document.getElementById("optnote").innerHTML = OPTIONS[state.opt].note;
+}
+function renderDays(){
+  document.getElementById("days").innerHTML = buildDays().map(d=>
+    `<div class="day ${d.ecl?"ecl":""}" onclick="focusStop('${d.stop}')">
+       <div class="d">${d.d}</div>
+       <div><div class="c">${d.city}</div><div class="w">${d.w}</div></div>
+       <div class="drv">${d.drv||""}</div>
+     </div>`).join("");
+}
+function renderHotels(){
+  const order = ["bcn","hon","ss","bio","sor","gra","cor","sev"];
+  document.getElementById("hotels").innerHTML = order.map(stop=>{
+    if(stop==="sor") return `<div class="stop" id="stop-sor">
+      <div class="stophead"><span class="name">Soria</span><span class="when">Aug 11–13 · booked</span></div>
+      <div class="booked">Our eclipse base. Nothing to decide.</div></div>`;
+    const n = nightsFor(stop);
+    if(!n) return "";
+    return `<div class="stop" id="stop-${stop}">
+      <div class="stophead"><span class="name">${STOPS[stop].name}</span><span class="when">${datesFor(stop)} · ${n} night${n>1?"s":""}</span></div>
+      ${HOTELS[stop].map((h,i)=>`
+        <div class="hrow ${state.picks[stop]===i?"sel":""}" onclick="pick('${stop}',${i})">
+          <span class="dot"></span>
+          <span>
+            <span class="hname">${h.name} <a href="${h.url}" target="_blank" onclick="event.stopPropagation()">↗</a></span>
+            <div class="hwhy">${h.why}</div>
+            ${h.caveat?`<div class="hcav">${h.caveat}</div>`:""}
+          </span>
+          <span class="hprice">${fmtE(h.price)}<small>${fmtD(h.price)}</small></span>
+        </div>`).join("")}
+    </div>`;
+  }).join("");
+}
+function totals(){
+  const stops = ["bcn","hon","ss","bio","gra","cor","sev"];
+  let total = 0, lines = [];
+  stops.forEach(s=>{
+    const n = nightsFor(s);
+    if(!n) return;
+    const h = HOTELS[s][state.picks[s]];
+    total += h.price*n;
+    lines.push({stop:STOPS[s].name, hotel:h.name, n, cost:h.price*n});
+  });
+  return {total, lines, avg: Math.round(total/10)};
+}
+function renderTotal(){
+  const {total, avg} = totals();
+  document.getElementById("tNum").textContent = `${fmtE(total)} · ${fmtD(total)}`;
+  document.getElementById("tPer").textContent =
+    `10 nights to book · ${fmtE(avg)} a night (${fmtD(avg)}) — ${avg>350?"over the band":avg>=260?"inside $300–400":"under budget"}`;
+}
+function picksText(){
+  const {total, lines, avg} = totals();
+  return `SPAIN — our picks\nRoute: ${state.opt} (${OPTIONS[state.opt].full})\nSan Sebastián night: ${state.ss?"yes":"no — castle + taxi"}\n` +
+    lines.map(l=>`${l.stop}: ${l.hotel} — ${l.n}n, ${fmtE(l.cost)}`).join("\n") +
+    `\nTotal: ${fmtE(total)} (${fmtD(total)}), ${fmtE(avg)}/night`;
+}
+function copyPicks(btn){
+  const done = ()=>{ const t=btn.textContent; btn.textContent="Copied"; setTimeout(()=>btn.textContent=t,1400); };
+  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(picksText()).then(done);
+  else prompt("Copy:", picksText());
+}
+
+/* ---------- map ---------- */
+let map, southLayer, markerLayer;
+function initMap(){
+  if(typeof L === "undefined"){ document.getElementById("map").style.display="none"; return; }
+  map = L.map("map",{scrollWheelZoom:true,zoomControl:true});
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png",
+    {attribution:"&copy; OpenStreetMap &copy; CARTO", subdomains:"abcd", maxZoom:19}).addTo(map);
+  map.fitBounds([[36.2,-7.3],[43.9,3.6]],{padding:[14,14]});
+  const north = [
+    STOPS.bcn.ll,[41.65,-0.88],[42.465,-2.449],[42.555,-2.585],[42.846,-2.673],STOPS.hon.ll,
+    STOPS.ss.ll,[43.2995,-2.23],STOPS.bio.ll,[42.846,-2.673],[42.465,-2.449],STOPS.sor.ll
+  ];
+  L.polyline(north,{color:"#39434e",weight:2.5,opacity:.9}).addTo(map);
+  southLayer = L.layerGroup().addTo(map);
+  markerLayer = L.layerGroup().addTo(map);
+  drawSouth(); drawMarkers();
+  setTimeout(()=>map.invalidateSize(),150);
+}
+function drawSouth(){
+  if(!map) return;
+  southLayer.clearLayers();
+  const via = {
+    granToledo:[STOPS.sor.ll,[40.63,-3.16],[39.8628,-4.0273],[38.76,-3.38],[37.78,-3.79],STOPS.gra.ll],
+    granDirect:[STOPS.sor.ll,[40.63,-3.16],[38.76,-3.38],[37.78,-3.79],STOPS.gra.ll],
+    graRonSev:[STOPS.gra.ll,[37.02,-4.56],[36.7462,-5.1612],[36.88,-5.40],[37.2,-5.78],STOPS.sev.ll],
+    graCor:[STOPS.gra.ll,[37.78,-3.79],[37.65,-4.3],STOPS.cor.ll],
+    corRonSev:[STOPS.cor.ll,[37.3,-4.85],[37.02,-4.56],[36.7462,-5.1612],[36.88,-5.40],[37.2,-5.78],STOPS.sev.ll],
+  };
+  const paths = state.opt==="A" ? [via.granToledo, via.graRonSev]
+              : state.opt==="B" ? [via.granDirect, via.graRonSev]
+              : [via.granToledo, via.graCor, via.corRonSev];
+  paths.forEach(pl=>L.polyline(pl,{color:"#c0361c",weight:2.5,opacity:.95}).addTo(southLayer));
+}
+function drawMarkers(){
+  if(!map) return;
+  markerLayer.clearLayers();
+  Object.entries(STOPS).forEach(([k,s])=>{
+    const n = k==="sor" ? 2 : nightsFor(k);
+    if(k!=="sor" && n===0) return;
+    const ecl = k==="sor";
+    const south = ["gra","cor","sev"].includes(k);
+    const c = L.circleMarker(s.ll,{radius:5.5,color:ecl?"#c0361c":(south?"#c0361c":"#39434e"),
+      weight:2,fillColor:"#f7f4ec",fillOpacity:1});
+    if(ecl) L.circleMarker(s.ll,{radius:10,color:"#c0361c",weight:1.2,fill:false}).addTo(markerLayer);
+    c.addTo(markerLayer);
+    c.on("click",()=>focusStop(k,true));
+    c.bindTooltip(
+      `${s.name}<span class="nts">${ecl?"total eclipse · aug 12":n+" night"+(n>1?"s":"")}</span>`,
+      {permanent:true,direction:s.dir,offset:lblOffset(s.dir),className:"lbl"+(ecl?" ecl":""),opacity:1});
+  });
+  WAYPTS.forEach(w=>{
+    if(w.opts && !w.opts.includes(state.opt)) return;
+    L.circleMarker(w.ll,{radius:2.6,color:"#7a7468",weight:1.4,fillColor:"#f7f4ec",fillOpacity:1})
+      .addTo(markerLayer)
+      .bindTooltip(w.n,{permanent:true,direction:w.dir,offset:lblOffset(w.dir),className:"lbl small",opacity:1});
+  });
+}
+function lblOffset(dir){
+  return dir==="right"?[8,0]:dir==="left"?[-8,0]:dir==="top"?[0,-9]:[0,9];
+}
+function focusStop(k,fromMap){
+  const el = document.getElementById("stop-"+k);
+  if(el) el.scrollIntoView({behavior:"smooth",block:"center"});
+  if(map && !fromMap) map.flyTo(STOPS[k].ll, 8, {duration:.7});
+}
+
+/* ---------- actions / state ---------- */
+function setOpt(k){ state.opt=k; renderAll(); }
+function pick(stop,i){ state.picks[stop]=i; renderAll(); }
+function applyPreset(name){
+  const pr = PRESETS[name];
+  state.picks = {...pr.picks};
+  state.ss = pr.ss;
+  document.getElementById("ssToggle").checked = state.ss;
+  renderAll();
+}
+document.getElementById("ssToggle").addEventListener("change",e=>{ state.ss=e.target.checked; renderAll(); });
+
+function saveHash(){
+  const p = Object.entries(state.picks).map(([k,v])=>k+v).join(".");
+  history.replaceState(null,"",`#o=${state.opt}&ss=${state.ss?1:0}&p=${p}`);
+}
+function loadHash(){
+  const h = location.hash.slice(1);
+  if(!h) return;
+  const q = Object.fromEntries(h.split("&").map(x=>x.split("=")));
+  if(q.o && OPTIONS[q.o]) state.opt = q.o;
+  if(q.ss) state.ss = q.ss==="1";
+  if(q.p) q.p.split(".").forEach(tok=>{
+    const m = tok.match(/^([a-z]+)(\d)$/);
+    if(m && state.picks[m[1]]!==undefined && HOTELS[m[1]] && HOTELS[m[1]][+m[2]]) state.picks[m[1]] = +m[2];
+  });
+  document.getElementById("ssToggle").checked = state.ss;
+}
+
+function renderAll(){
+  renderTabs(); renderDays(); renderHotels(); renderTotal();
+  drawSouth(); drawMarkers(); saveHash();
+}
+
+loadHash();
+renderAll();
+initMap();
+</script>
+</body>
+</html>
