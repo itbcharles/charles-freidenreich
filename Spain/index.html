@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Spain — August 2026</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
@@ -22,41 +25,38 @@
   main{display:grid;grid-template-columns:436px 1fr;height:100vh}
   #map{height:100%;background:#eceae3}
 
-  /* ---------- panel ---------- */
   .panel{border-right:1px solid var(--hair);overflow-y:auto;display:flex;flex-direction:column;background:var(--paper)}
-  .masthead{padding:20px 22px 14px;border-bottom:1px solid var(--hair)}
+  .masthead{padding:18px 22px 14px;border-bottom:1px solid var(--hair)}
   .masthead h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:23px;letter-spacing:.01em}
-  .masthead .sub{color:var(--muted);font-size:12.5px;margin-top:4px}
+  .masthead .ver{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--paper);background:var(--red);padding:2px 7px;border-radius:2px;margin-top:9px}
+  .masthead .sub{color:var(--muted);font-size:12.5px;margin-top:9px}
 
   .seclabel{font-size:10px;font-weight:700;letter-spacing:.18em;color:var(--muted);
             text-transform:uppercase;padding:18px 22px 8px}
   .seclabel .r{float:right;font-weight:400;letter-spacing:.02em;text-transform:none}
+  .seclabel.leg{color:var(--red)}
 
-  /* version tabs */
   .tabs{display:flex;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);flex-wrap:wrap}
-  .tab{flex:1 1 0;min-width:84px;padding:8px 5px 7px;text-align:center;cursor:pointer;border-bottom:2px solid transparent;
-       border-right:1px solid var(--hair)}
+  .tab{flex:1 1 0;min-width:78px;padding:8px 5px 7px;text-align:center;cursor:pointer;border-bottom:2px solid transparent;border-right:1px solid var(--hair)}
   .tab:last-child{border-right:none}
   .tab .l{font-family:Georgia,serif;font-size:13.5px;display:block;line-height:1.15}
   .tab .n{display:block;font-size:9px;color:var(--muted);margin-top:2px;line-height:1.2}
   .tab.on{border-bottom-color:var(--red);background:var(--tint)}
   .tab.on .l{color:var(--red)}
-  .optnote{padding:11px 22px 0;font-size:12.5px;color:var(--muted)}
+  .optnote{padding:10px 22px 0;font-size:12.5px;color:var(--muted)}
   .optnote b{color:var(--ink);font-weight:600}
+  .inc{padding:7px 22px 0;font-size:11.5px;color:var(--muted);line-height:1.5}
+  .inc .y{color:var(--ok);font-weight:700} .inc .x{color:var(--red);font-weight:700}
 
-  /* itinerary */
-  .day{display:grid;grid-template-columns:50px 1fr auto;gap:10px;padding:8px 22px;cursor:pointer;
-       border-bottom:1px solid transparent}
+  .day{display:grid;grid-template-columns:50px 1fr auto;gap:10px;padding:8px 22px;cursor:pointer;border-bottom:1px solid transparent}
   .day:hover{background:var(--tint)}
   .day .d{color:var(--muted);font-size:12px;padding-top:1px;white-space:nowrap}
   .day .c{font-weight:600;font-size:13.5px}
   .day .w{color:var(--muted);font-size:12.5px}
   .day .drv{font-size:11px;white-space:nowrap;padding-top:2px;text-align:right}
   .drv.dok{color:var(--muted)} .drv.dstretch{color:var(--warn);font-weight:600} .drv.dno{color:var(--red);font-weight:600}
-  .day.ecl .c{color:var(--red)}
-  .day.ecl{background:var(--tint)}
+  .day.ecl .c{color:var(--red)} .day.ecl{background:var(--tint)}
 
-  /* driving — by day, with splits */
   .drivesum{padding:2px 22px 10px;font-size:12px;color:var(--ink)}
   .dvday{padding:8px 22px 9px;border-top:1px solid var(--hair)}
   .dvday:first-child{border-top:none}
@@ -74,14 +74,11 @@
   .drvlegend i::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
   .drvlegend .gok::before{background:var(--ok)} .drvlegend .gst::before{background:var(--warn)} .drvlegend .gno::before{background:var(--red)}
 
-  /* lodging accordion */
   .lodgehint{padding:0 22px 9px;font-size:11.5px;color:var(--muted)}
   .citerow{display:grid;grid-template-columns:1fr auto 16px;gap:10px;align-items:center;padding:13px 22px;cursor:pointer;border-top:1px solid var(--hair)}
   .citerow:first-child{border-top:none}
-  .citerow:hover{background:var(--tint)}
-  .citerow.open{background:var(--tint)}
-  .citerow.fixed{cursor:default}
-  .citerow.fixed:hover{background:none}
+  .citerow:hover{background:var(--tint)} .citerow.open{background:var(--tint)}
+  .citerow.fixed{cursor:default} .citerow.fixed:hover{background:none}
   .cityname{font-weight:700;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase}
   .cityname .sub2{display:block;font-weight:400;font-size:11px;letter-spacing:0;text-transform:none;color:var(--muted);margin-top:2px}
   .citypick{font-size:10.5px;color:var(--muted);text-align:right;line-height:1.3;white-space:nowrap}
@@ -90,55 +87,45 @@
   .cityopts{background:#fcfaf4;border-top:1px solid var(--hair);padding:2px 0 6px}
   .splurgetag{display:inline-block;font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);border:1px solid var(--warn);border-radius:2px;padding:0 4px;margin-left:4px;vertical-align:1px}
   .hrow{display:grid;grid-template-columns:16px 1fr auto;gap:10px;padding:9px 22px;cursor:pointer;align-items:start}
-  .hrow:hover{background:var(--tint)}
-  .hrow.sel{background:var(--tint)}
+  .hrow:hover{background:var(--tint)} .hrow.sel{background:var(--tint)}
   .dot{width:13px;height:13px;border-radius:50%;border:1.5px solid var(--ink);margin-top:3px}
   .hrow.sel .dot{background:var(--red);border-color:var(--red);box-shadow:inset 0 0 0 2.5px var(--paper)}
   .hname{font-size:13px;font-weight:600}
-  .hname a{text-decoration:none;color:var(--muted);font-weight:400}
-  .hname a:hover{color:var(--ink)}
   .hwhy{font-size:11.8px;color:var(--muted);margin-top:1px}
   .hcav{font-size:11.3px;color:var(--red);margin-top:1px}
   .hbed{font-size:11px;color:var(--muted);margin-top:1px;font-style:italic}
+  .hlinks{margin-top:4px;font-size:11px}
+  .hlinks a{color:var(--red);text-decoration:none;border-bottom:1px solid var(--hair);margin-right:8px}
+  .hlinks a:hover{border-bottom-color:var(--red)}
   .hprice{font-size:13px;font-weight:600;white-space:nowrap}
   .hprice small{display:block;font-weight:400;color:var(--muted);font-size:10.5px;text-align:right}
   .presets{padding:0 22px 4px;font-size:11.5px;color:var(--muted)}
   .presets a{cursor:pointer;text-decoration:none;border-bottom:1px solid var(--hair);margin-right:10px;color:var(--muted)}
   .presets a:hover{color:var(--ink)}
 
-  /* book first */
   .urgent{margin:4px 22px 14px;border-left:2px solid var(--red);padding-left:12px;display:grid;gap:7px}
-  .urgent .u{font-size:12.3px}
-  .urgent .u b{font-weight:600}
+  .urgent .u{font-size:12.3px} .urgent .u b{font-weight:600}
   .urgent .u .when{color:var(--red);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-right:6px}
   .urgent .u a{color:var(--muted)}
 
-  /* total */
-  .total{position:sticky;bottom:0;margin-top:auto;background:var(--paper);border-top:1px solid var(--ink);
-         padding:12px 22px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .total{position:sticky;bottom:0;margin-top:auto;background:var(--paper);border-top:1px solid var(--ink);padding:12px 22px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
   .total .num{font-family:Georgia,serif;font-size:21px}
   .total .per{color:var(--muted);font-size:11.5px}
-  .total button{border:1px solid var(--ink);background:none;font:inherit;font-size:11px;letter-spacing:.08em;
-                text-transform:uppercase;padding:5px 10px;cursor:pointer}
+  .total button{border:1px solid var(--ink);background:none;font:inherit;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;cursor:pointer}
   .total button:hover{background:var(--ink);color:var(--paper)}
-
   .fine{padding:10px 22px 18px;font-size:10.8px;color:var(--muted);line-height:1.5}
 
-  /* ---------- map labels ---------- */
-  .lbl{background:none;border:none;box-shadow:none;font-weight:700;font-size:10.5px;letter-spacing:.14em;
-       color:var(--ink);text-transform:uppercase;
-       text-shadow:0 0 2px #fff,0 0 4px #fff,0 0 6px #fff,1px 1px 2px #fff,-1px -1px 2px #fff}
+  .lbl{background:none;border:none;box-shadow:none;font-weight:700;font-size:10.5px;letter-spacing:.14em;color:var(--ink);text-transform:uppercase;text-shadow:0 0 2px #fff,0 0 4px #fff,0 0 6px #fff,1px 1px 2px #fff,-1px -1px 2px #fff}
   .lbl.small{font-weight:600;font-size:9px;letter-spacing:.1em;color:#5e594e}
+  .lbl.ctx{font-weight:400;font-size:8.5px;letter-spacing:.06em;color:#b0a896;text-transform:uppercase}
   .lbl.ecl{color:var(--red)}
   .lbl::before{display:none}
   .lbl .nts{display:block;font-weight:400;font-size:8.5px;letter-spacing:.08em;color:var(--muted);text-align:inherit}
   .leaflet-container{font:inherit}
   .leaflet-control-attribution{background:rgba(247,244,236,.8);font-size:9px;color:var(--muted)}
 
-  /* ---------- mobile ---------- */
   @media (max-width:860px){
-    body{height:auto}
-    main{display:block;height:auto}
+    body{height:auto} main{display:block;height:auto}
     #map{position:sticky;top:0;height:44vh;z-index:0;border-bottom:1px solid var(--hair)}
     .panel{border-right:none;overflow:visible;height:auto}
     .total{position:sticky;bottom:0;z-index:10}
@@ -150,43 +137,45 @@
   <div class="panel">
     <div class="masthead">
       <h1>Spain, August 2026</h1>
-      <div class="sub">Barcelona to Seville with the total eclipse in the middle. Twelve nights, three people, one car — and five different ways to shape the trip.</div>
+      <div class="ver">Updated · June 14 · v8</div>
+      <div class="sub">Build the trip from two halves: pick a <b>first leg</b> (Barcelona → the eclipse) and a <b>second leg</b> (the eclipse → Seville). They join at Soria, so any pairing works. Twelve nights, three people, one car.</div>
     </div>
 
-    <div class="seclabel">Five versions — pick one</div>
-    <div class="tabs" id="tabs"></div>
-    <div class="optnote" id="optnote"></div>
+    <div class="seclabel leg">First leg · Aug 4–11 <span class="r">Barcelona → Soria</span></div>
+    <div class="tabs" id="ntabs"></div>
+    <div class="optnote" id="nnote"></div>
+    <div class="inc" id="ninc"></div>
+
+    <div class="seclabel leg">Second leg · Aug 13–16 <span class="r">Soria → Seville</span></div>
+    <div class="tabs" id="stabs"></div>
+    <div class="optnote" id="snote"></div>
+    <div class="inc" id="sinc"></div>
 
     <div class="seclabel">Day by day</div>
     <div id="days"></div>
 
-    <div class="seclabel">Driving, by day <span class="r" id="drvrule">two 2–3 h halves, never 5 h straight</span></div>
+    <div class="seclabel">Driving, by day <span class="r">two 2–3 h halves, never 5 h straight</span></div>
     <div class="drivesum" id="drivesum"></div>
     <div id="drivelegs"></div>
     <div class="drvlegend"><i class="gok">easy day</i><i class="gst">split with a lunch stop</i><i class="gno">a long day</i></div>
 
     <div class="seclabel">Lodging <span class="r">all 3 people · per night · est.</span></div>
     <div class="presets">set all: <a onclick="applyPreset('saver')">save</a> <a onclick="applyPreset('balanced')">balanced</a> <a onclick="applyPreset('splurge')">castles</a></div>
-    <div class="presets" style="padding-bottom:8px">A <b>Parador</b> is a state-run hotel inside a real Spanish monument — a castle, convent, or palace. Usually the most interesting bed in town.</div>
-    <div class="lodgehint">Tap a city to open its options and choose where you sleep — only one opens at a time, and your picks save automatically. <b style="color:var(--warn)">Splurge</b> marks a special place above our usual budget.</div>
+    <div class="lodgehint">Tap a city to open its options and pick where you sleep — one opens at a time, picks save automatically. Each has <b>photos</b> and <b>map</b> links. <b style="color:var(--warn)">Splurge</b> = above our usual budget.</div>
     <div id="hotels"></div>
 
     <div class="seclabel">Book first</div>
     <div class="urgent" id="urgent"></div>
 
     <div class="total">
-      <div>
-        <div class="num" id="tNum"></div>
-        <div class="per" id="tPer"></div>
-      </div>
+      <div><div class="num" id="tNum"></div><div class="per" id="tPer"></div></div>
       <button onclick="copyPicks(this)">Copy choices</button>
     </div>
 
     <div class="fine">
-      Prices gathered June 13, 2026 from hotel sites — verify before booking. One room sleeps all three at every option (book the dedicated triple or family room). Each version is ten bookable nights; Soria (Aug 11–12) is the fixed eclipse base. Tourist tax adds a few euros per person per night in some regions. €1 ≈ $1.15. Heat: Córdoba and Seville run 95–105°F in August — sightsee mornings, rest midday, confirm A/C. Eclipse: totality 8:30pm with the sun low in the west — pick ground with a clear, unblocked western horizon.
+      Prices gathered June 13–14, 2026 from hotel sites — verify before booking. One room sleeps all three at every option (book the dedicated triple or family room). Each trip is ten bookable nights; Soria (Aug 11–12) is the fixed eclipse base. €1 ≈ $1.15. August heat in the south runs 95–105°F — sightsee mornings, rest midday, confirm A/C. Eclipse: totality 8:30pm with the sun low in the west — pick ground with a clear western horizon.
     </div>
   </div>
-
   <div id="map"></div>
 </main>
 
@@ -196,398 +185,435 @@ const USD = 1.15;
 const fmtE = n => "€" + n.toLocaleString("en-US");
 const fmtD = n => "$" + Math.round(n*USD).toLocaleString("en-US");
 function fmtHrs(h){ let H=Math.floor(h+1e-6), M=Math.round((h-H)*60/5)*5; if(M===60){H++;M=0;} return M?`${H}h${String(M).padStart(2,"0")}`:`${H}h`; }
+const mapsUrl = (name,city)=>`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name+", "+city+", Spain")}`;
 
-/* ---------- places ---------- */
 const STOPS = {
   bcn:{name:"Barcelona",ll:[41.3874,2.1686],dir:"right"},
   zar:{name:"Zaragoza",ll:[41.6488,-0.8891],dir:"bottom"},
   pam:{name:"Pamplona",ll:[42.8125,-1.6458],dir:"top"},
   ss:{name:"San Sebastián",ll:[43.3183,-1.9812],dir:"top"},
   bio:{name:"Bilbao",ll:[43.2630,-2.9350],dir:"top"},
+  bur:{name:"Burgos",ll:[42.3408,-3.7000],dir:"left"},
+  loa:{name:"Loarre",ll:[42.3186,-0.6203],dir:"top"},
+  ain:{name:"Aínsa",ll:[42.4189,0.1389],dir:"top"},
+  rio:{name:"La Rioja",ll:[42.5550,-2.5850],dir:"left"},
+  alb:{name:"Albarracín",ll:[40.4053,-1.4447],dir:"bottom"},
+  sig:{name:"Sigüenza",ll:[41.0686,-2.6450],dir:"left"},
   sor:{name:"Soria",ll:[41.7665,-2.4790],dir:"right"},
-  tol:{name:"Toledo",ll:[39.8628,-4.0273],dir:"left"},
+  mad:{name:"Madrid",ll:[40.4168,-3.7038],dir:"left"},
   gra:{name:"Granada",ll:[37.1773,-3.5986],dir:"right"},
-  cac:{name:"Cáceres",ll:[39.4753,-6.3724],dir:"left"},
+  cor:{name:"Córdoba",ll:[37.8882,-4.7794],dir:"top"},
   sev:{name:"Seville",ll:[37.3891,-5.9845],dir:"left"},
 };
 const WAYPTS = {
+  figueres:{ll:[42.2667,2.9614],dir:"top",n:"Figueres (Dalí)"},
   girona:{ll:[41.9794,2.8214],dir:"right",n:"Girona"},
   lleida:{ll:[41.6176,0.6200],dir:"bottom",n:"Lleida"},
   zaragoza:{ll:[41.6488,-0.8891],dir:"bottom",n:"Zaragoza"},
+  huesca:{ll:[42.1362,-0.4087],dir:"left",n:"Huesca"},
+  barbastro:{ll:[42.0357,0.1265],dir:"bottom",n:"Barbastro"},
+  teruel:{ll:[40.3440,-1.1069],dir:"left",n:"Teruel"},
+  molina:{ll:[40.8430,-1.8869],dir:"bottom",n:"Molina de Aragón"},
+  medinaceli:{ll:[41.1730,-2.4400],dir:"right",n:"Medinaceli"},
+  haro:{ll:[42.5772,-2.8470],dir:"left",n:"Haro"},
+  pamplona:{ll:[42.8125,-1.6458],dir:"top",n:"Pamplona"},
+  sansebastian:{ll:[43.3183,-1.9812],dir:"top",n:"San Sebastián"},
   getaria:{ll:[43.2995,-2.23],dir:"top",n:"Zumaia · Getaria"},
+  bilbao:{ll:[43.2630,-2.9350],dir:"top",n:"Bilbao"},
+  vitoria:{ll:[42.8467,-2.6716],dir:"bottom",n:"Vitoria"},
   madrid:{ll:[40.4168,-3.7038],dir:"left",n:"Madrid"},
   valdepenas:{ll:[38.7628,-3.3847],dir:"right",n:"Valdepeñas"},
   cordoba:{ll:[37.8882,-4.7794],dir:"top",n:"Córdoba"},
   ronda:{ll:[36.7462,-5.1612],dir:"bottom",n:"Ronda"},
-  antequera:{ll:[37.0179,-4.5611],dir:"bottom",n:"Antequera"},
 };
+const CONTEXT_CITIES = [
+  {ll:[39.4699,-0.3763],dir:"right",n:"Valencia"},
+  {ll:[36.7213,-4.4214],dir:"bottom",n:"Málaga"},
+  {ll:[43.4623,-3.8099],dir:"top",n:"Santander"},
+  {ll:[40.9701,-5.6635],dir:"left",n:"Salamanca"},
+];
 
-/* ---------- hotels ---------- */
 const HOTELS = {
   bcn:[
-    {name:"El Born Guest House",price:190,bed:"6-room guesthouse; one room adds a 3rd bed",why:"A genuinely tiny 6-room guesthouse beside the Born food market, run more like a friend's apartment than a hotel.",caveat:"Self check-in, no reception; only one room fits three — book early.",url:"https://casaconsell.com/en/el-born-guest-house-2/"},
-    {name:"The5rooms",price:205,bed:"family room sleeps 3",why:"An art-filled boutique B&B in an early-1900s building, named for the five rooms its owner first opened — a personal, gallery-like hideaway.",caveat:"Spread over two nearby addresses — confirm which one you're in.",url:"https://www.the5rooms.com/en/"},
-    {name:"Catalonia Portal de l'Àngel",price:240,bed:"true triple",why:"An 1872 mansion by the cathedral with a garden pool, right on the main pedestrian street.",caveat:"",url:"https://www.cataloniahotels.com/en/hotel/catalonia-portal-del-angel"},
-    {name:"Hotel España",price:240,bed:"triple",why:"An 1859 landmark redone by one of Barcelona's great Art Nouveau architects — murals, marble, the works.",caveat:"A renovation is due to finish just before mid-August 2026 — confirm it's done.",url:"https://www.hotelespanya.com/en/rooms/"},
-    {name:"Casa Mathilda",price:270,bed:"triple (extra bed); 14-room B&B",why:"An owner-run B&B on the noble floor of a late-1800s textile-family mansion — stained glass, oak parquet, homemade-cake breakfasts near Gaudí's La Pedrera.",caveat:"One floor of a residential building; few rooms, book early.",url:"https://casamathilda.com/en/"},
-    {name:"Hotel Bagués",price:590,bed:"suite + extra bed",why:"A modernista splurge in the 1850 El Regulador palace on La Rambla — the old Bagués-Masriera jewellery house, with real Art Nouveau jewels in every room and a rooftop pool.",caveat:"~80% over budget, on the busy lower Rambla.",url:"https://www.hotelbagues.com/en"},
-    {name:"Casa Neri Apartments",price:600,bed:"apartment, sleeps 3",why:"A 12th-century palace deep in the medieval Gothic Quarter; the apartment sleeps three with a rooftop plunge pool.",caveat:"Only six apartments. Over budget — the splurge.",url:"https://www.hotelneri.com/en/rooms"},
+    {name:"El Born Guest House",price:190,bed:"6-room guesthouse; one room adds a 3rd bed",why:"A genuinely tiny 6-room guesthouse beside the Born food market, run like a friend's apartment.",caveat:"Self check-in, no reception; only one room fits three — book early.",url:"https://casaconsell.com/en/el-born-guest-house-2/"},
+    {name:"The5rooms",price:205,bed:"family room sleeps 3",why:"An art-filled boutique B&B in an early-1900s building, a personal, gallery-like hideaway.",caveat:"Spread over two nearby addresses — confirm which one you're in.",url:"https://www.the5rooms.com/en/"},
+    {name:"Catalonia Portal de l'Àngel",price:240,bed:"true triple",why:"An 1872 mansion by the cathedral with a garden pool, on the main pedestrian street.",caveat:"",url:"https://www.cataloniahotels.com/en/hotel/catalonia-portal-del-angel"},
+    {name:"Hotel España",price:240,bed:"triple",why:"An 1859 landmark redone by one of Barcelona's great Art Nouveau architects — murals, marble.",caveat:"A renovation is due to finish just before mid-August 2026 — confirm it's done.",url:"https://www.hotelespanya.com/en/rooms/"},
+    {name:"Casa Mathilda",price:270,bed:"triple (extra bed); 14-room B&B",why:"An owner-run B&B on the noble floor of a late-1800s textile-family mansion near La Pedrera.",caveat:"One floor of a residential building; few rooms, book early.",url:"https://casamathilda.com/en/"},
+    {name:"Hotel Bagués",price:590,bed:"suite + extra bed",why:"A modernista splurge in the 1850 El Regulador palace on La Rambla — the old jewellery house, rooftop pool.",caveat:"~80% over budget, on the busy lower Rambla.",url:"https://www.hotelbagues.com/en"},
+    {name:"Casa Neri Apartments",price:600,bed:"apartment, sleeps 3",why:"A 12th-century palace deep in the Gothic Quarter; the apartment sleeps three, rooftop plunge pool.",caveat:"Only six apartments. Over budget — the splurge.",url:"https://www.hotelneri.com/en/rooms"},
   ],
   zar:[
-    {name:"Hotel Sauce",price:120,bed:"family room",why:"A plain but well-run little hotel with its own pastry café, 100 yards from the basilica — the best-value bed in the old town.",caveat:"Modern, not historic. Request the family room.",url:"https://www.hotelsauce.com/en/"},
-    {name:"Hostal Plaza Boutique",price:130,bed:"triple on request; 15 rooms",why:"A pocket-sized 15-room guesthouse right on Plaza del Pilar, with corner rooms framing the basilica domes from the window.",caveat:"Adults-only and built around doubles — email to lock in a 3-person room.",url:"https://www.hostalplazazgz.com/en"},
-    {name:"Catalonia El Pilar",price:140,bed:"family room",why:"A 1900s mansion in Zaragoza's own Art Nouveau style — carved stone façades, flower-shaped iron balconies, an original wood-paneled elevator — two minutes behind the giant domed basilica.",caveat:"Only a few rooms sleep three; book the family (bunk-bed) room directly and soon.",url:"https://www.cataloniahotels.com/en/hotel/catalonia-el-pilar"},
-    {name:"Casa Palacio de los Sitios",price:150,bed:"1–2 bedroom apartment, sleeps 3",why:"Two listed 18th-century townhouses whose stone façades still carry cannonball scars from Napoleon's 1808 siege of the city, now handsome apartments off Plaza del Pilar.",caveat:"Apartments — light service; confirm the exact unit for three.",url:"https://www.booking.com/hotel/es/palacios-de-los-sitios.html"},
-    {name:"NH Collection Gran Hotel",price:175,bed:"double + extra bed",why:"The city's grand 1929 landmark, built at the king's request — marble lobby, sweeping staircase; Hemingway and Ava Gardner slept here.",caveat:"Confirm a room that truly fits three. About a 10-min walk from the basilica.",url:"https://www.nh-collection.com/en/hotel/nh-collection-gran-hotel-de-zaragoza"},
-    {name:"Hotel Alfonso",price:430,bed:"junior suite / triple",why:"The city's classic grand address on pedestrian Calle Alfonso, with interiors by designer Pascua Ortega, a few minutes from the basilica.",caveat:"Entry of the over-budget range; a polished big hotel, not intimate.",url:"https://www.palafoxhoteles.com/en/zaragoza-hotels/hotel-alfonso"},
+    {name:"Hotel Sauce",price:120,bed:"family room",why:"A well-run little hotel with its own pastry café, 100 yards from the giant domed basilica.",caveat:"Modern, not historic. Request the family room.",url:"https://www.hotelsauce.com/en/"},
+    {name:"Hostal Plaza Boutique",price:130,bed:"triple on request; 15 rooms",why:"A pocket-sized 15-room guesthouse right on Plaza del Pilar, with corner rooms framing the basilica domes.",caveat:"Adults-only and built around doubles — email to lock in a 3-person room.",url:"https://www.hostalplazazgz.com/en"},
+    {name:"Catalonia El Pilar",price:140,bed:"family room",why:"A 1900s Art Nouveau mansion — carved façades, an original wood-paneled elevator — behind the basilica.",caveat:"Only a few rooms sleep three; book the family room early.",url:"https://www.cataloniahotels.com/en/hotel/catalonia-el-pilar"},
+    {name:"Casa Palacio de los Sitios",price:150,bed:"1–2 bedroom apartment, sleeps 3",why:"Two 18th-century townhouses whose façades still carry cannonball scars from Napoleon's 1808 siege.",caveat:"Apartments — light service; confirm the unit for three.",url:"https://www.booking.com/hotel/es/palacios-de-los-sitios.html"},
+    {name:"Hotel Alfonso",price:430,bed:"junior suite / triple",why:"The city's grand address on pedestrian Calle Alfonso, interiors by designer Pascua Ortega.",caveat:"Over budget; a polished big hotel, not intimate.",url:"https://www.palafoxhoteles.com/en/zaragoza-hotels/hotel-alfonso"},
   ],
   pam:[
-    {name:"Hostal Arriazu",price:130,bed:"double + extra bed",why:"A warm little family hostal 50 yards off the main square, with wood floors and balconies over the old town.",caveat:"A simple 2-star, not a designer place; rooms are small.",url:"https://www.hostalarriazu.com/en/"},
-    {name:"Pamplona Catedral Hotel",price:150,bed:"true triple",why:"A restored former convent beside the Gothic cathedral — old stone bones, modern rooms, a little rooftop pool — the best-value characterful base inside the walls.",caveat:"No roll-away beds; book the dedicated triple room.",url:"https://www.pamplonacatedralhotel.com/en"},
-    {name:"Antique Pamplona Apartments",price:230,bed:"2-bedroom apartment (own room for the 3rd) + kitchen",why:"A tiny set of design apartments in a historic building on one of the old town's oldest Roman-rooted streets, run by the grand Hotel Tres Reyes.",caveat:"Apartments — no front desk; check-in is arranged.",url:"https://antiquepamplona.com/en/"},
-    {name:"Palacio Guendulain",price:250,bed:"room + extra bed",why:"A real 18th-century palace built by a Spanish viceroy of the Americas; the lobby still displays the family's horse-drawn carriages. Three-minute walk to the main square.",caveat:"The third bed is an add-on — confirm a big enough room. Only 25 rooms.",url:"https://www.palacioguendulainhotel.com/en/"},
-    {name:"Hotel Pompaelo",price:270,bed:"family room (two connecting bedrooms)",why:"A boutique 4-star wrapped around the historic La Galea tower, overlooking the plaza where the San Fermín opening rocket fires, with a rooftop sky bar and spa.",caveat:"Modern inside the old shell; lively plaza — ask for an inner room.",url:"https://www.hotelpompaelo.com/"},
-    {name:"Gran Hotel La Perla",price:310,bed:"true triple",why:"The landmark on the grand arcaded main square since 1881 — Hemingway's hotel, right on the bull-run street, his room preserved.",caveat:"Cheaper rooms have no square view and the bull-run side is loud at night.",url:"https://www.granhotellaperla.com/EN/rooms.html"},
-    {name:"Castillo de Gorraiz",price:480,bed:"junior suite",why:"A boho-luxe hotel folded around a real 17th-century castle in the valley outside town, with golf, a full spa and stone-and-velvet rooms.",caveat:"Over budget and 10 min out (free shuttle); resort vibe, not old-town.",url:"https://www.castillodegorraiz.com/index.asp?Idioma=EN"},
+    {name:"Hostal Arriazu",price:130,bed:"double + extra bed",why:"A warm little family hostal 50 yards off the main square, balconies over the old town.",caveat:"A simple 2-star; rooms are small.",url:"https://www.hostalarriazu.com/en/"},
+    {name:"Pamplona Catedral Hotel",price:150,bed:"true triple",why:"A restored former convent beside the Gothic cathedral, with a little rooftop pool — best-value base inside the walls.",caveat:"No roll-away beds; book the dedicated triple.",url:"https://www.pamplonacatedralhotel.com/en"},
+    {name:"Antique Pamplona Apartments",price:230,bed:"2-bedroom apartment + kitchen",why:"A tiny set of design apartments in a historic building on a Roman-rooted old-town street.",caveat:"Apartments — no front desk; check-in arranged.",url:"https://antiquepamplona.com/en/"},
+    {name:"Palacio Guendulain",price:250,bed:"room + extra bed",why:"A real 18th-century palace built by a Spanish viceroy of the Americas; carriages in the lobby.",caveat:"The third bed is an add-on — confirm a big room. 25 rooms.",url:"https://www.palacioguendulainhotel.com/en/"},
+    {name:"Gran Hotel La Perla",price:310,bed:"true triple",why:"The landmark on the arcaded main square since 1881 — Hemingway's hotel, his room preserved.",caveat:"Cheaper rooms have no square view; the bull-run side is loud.",url:"https://www.granhotellaperla.com/EN/rooms.html"},
+    {name:"Castillo de Gorraiz",price:480,bed:"junior suite",why:"A boho-luxe hotel folded around a real 17th-century castle in the valley outside town, golf + spa.",caveat:"Over budget and 10 min out (free shuttle); resort vibe.",url:"https://www.castillodegorraiz.com/index.asp?Idioma=EN"},
   ],
   ss:[
-    {name:"Pensión El Puerto",price:175,bed:"family studio (sleeps 3)",why:"A truly tiny 6-room guesthouse by the old fishing port at the foot of the old town — parquet floors, period touches, a fraction of hotel prices.",caveat:"Basic pension, 6 rooms; the family units go fast for August.",url:"https://pension-el-puerto.sansebastian-hotels.com/en/"},
-    {name:"Pensión Amaiur",price:230,bed:"triple (7 rooms)",why:"A family-run guesthouse on the old town's most atmospheric lane, in one of the few buildings to survive the 1813 burning of the city — floral wallpaper, tiled baths, the pintxo bars literally downstairs.",caveat:"Only 7 rooms; sells out earliest. No elevator, loud during the August festival.",url:"https://pensionamaiur.com/en/"},
-    {name:"Pensión Casa Nicolasa",price:240,bed:"triple/family room (11 rooms)",why:"An intimate 11-room boutique pension in a historic old-town building that once held a legendary Basque restaurant, steps from the market and pintxo bars.",caveat:"Only 11 rooms; books far ahead for the August festival.",url:"https://www.pensioncasanicolasa.com/en/"},
-    {name:"Hotel Niza",price:320,bed:"sea-view triple",why:"A 1908 seafront classic right on the La Concha bay promenade — the bay fills the windows, the old town a 5-minute walk; the sculptor Chillida once owned it.",caveat:"Aug 7–9 is the city's biggest festival (fireworks over the bay nightly) — spectacular but ~2–3× normal price, likely 3-night minimum.",url:"https://www.hotelniza.com/en/"},
-    {name:"Hotel Villa Soro",price:480,bed:"family room (sofa bed)",why:"A Small Luxury Hotel in an 1898 heritage mansion wrapped in a garden, with antique-meets-design rooms, free bikes and original Basque art.",caveat:"~50% over budget and a 15–20 min walk from the old town; the 3rd bed only works in the Family Room.",url:"https://slh.com/hotels/hotel-villa-soro"},
-    {name:"Hotel de Londres y de Inglaterra",price:520,bed:"family room",why:"The 150-year-old Belle Époque grande dame on the seafront — white façade, chandeliered lounges, the postcard hotel of the bay.",caveat:"Over budget, more so during the festival.",url:"https://hlondres.com/en/"},
-    {name:"Nobu Hotel San Sebastián",price:700,bed:"suite (sofa bed for the 3rd)",why:"An 18-key hideaway in a 1912 villa right on La Concha bay — Japanese minimalism meets Basque elegance, a Nobu restaurant downstairs.",caveat:"The big splurge — well over double budget at peak; suites suit 2 adults + a child best.",url:"https://www.nobuhotels.com/san-sebastian/"},
+    {name:"Pensión El Puerto",price:175,bed:"family studio (sleeps 3)",why:"A tiny 6-room guesthouse by the old fishing port at the foot of the old town — a fraction of hotel prices.",caveat:"Basic pension, 6 rooms; family units go fast for August.",url:"https://pension-el-puerto.sansebastian-hotels.com/en/"},
+    {name:"Pensión Amaiur",price:230,bed:"triple (7 rooms)",why:"A family-run guesthouse on the old town's most atmospheric lane, pintxo bars downstairs.",caveat:"7 rooms; sells out earliest. No elevator, loud during the festival.",url:"https://pensionamaiur.com/en/"},
+    {name:"Pensión Casa Nicolasa",price:240,bed:"triple/family room (11 rooms)",why:"An intimate 11-room boutique pension in a historic old-town building, steps from the market.",caveat:"11 rooms; books far ahead for the August festival.",url:"https://www.pensioncasanicolasa.com/en/"},
+    {name:"Hotel Niza",price:320,bed:"sea-view triple",why:"A 1908 seafront classic right on La Concha bay — the bay fills the windows; Chillida once owned it.",caveat:"Aug 6–9 is the city's biggest festival (nightly fireworks) — ~2–3× price, 3-night minimum.",url:"https://www.hotelniza.com/en/"},
+    {name:"Hotel Villa Soro",price:480,bed:"family room (sofa bed)",why:"A Small Luxury Hotel in an 1898 mansion wrapped in a garden, antique-meets-design rooms, free bikes.",caveat:"~50% over budget, 15–20 min walk from the old town; 3rd bed only in the Family Room.",url:"https://slh.com/hotels/hotel-villa-soro"},
+    {name:"Hotel de Londres y de Inglaterra",price:520,bed:"family room",why:"The 150-year-old Belle Époque grande dame on the seafront — the postcard hotel of the bay.",caveat:"Over budget, more so during the festival.",url:"https://hlondres.com/en/"},
+    {name:"Nobu Hotel San Sebastián",price:700,bed:"suite (sofa bed for 3rd)",why:"An 18-key hideaway in a 1912 villa right on La Concha bay; a Nobu restaurant downstairs.",caveat:"The big splurge — well over double budget at peak.",url:"https://www.nobuhotels.com/san-sebastian/"},
   ],
   bio:[
-    {name:"Pensión Basque Boutique",price:140,bed:"true triple room",why:"A miniature old-town guesthouse where every room is hand-decorated with Basque art, steps from the Casco Viejo bars.",caveat:"A simple 2-star pension; the true triple is one of few — book early.",url:"https://www.booking.com/hotel/es/basque-boutique.html"},
-    {name:"Iturrienea Ostatua",price:150,bed:"triple (9 rooms)",why:"A gloriously eccentric 9-room pension on the first floor of a 1906 old-town building — antiques, stone, oak beams, sheep figurines in berets; pure Basque personality.",caveat:"9 rooms, no elevator, basic baths; triples scarce.",url:"https://www.booking.com/hotel/es/iturrienea-ostatua.html"},
+    {name:"Pensión Basque Boutique",price:140,bed:"true triple room",why:"A miniature old-town guesthouse where every room is hand-decorated with Basque art.",caveat:"A simple 2-star; the true triple is one of few — book early.",url:"https://www.booking.com/hotel/es/basque-boutique.html"},
+    {name:"Iturrienea Ostatua",price:150,bed:"triple (9 rooms)",why:"A gloriously eccentric 9-room pension in a 1906 old-town building — antiques, beams, sheep figurines in berets.",caveat:"9 rooms, no elevator, basic baths.",url:"https://www.booking.com/hotel/es/iturrienea-ostatua.html"},
     {name:"Petit Palace Arana",price:155,bed:"true triple",why:"Bilbao's oldest hotel (an 1850 building) at the edge of the old town.",caveat:"",url:"https://www.petitpalace.com/en/petit-palace-arana/"},
-    {name:"Hotel Carlton",price:230,bed:"family room",why:"A 1919 landmark — the Basque government ran its side of the Civil War from this building; Einstein and Hemingway signed the guestbook.",caveat:"",url:"https://www.hotelcarlton.es/en/"},
-    {name:"Hotel Tayko",price:265,bed:"family room (sofa bed)",why:"An industrial-chic design hotel in a landmark 1924 building (the 4th reinforced-concrete structure ever built in Spain), with a Michelin-starred Berasategui restaurant.",caveat:"More design hotel than intimate; family rooms limited.",url:"https://taykohotels.com/en/bilbao/"},
-    {name:"The Artist (ex-Domine)",price:330,bed:"suite",why:"Faces the Guggenheim museum across the street, with rooftop views of it.",caveat:"Three adults means booking a suite.",url:"https://www.hoteldominebilbao.com"},
-    {name:"Palacio Arriluce",price:540,bed:"suite / family room",why:"A 1912 neo-Gothic clifftop palace built for a marquis in seaside Getxo — a Leading Hotels five-star with spa, sea-view grounds and a bar in the old chapel.",caveat:"Over budget and 12 min from the center; book a suite/family room for three.",url:"https://www.palacioarrilucehotel.com/en/"},
+    {name:"Hotel Carlton",price:230,bed:"family room",why:"A 1919 landmark — the Basque government ran its side of the Civil War from here; Einstein signed the guestbook.",caveat:"",url:"https://www.hotelcarlton.es/en/"},
+    {name:"Hotel Tayko",price:265,bed:"family room (sofa bed)",why:"An industrial-chic design hotel in a landmark 1924 building, Michelin-starred Berasategui restaurant.",caveat:"More design hotel than intimate; family rooms limited.",url:"https://taykohotels.com/en/bilbao/"},
+    {name:"The Artist (ex-Domine)",price:330,bed:"suite",why:"Faces the Guggenheim across the street, with rooftop views of it.",caveat:"Three adults means a suite.",url:"https://www.hoteldominebilbao.com"},
+    {name:"Palacio Arriluce",price:540,bed:"suite / family room",why:"A 1912 neo-Gothic clifftop palace in seaside Getxo — a Leading Hotels five-star with spa.",caveat:"Over budget and 12 min from the center.",url:"https://www.palacioarrilucehotel.com/en/"},
   ],
-  tol:[
-    {name:"La Posada de Manolo",price:115,bed:"superior room: double + single",why:"A lovingly restored 15th-century Toledo house 100 yards below the cathedral, its three floors themed to the city's Arab, Jewish and Christian past, around a leafy courtyard.",caveat:"Family-run and simple (no full elevator); the rooftop cathedral-view rooms book months ahead.",url:"https://www.laposadademanolo.com/en/"},
-    {name:"Hotel Pintor El Greco",price:155,bed:"superior triple",why:"A 17th-century bakery turned hotel deep in the old Jewish Quarter — wooden beams, brick vaults, even rooms carved into the rock — 50 yards from the El Greco museum, inside the walls.",caveat:"Cars can't reach the door; park in a garage and walk.",url:"https://www.hotelpintorelgreco.com/en/rooms/triple-room/"},
-    {name:"Casa del Armiño",price:200,bed:"family room / unit + extra bed",why:"A Renaissance palace in the old town that once belonged to El Greco's own son — a flower-filled courtyard, original stonework, and a genuine tower room you can sleep in.",caveat:"Newly reopened and sometimes used for events — confirm no private function on your dates.",url:"https://casadelarmino.es/"},
-    {name:"Parador de Toledo",price:230,bed:"triple",why:"A modern building, but its terrace frames THE postcard view — the whole walled city piled on its rock across the river, the skyline El Greco painted.",caveat:"20th-century, and a 10-min drive from the old town. View rooms sell out for August.",url:"https://paradores.es/en/parador-de-toledo"},
-    {name:"Eugenia de Montijo (Autograph)",price:480,bed:"deluxe + rollaway",why:"A 16th-century palace once owned by the Empress Eugenia de Montijo, 200 yards from the cathedral, now a 5-star with a Natura Bissé spa, indoor pool and hammam.",caveat:"Over budget once you add the 3rd bed; old-town parking is a hassle (use valet).",url:"https://www.marriott.com/en-us/hotels/madft-eugenia-de-montijo-autograph-collection/overview/"},
-    {name:"Madrid · Catalonia Las Cortes",price:215,bed:"true triple",why:"If you'd rather sleep in Madrid: an 18th-century duke's mansion with surviving painted ceilings, five minutes from the Prado in the old literary quarter.",caveat:"You'd skip the Toledo night and just visit it next morning. Sells out first; book the triple.",url:"https://www.cataloniahotels.com/en/hotel/catalonia-las-cortes"},
-    {name:"Madrid · Posada del León de Oro",price:240,bed:"family room (double + single/sofa)",why:"If you'd rather sleep in Madrid: a 1700s inn on the tapas street Cava Baja with a stretch of Madrid's 12th-century city wall preserved under glass floors inside.",caveat:"Trades the Toledo night. Cava Baja is loud on weekend nights — ask for an inner courtyard room.",url:"https://posadadelleondeoro.com/en/"},
-    {name:"Madrid · Gran Hotel Inglés",price:560,bed:"larger room / connecting (confirm for 3)",why:"If you'd rather splurge in Madrid: the city's oldest hotel (1886), reborn as an Art Deco jewel box — quilted-leather walls, bronze and crystal — on a quiet Letras side street.",caveat:"60–90% over budget and really a couples' hotel; triples are limited and pricey.",url:"https://www.granhotelingles.com/"},
+  bur:[
+    {name:"Hostal Rimbombín",price:110,bed:"triple (double + single)",why:"A cheerful little inn in the old town ~150 yards from the cathedral, its own tapas bar.",caveat:"A simple 2-star: small rooms, some street noise.",url:"https://www.rimbombin.com/room-details/habitacion-triple/?lang=en"},
+    {name:"Hotel Norte y Londres",price:165,bed:"triple (double + single)",why:"A genteel 1904 family hotel on a quiet plaza by the cathedral — original stained glass, antiques.",caveat:"Character over polish; limited triples — book early.",url:"https://www.hotelnorteylondres.com/en/"},
+    {name:"Hotel Mesón del Cid",price:215,bed:"triple (some cathedral-facing)",why:"A family institution since 1961 right across the square from the cathedral's west front.",caveat:"Traditional decor; cathedral-view triples sell out first.",url:"https://www.mesondelcid.es/en/"},
+    {name:"Parador de Lerma",price:245,bed:"triple (extra bed)",why:"A Parador in a vast 17th-century ducal palace atop a medieval castle, crowning Lerma's arcaded square.",caveat:"~40 min south of Burgos — best if you make Lerma the stop instead.",url:"https://paradores.es/en/parador-de-lerma"},
+    {name:"NH Collection Palacio de Burgos",price:290,bed:"superior / suite + extra bed",why:"A former 16th-century convent on the river — sleep inside Gothic stone cloisters, 5 min from the cathedral.",caveat:"A chain conversion; a true triple means a Superior/suite at the top of this price.",url:"https://www.nh-collection.com/en/hotel/nh-collection-palacio-de-burgos"},
+  ],
+  loa:[
+    {name:"Posada de la Luna (Huesca)",price:110,bed:"triple (extra bed); 8 rooms",why:"An 8-room hideaway built inside a surviving stretch of Huesca's medieval city wall — sleeping in the ramparts.",caveat:"Tiny and snug; verify the triple is big enough. In Huesca, ~30 min from the castle.",url:"https://www.booking.com/hotel/es/posada-de-la-luna.html"},
+    {name:"Hospedería de Loarre",price:125,bed:"true triple (3 singles)",why:"A 16th-century Aragonese palace-inn right on Loarre's village square, directly below the great Romanesque castle.",caveat:"Only 12 rooms — book the triple early; the castle itself is a short drive up.",url:"https://hospederiadeloarre.es/"},
+    {name:"Sancho Abarca Petit SPA (Huesca)",price:150,bed:"triple (sofa bed for 3rd)",why:"A stone-and-wood boutique 100 m from Huesca's cathedral, with its own little spa.",caveat:"Third sleeps on a sofa bed; modern interior more than ancient.",url:"https://www.gargallo-hotels.com/en/huesca/hotel-sancho-abarca-petit-spa"},
+    {name:"Hotel Pedro I de Aragón (Huesca)",price:195,bed:"triple (extra bed)",why:"A large, recently renovated 4-star by Huesca's park — and a rooftop pool, gold after a hot castle day.",caveat:"Over budget and a big polished hotel, not a tiny inn.",url:"https://www.gargallo-hotels.com/en/huesca/hotel-pedro-i-de-aragon"},
+  ],
+  ain:[
+    {name:"Hotel Sánchez",price:150,bed:"true triple (double + single)",why:"A reliable family-run hotel with a real triple and a short flat walk up into the medieval plaza.",caveat:"In the modern lower town, not the old quarter; book code ALOJAMIENTOS2026 for ~7% off.",url:"https://www.hotelsanchez.com/en/rooms/"},
+    {name:"Casa El Hospital",price:175,bed:"triple room (double + single)",why:"A restored medieval stone house woven into the historic core, steps off the arcaded Plaza Mayor.",caveat:"A room-rental casa rural (no reception/restaurant); confirm a 3-person room.",url:"https://www.turismoainsa.com/casa-el-hospital/"},
+    {name:"Hotel Posada Real",price:190,bed:"Suite Real (double + sofa bed)",why:"A tiny 6-room inn built into a stone house right ON the arcaded Plaza Mayor, its own restaurant downstairs.",caveat:"Only the Suite Real fits 3, so it's a single-room booking; 2-star simple.",url:"https://posadareal.com/"},
+    {name:"Casas Pirineo (palace & garden)",price:320,bed:"1–2 bedroom apartment (sofa bed/2nd room)",why:"A 16th-century stone palace with garden, pool and in-room hot tubs, 4 min from Aínsa — an Ordesa base.",caveat:"Over budget and a 4-min drive from the old town.",url:"https://www.booking.com/hotel/es/casas-pirineo.html"},
+  ],
+  rio:[
+    {name:"Eurostars Los Agustinos (Haro)",price:215,bed:"true triple",why:"A 1373 convent-turned-hotel in the wine town of Haro, built around a breathtaking glass-domed stone cloister.",caveat:"A big 4-star chain property — the cloister is the magic, rooms are standard. The only real triple here.",url:"https://www.eurostarshotels.com/eurostars-los-agustinos.html"},
+    {name:"Hotel Castillo El Collado (Laguardia)",price:250,bed:"double + requested extra bed (10 rooms)",why:"A pocket-sized stone castle on the edge of the walled wine village of Laguardia — climb the tower for a glass of Rioja.",caveat:"Just outside the walls (4-min walk); thinly staffed evenings. Confirm the extra bed.",url:"https://castilloelcollado.com/"},
+    {name:"Hospedería de los Parajes (Laguardia)",price:320,bed:"55 m² Suite Deluxe (loft sofa for 3rd)",why:"A wood-beamed 16th-century palace inside Laguardia's car-free walls, with 500-year-old wine caves and a wine spa.",caveat:"Only the larger suite fits 3, which pushes it up; parking outside the walls.",url:"https://www.hospederiadelosparajes.com/en/"},
+    {name:"Hotel Marqués de Riscal (Elciego)",price:700,bed:"loft suite (sofa) / connecting rooms",why:"THE headliner: sleep inside Frank Gehry's swooping pink-and-titanium ribbons rising out of the Marqués de Riscal vineyards — spa, a bottle in every room.",caveat:"Over budget and awkward for three (need a suite/connecting rooms). A one-night blowout.",url:"https://www.marriott.com/en-us/hotels/biolc-hotel-marques-de-riscal-a-luxury-collection-hotel-elciego/overview/"},
+  ],
+  alb:[
+    {name:"Hotel Albarracín",price:200,bed:"true triple (3 real beds)",why:"A late-16th-century noble palace at the gateway to the walled village, rustic-classic rooms and a summer pool — rare luxury on this clifftop.",caveat:"Bigger and more conventional than the tiny boutiques; at the edge, not buried in the prettiest lanes.",url:"https://www.hotelalbarracinteruel.com/EN/home.html"},
+    {name:"La Casona del Ajimez",price:240,bed:"double + requested extra bed (6 rooms)",why:"A 200-year-old stone manor deep in the old town below the castle, six rooms themed to the three cultures that built Albarracín, with a garden and rooftop views.",caveat:"Only 6 rooms and no standing triple — request the extra bed in advance; pedestrian/steep streets.",url:"https://casonadelajimez.com/"},
+    {name:"Posada del Adarve",price:250,bed:"suite + extra bed, or 2-bed apartment",why:"You sleep inside a medieval gate-tower of the town wall, with a terrace on the rampart over the river gorge — one suite has a star-painted ceiling.",caveat:"Apartment is up two floors of stairs; suite-plus-bed is tighter. Very few rooms.",url:"https://posadadeladarve.com/"},
+  ],
+  sig:[
+    {name:"Hotel Posta Real",price:160,bed:"true triple (3rd single bed)",why:"An easygoing boutique inn woven into Sigüenza's medieval lanes, two minutes below the castle, 19th-century antiques inside.",caveat:"Comfortable-modern more than character-dripping; tight streets, limited parking.",url:"https://www.booking.com/hotel/es/posta-real.html"},
+    {name:"Parador de Sigüenza",price:235,bed:"double + extra bed (request castle wing)",why:"You literally sleep inside a 12th-century hilltop fortress that held Spanish kings and bishops — cobbled courtyard, Romanesque chapel, vaulted stone dining hall.",caveat:"An 81-room property (feels grand-hotel); ask for the historic castle wing, not the modern block. Confirm the extra bed.",url:"https://paradores.es/en/parador-de-siguenza"},
+    {name:"Molino de Alcuneza (Relais & Châteaux)",price:320,bed:"Superior/Suite (sleeps 3)",why:"A whitewashed 15th-century watermill on the river, restored into a tiny Relais & Châteaux retreat with a pool, hammam and Michelin-star kitchen.",caveat:"~5 km outside town (need the car); few rooms sleep 3 — book early.",url:"https://www.molinodealcuneza.com/en/molino-de-alcuneza-english/"},
+  ],
+  mad:[
+    {name:"Catalonia Las Cortes",price:215,bed:"true triple",why:"An 18th-century duke's mansion with surviving painted ceilings, five minutes from the Prado in the literary quarter.",caveat:"Sells out first; book the triple.",url:"https://www.cataloniahotels.com/en/hotel/catalonia-las-cortes"},
+    {name:"Posada del Peine",price:235,bed:"family room (sleeps 3–4)",why:"Officially the oldest hotel in Spain (an inn since 1610), exposed 17th-century beams, by Plaza Mayor.",caveat:"Three old buildings knitted together — ask for a larger family room.",url:"https://www.petitpalace.com/en/petit-palace-posada-del-peine/"},
+    {name:"Posada del León de Oro",price:240,bed:"family room (double + single/sofa)",why:"A 1700s inn on the tapas street Cava Baja with a stretch of Madrid's 12th-century wall under glass floors.",caveat:"Cava Baja is loud on weekends — ask for an inner courtyard room.",url:"https://posadadelleondeoro.com/en/"},
+    {name:"NH Collection Palacio de Tepa",price:330,bed:"triple (extra bed)",why:"A grand 19th-century casa-palacio off Plaza Santa Ana in the heart of the literary quarter.",caveat:"Polished chain-collection palace; confirm a true triple.",url:"https://www.nh-collection.com/en/hotel/nh-collection-madrid-palacio-de-tepa"},
+    {name:"Gran Hotel Inglés",price:560,bed:"larger room / connecting (confirm 3)",why:"The city's oldest hotel (1886), an Art Deco jewel box — quilted-leather walls, bronze and crystal.",caveat:"60–90% over budget, really a couples' hotel; triples limited.",url:"https://www.granhotelingles.com/"},
   ],
   gra:[
     {name:"Palacio de Santa Inés",price:170,bed:"true triple",why:"Two joined 16th-century houses in the old Moorish quarter facing the Alhambra; frescoed courtyard.",caveat:"Small house — book soon.",url:"https://www.palaciosantaines.es/en/rooms/"},
-    {name:"Carmen del Cobertizo",price:195,bed:"triple (7 rooms)",why:"A tiny 16th-century casa-palacio with Moorish roots, still run by the family descended from its Arab builders, on a quiet Albaicín lane with a garden pool and Alhambra views.",caveat:"Only 1–2 rooms fit three; steep stepped alley, no car access.",url:"https://www.booking.com/hotel/es/carmen-del-cobertizo.html"},
-    {name:"Hotel Santa Isabel la Real",price:210,bed:"triple (11 rooms)",why:"An intimate 16th-century Albaicín mansion around a columned, fountain courtyard, on the prettiest convent square steps from the famous San Nicolás Alhambra viewpoint.",caveat:"Most rooms face the patio — ask for an exterior one for a view.",url:"https://hotelsantaisabellareal.com/en/"},
+    {name:"Carmen del Cobertizo",price:195,bed:"triple (7 rooms)",why:"A tiny 16th-century casa-palacio with Moorish roots on a quiet Albaicín lane, garden pool and Alhambra views.",caveat:"Only 1–2 rooms fit three; steep stepped alley, no car access.",url:"https://www.booking.com/hotel/es/carmen-del-cobertizo.html"},
+    {name:"Hotel Santa Isabel la Real",price:210,bed:"triple (11 rooms)",why:"An intimate 16th-century Albaicín mansion around a fountain courtyard, steps from the San Nicolás viewpoint.",caveat:"Most rooms face the patio — ask for an exterior one.",url:"https://hotelsantaisabellareal.com/en/"},
     {name:"Casa Morisca",price:230,bed:"3rd bed +€45",why:"An actual 15th-century Moorish merchant's house — it won Europe's top restoration prize.",caveat:"Only two rooms take a third bed. Email now.",url:"https://www.hotelcasamorisca.com/en/"},
-    {name:"Carmen de la Alcubilla del Caracol",price:230,bed:"larger room + extra bed (7 rooms)",why:"A genuine Granadan carmen — a walled hillside villa with garden — on the Alhambra slope itself, with terraced gardens of lemon and orange gazing across to the Sierra Nevada.",caveat:"A true 7-room house; 3-person space is tight, books out fast.",url:"https://www.alcubilladelcaracol.com/en/"},
-    {name:"Hotel Casa 1800 Granada",price:430,bed:"triple / suite",why:"A lavish 16th-century casa-palacio on the Carrera del Darro with coffered ceilings and a galleried courtyard; the top suites open onto private terraces with a head-on Alhambra view.",caveat:"Standard rooms are cheaper — the Alhambra-view terrace rooms are what reach splurge; lively street at night.",url:"https://www.hotelcasa1800granada.com/en/"},
-    {name:"Hotel Alhambra Palace",price:480,bed:"triple (extra bed)",why:"The iconic 1910 neo-Nasrid grand hotel on the Alhambra hill, opened by the king — horseshoe arches and tilework inside, a famous terrace over all of Granada.",caveat:"Big and grand, not intimate; headline view rooms run over budget.",url:"https://www.hotelalhambrapalace.com/en/"},
-    {name:"Parador de Granada",price:520,bed:"triple",why:"A 500-year-old convent inside the Alhambra's own walls — the only hotel in the monument. Guests can drive in and park, and the grounds go quiet at night.",caveat:"Likely sold out, ~2× budget. Refundable — check today.",url:"https://paradores.es/en/parador-de-granada"},
+    {name:"Carmen de la Alcubilla del Caracol",price:230,bed:"larger room + extra bed (7 rooms)",why:"A genuine Granadan carmen — a walled hillside villa with garden on the Alhambra slope, Sierra Nevada views.",caveat:"A true 7-room house; 3-person space is tight, books out fast.",url:"https://www.alcubilladelcaracol.com/en/"},
+    {name:"Hotel Casa 1800 Granada",price:430,bed:"triple / suite",why:"A lavish 16th-century casa-palacio on the Carrera del Darro; top suites have terraces with a head-on Alhambra view.",caveat:"Standard rooms cheaper — the view terraces are what reach splurge.",url:"https://www.hotelcasa1800granada.com/en/"},
+    {name:"Hotel Alhambra Palace",price:480,bed:"triple (extra bed)",why:"The iconic 1910 neo-Nasrid grand hotel on the Alhambra hill, a famous terrace over all of Granada.",caveat:"Big and grand, not intimate; view rooms over budget.",url:"https://www.hotelalhambrapalace.com/en/"},
+    {name:"Parador de Granada",price:520,bed:"triple",why:"A 500-year-old convent inside the Alhambra's own walls — the only hotel in the monument.",caveat:"Likely sold out, ~2× budget. Refundable — check today.",url:"https://paradores.es/en/parador-de-granada"},
   ],
-  cac:[
-    {name:"Parador de Cáceres",price:240,bed:"room + extra bed",why:"A 14th-century granite palace inside the walled old town — thick stone walls, arches, a quiet courtyard, ringed by medieval towers.",caveat:"~39 rooms and the one address inside the walls — books early. Park outside and walk in.",url:"https://paradores.es/en/parador-de-caceres"},
-    {name:"NH Palacio de Oquendo",price:185,bed:"junior suite",why:"A converted 16th-century noble palace at a gate into the walled city — palatial bones, comfortable modern rooms; best value-meets-history.",caveat:"Just outside the walls (2–3 min walk); interior is more modern than medieval.",url:"https://www.nh-collection.com/en/hotel/nh-collection-caceres-palacio-de-oquendo"},
-    {name:"Soho Casa Don Fernando",price:125,bed:"triple",why:"A former nobleman's house on the arcaded Plaza Mayor at the foot of the old town — step out to café tables under the floodlit walls and Bujaco Tower.",caveat:"Cheapest and most modern; the square can be noisy on summer nights — ask for an interior room.",url:"https://en.sohohoteles.com/hotel-boutique-casa-don-fernando-in-caceres/"},
+  cor:[
+    {name:"Hotel Casa Museo Mezquita",price:145,bed:"true triple",why:"A 16th-century noble residence built against the Mezquita's outer wall, courtyards studded with mosque stones.",caveat:"Characterful old house more than luxury; some rooms snug — but unbeatable location.",url:"https://hotelmezquita.com/"},
+    {name:"Parador de Córdoba",price:195,bed:"family/triple (extra bed)",why:"On the hillside grounds of an 8th-century caliph's summer palace — terraced gardens, big pool, city views.",caveat:"NOT in the old town (~3 km up the hill); modern building, but easy parking + pool.",url:"https://paradores.es/en/parador-de-cordoba"},
+    {name:"Las Casas de la Judería",price:235,bed:"triple / double + sofa",why:"Five interlinked 16th–18th-century palace-houses woven by flower-filled patios, 200 yards from the Mezquita.",caveat:"Warren-like; confirm a triple in a renovated wing. Small plunge pool.",url:"https://www.lascasasdelajuderiadecordoba.com/en/"},
+    {name:"La Llave de la Judería",price:265,bed:"room + extra bed (9 rooms)",why:"A small antique-filled hideaway through old Jewish-quarter houses with a planted patio, 5 min from the Mezquita.",caveat:"Only 9 rooms and few sleep three — reserve early; no pool.",url:"https://www.lallavedelajuderia.es/en/"},
+    {name:"Hotel Balcón de Córdoba",price:395,bed:"junior suite / suite (sleeps 3)",why:"A serene 4-century-old house around three courtyards, with a rooftop gazing onto the floodlit Mezquita.",caveat:"Over budget; only suites take a third bed; no pool.",url:"https://balcondecordoba.com/?lang=en"},
+    {name:"Hospes Palacio del Bailío",price:470,bed:"junior suite (extra bed)",why:"A 16th-century palacio (5-star) over a Roman villa whose mosaics show under the glass-floored restaurant; pool + spa.",caveat:"The biggest splurge; ~10 min walk from the Mezquita.",url:"https://www.hospes.com/en/palacio-bailio/"},
   ],
   sev:[
     {name:"Petit Palace Santa Cruz",price:150,bed:"triple",why:"An old palace shell in the most walkable historic quarter; plain modern rooms inside.",caveat:"",url:"https://www.petitpalace.com/en/petit-palace-santa-cruz/"},
-    {name:"Casa 1800 Sevilla",price:240,bed:"family room",why:"An 1864 mansion a block from the cathedral, with a rooftop plunge pool facing its bell tower.",caveat:"Summer rates can run up to 30% off if you book direct.",url:"https://www.hotelcasa1800sevilla.com/en/"},
-    {name:"Parador de Carmona",price:240,bed:"triple",why:"An actual medieval castle — a 14th-century royal fortress on a bluff, 25 min from the airport on the departure side of the city.",caveat:"Trades a night in Seville's center for a castle 20 min out.",url:"https://paradores.es/en/parador-de-carmona"},
-    {name:"Joya del Casco",price:250,bed:"triple (15 rooms)",why:"A tiny 15-room jewel in a restored 19th-century townhouse minutes from the cathedral, with a rooftop plunge pool facing the lit-up Giralda.",caveat:"Small and charm-over-polish; only some rooms take a third — book a triple.",url:"https://www.joyadelcasco.com/en/"},
-    {name:"CoolRooms Palacio de Villapanés",price:340,bed:"suite / extra bed",why:"A magnificent early-18th-century baroque casa-palacio around a grand columned courtyard, with a rooftop plunge pool over the Alfalfa quarter.",caveat:"Mid-size (~50 rooms), 10 min from the cathedral; breakfast a pricey add-on.",url:"https://coolrooms.com/palaciovillapanes/en/"},
-    {name:"Hotel Boutique Corral del Rey",price:390,bed:"Grand Deluxe (rollaway 3rd); 17 rooms",why:"A meticulously restored 17th-century casa-palacio in Alfalfa with Roman-marble columns and beamed ceilings, and rooftop penthouses with private plunge pools over the Giralda.",caveat:"Top of budget and over it for the best rooms.",url:"https://www.corraldelrey.com/"},
-    {name:"Mercer Sevilla",price:620,bed:"suite (sofa/extra bed); 12 rooms",why:"An intimate 12-room jewel box in a 19th-century mansion restored by star architects, with a glass-roofed marble courtyard and a rooftop plunge pool and sherry terrace.",caveat:"~80% over budget; the 3rd needs a Suite category.",url:"https://www.mercersevilla.com/en"},
-    {name:"Hotel Alfonso XIII",price:700,bed:"superior + extra bed",why:"The 1929 royal palace-hotel built for the king's exposition — a Mudéjar-revival landmark of arches, painted tiles and a vast orange-tree courtyard, beside the Alcázar gardens.",caveat:"Seville's grandest address; peak-August rates run well past budget.",url:"https://www.marriott.com/en-us/hotels/svqlc-hotel-alfonso-xiii-a-luxury-collection-hotel-seville/overview/"},
+    {name:"Casa 1800 Sevilla",price:240,bed:"family room",why:"An 1864 mansion a block from the cathedral, rooftop plunge pool facing its bell tower.",caveat:"Summer rates can run up to 30% off direct.",url:"https://www.hotelcasa1800sevilla.com/en/"},
+    {name:"Parador de Carmona",price:240,bed:"triple",why:"An actual medieval castle — a 14th-century royal fortress on a bluff, 25 min from the airport on the departure side.",caveat:"Trades a night in Seville's center for a castle 20 min out.",url:"https://paradores.es/en/parador-de-carmona"},
+    {name:"Joya del Casco",price:250,bed:"triple (15 rooms)",why:"A tiny 15-room jewel in a 19th-century townhouse minutes from the cathedral, rooftop pool facing the lit Giralda.",caveat:"Small and charm-over-polish; only some rooms take a third.",url:"https://www.joyadelcasco.com/en/"},
+    {name:"CoolRooms Palacio de Villapanés",price:340,bed:"suite / extra bed",why:"A magnificent early-18th-century baroque casa-palacio around a columned courtyard, rooftop pool.",caveat:"Mid-size, 10 min from the cathedral; breakfast a pricey add-on.",url:"https://coolrooms.com/palaciovillapanes/en/"},
+    {name:"Hotel Boutique Corral del Rey",price:390,bed:"Grand Deluxe (rollaway 3rd); 17 rooms",why:"A restored 17th-century casa-palacio in Alfalfa with Roman-marble columns, rooftop penthouses over the Giralda.",caveat:"Top of budget and over it for the best rooms.",url:"https://www.corraldelrey.com/"},
+    {name:"Mercer Sevilla",price:620,bed:"suite (sofa/extra bed); 12 rooms",why:"An intimate 12-room jewel box in a 19th-century mansion, glass-roofed marble courtyard, rooftop pool.",caveat:"~80% over budget; the 3rd needs a Suite.",url:"https://www.mercersevilla.com/en"},
+    {name:"Hotel Alfonso XIII",price:700,bed:"superior + extra bed",why:"The 1929 royal palace-hotel — a Mudéjar-revival landmark of arches and tiles beside the Alcázar gardens.",caveat:"Seville's grandest address; peak-August rates run well past budget.",url:"https://www.marriott.com/en-us/hotels/svqlc-hotel-alfonso-xiii-a-luxury-collection-hotel-seville/overview/"},
   ],
 };
 
-/* ---------- shared day fragments ----------
-   drive: ordered legs for the day; each {a,b,t,h,brk}. brk = the stop/break AFTER this leg
-   (only set when another leg follows). dv = the day's driving verdict (ok/stretch/no). */
-const D_BCN1={d:"Tue 4",city:"Barcelona",w:"Land around midday. Walk the Gothic Quarter — the maze of medieval lanes — and eat an early Spanish dinner.",stop:"bcn"};
-const D_BCN2={d:"Wed 5",city:"Barcelona",w:"Gaudí's wild unfinished basilica (the Sagrada Família) at opening with a timed ticket, then the El Born quarter next door for tapas and small shops.",stop:"bcn"};
-const D_GIRONA={d:"Thu 6",city:"Girona",w:"Drive up to Girona, a walled medieval city used as Braavos in Game of Thrones — climb the cathedral steps, walk the old walls — and back to Barcelona for the night.",dv:"ok",stop:"bcn",drive:[{a:"Barcelona",b:"Girona & back",t:"1h15 ea",h:2.5,brk:""}]};
-const D_BILBAO={d:"Mon 10",city:"Bilbao",w:"The Guggenheim — the swooping titanium museum that put this city back on the map — then the old town and market. Cable car up the hill at dusk for the view.",stop:"bio"};
-const D_SORIA={d:"Tue 11",city:"To Soria",w:"Drive early — half of Spain is heading into the eclipse zone. Numantia ruins near Soria: the hilltop town that held off Rome for 20 years, then burned itself rather than surrender.",dv:"ok",stop:"sor",drive:[{a:"Bilbao",b:"Soria",t:"2h35",h:2.58,brk:""}]};
-const D_ECLIPSE={d:"Wed 12",city:"Total eclipse",w:"Totality at 8:30pm with the sun low in the west — it actually sets during the eclipse, so find flat, open ground with a clear, unblocked western horizon. Glasses on.",stop:"sor",ecl:true};
-const D_FLY={d:"Sun 16",city:"Fly home",w:"Seville in the morning if the flight allows — the royal Alcázar palace (Dorne in Game of Thrones) or the cathedral bell tower — then the airport.",stop:"sev"};
-const D_MADTOL={d:"Thu 13",city:"Madrid → Toledo",w:"Drive to Madrid (2h15) for the afternoon: the Prado, one of the world's great painting museums (Velázquez, Goya), with Picasso's anti-war 'Guernica' in the Reina Sofía next door. Then 50 minutes to Toledo — a medieval city wrapped in a river bend — for the night.",dv:"ok",stop:"tol",drive:[{a:"Soria",b:"Madrid",t:"2h15",h:2.25,brk:"afternoon in Madrid (the Prado)"},{a:"Madrid",b:"Toledo",t:"0h50",h:0.83,brk:""}]};
-const D_TOLGRA={d:"Fri 14",city:"Toledo → Granada",w:"Morning in Toledo: the old Christian, Muslim and Jewish quarters stacked on the hill, El Greco's paintings where he made them. South with a lunch break in the Valdepeñas wine country. Sunset over the Alhambra from the Albaicín viewpoint. Sleep in Granada.",dv:"stretch",stop:"gra",drive:[{a:"Toledo",b:"Valdepeñas",t:"1h45",h:1.75,brk:"lunch in Valdepeñas (wine country)"},{a:"Valdepeñas",b:"Granada",t:"1h50",h:1.83,brk:""}]};
+const D_BCN_LAND={d:"Tue 4",city:"Barcelona",w:"Land around midday. Walk the Gothic Quarter — the maze of medieval lanes — and eat an early Spanish dinner.",stop:"bcn"};
+const D_BCN_GAUDI={d:"Wed 5",city:"Barcelona",w:"Gaudí's wild unfinished basilica (the Sagrada Família) at opening, then the El Born quarter for tapas.",stop:"bcn"};
+const D_ECLIPSE={d:"Wed 12",city:"Total eclipse",w:"Totality at 8:30pm with the sun low in the west — it sets during the eclipse, so find flat, open ground with a clear western horizon. Glasses on.",stop:"sor",ecl:true};
+const D_FLY={d:"Sun 16",city:"Fly home",w:"Seville in the morning if the flight allows — the Alcázar palace (Dorne in Game of Thrones) or the cathedral bell tower — then the airport.",stop:"sev"};
 
-const NORTH_DAYS = {
-  classic:[D_BCN1,D_BCN2,D_GIRONA,
-    {d:"Fri 7",city:"To Zaragoza",w:"Drive inland with a coffee stop in Lleida. Afternoon in Zaragoza: a giant domed riverside basilica (two undetonated 1936 bombs still on display inside) and the Aljafería, an 11th-century Moorish fortress-palace.",dv:"stretch",stop:"zar",drive:[{a:"Barcelona",b:"Lleida",t:"1h45",h:1.75,brk:"coffee stop in Lleida"},{a:"Lleida",b:"Zaragoza",t:"1h15",h:1.25,brk:""}]},
-    {d:"Sat 8",city:"To Pamplona",w:"A short hop to Pamplona. Walk the old star-fort ramparts and the walled center; Café Iruña on the main square is Hemingway's bar.",dv:"ok",stop:"pam",drive:[{a:"Zaragoza",b:"Pamplona",t:"1h50",h:1.83,brk:""}]},
-    {d:"Sun 9",city:"To Bilbao",w:"Drive to Bilbao through the Rioja wine country — an easy lunch stop in Haro or Laguardia, a tiny walled hilltop village. Sleep in Bilbao.",dv:"ok",stop:"bio",drive:[{a:"Pamplona",b:"Bilbao",t:"1h45",h:1.75,brk:""}]},
-    D_BILBAO,D_SORIA,D_ECLIPSE],
-  coast:[D_BCN1,D_BCN2,D_GIRONA,
-    {d:"Fri 7",city:"To San Sebastián",w:"The long transfer west: a coffee stop in Lleida, lunch in Zaragoza (giant domed basilica, Moorish palace), then up to San Sebastián — a belle-époque beach city on a scallop-shaped bay. The one big driving day of this version.",dv:"no",stop:"ss",drive:[{a:"Barcelona",b:"Zaragoza",t:"3h00",h:3,brk:"coffee in Lleida, then lunch in Zaragoza"},{a:"Zaragoza",b:"San Sebastián",t:"2h45",h:2.75,brk:""}]},
-    {d:"Sat 8",city:"San Sebastián",w:"A beach day on La Concha bay, a pintxos (Basque tapas) crawl in the old town, the funicular up Monte Igueldo. Aug 8 opens the city's huge summer festival — fireworks over the bay at night.",stop:"ss"},
-    {d:"Sun 9",city:"Coast → Bilbao",w:"The coast road to Bilbao: Zumaia's tilted sea-cliffs (Dragonstone in Game of Thrones) and lunch in Getaria, a fishing village known for txakoli wine. Sleep in Bilbao.",dv:"ok",stop:"bio",drive:[{a:"San Sebastián",b:"Bilbao",t:"~2h",h:2,brk:""}]},
-    D_BILBAO,D_SORIA,D_ECLIPSE],
+const NORTHS = {
+  classic:{ label:"Classic", tag:"Catalonia + Basque + Burgos",
+    note:"<b>The balanced sweep.</b> Barcelona as a base (a day trip to the Dalí museum in Figueres and to Girona), then Pamplona, two nights in Bilbao for the Guggenheim, and Burgos's great cathedral on the way to the eclipse.",
+    inc:'<span class="y">✓</span> Figueres · Girona · Pamplona · Bilbao · Burgos &nbsp; <span class="x">✕</span> 3 nights in Barcelona, 2 in Bilbao',
+    stops:[["bcn",3,"Aug 4–7"],["pam",1,"Aug 7–8"],["bio",2,"Aug 8–10"],["bur",1,"Aug 10–11"]],
+    waypts:["figueres","girona","zaragoza","sansebastian"],
+    route:[STOPS.bcn.ll,[41.62,0.62],[41.65,-0.89],STOPS.pam.ll,STOPS.ss.ll,STOPS.bio.ll,STOPS.bur.ll,STOPS.sor.ll],
+    days:[D_BCN_LAND,D_BCN_GAUDI,
+      {d:"Thu 6",city:"Figueres + Girona",w:"A day out from Barcelona: the Dalí Theatre-Museum in Figueres (the surreal museum the artist built and is buried in), then Girona's walled old town (Braavos in Game of Thrones), and back.",dv:"ok",stop:"bcn",drive:[{a:"Barcelona",b:"Figueres",t:"1h30",h:1.5,brk:"the Dalí museum"},{a:"Figueres",b:"Girona",t:"0h30",h:0.5,brk:"Girona old town"},{a:"Girona",b:"Barcelona",t:"1h15",h:1.25,brk:""}]},
+      {d:"Fri 7",city:"To Pamplona",w:"Drive across to Pamplona, lunch in Zaragoza (its giant domed basilica and Moorish Aljafería palace). Walk Pamplona's star-fort ramparts; Café Iruña is Hemingway's bar.",dv:"stretch",stop:"pam",drive:[{a:"Barcelona",b:"Zaragoza",t:"3h00",h:3,brk:"lunch in Zaragoza"},{a:"Zaragoza",b:"Pamplona",t:"1h45",h:1.75,brk:""}]},
+      {d:"Sat 8",city:"San Sebastián → Bilbao",w:"Pamplona in the morning, then San Sebastián for La Concha beach and a pintxos lunch, and on to Bilbao.",dv:"ok",stop:"bio",drive:[{a:"Pamplona",b:"San Sebastián",t:"1h10",h:1.17,brk:"beach + pintxos"},{a:"San Sebastián",b:"Bilbao",t:"1h00",h:1,brk:""}]},
+      {d:"Sun 9",city:"Bilbao",w:"The Guggenheim — the swooping titanium museum that put this city back on the map — then the old town and market, cable car up the hill at dusk.",stop:"bio"},
+      {d:"Mon 10",city:"To Burgos",w:"South to Burgos for its soaring Gothic cathedral (El Cid's tomb inside) and a hearty Castilian dinner. Sleep by the cathedral.",dv:"ok",stop:"bur",drive:[{a:"Bilbao",b:"Burgos",t:"1h35",h:1.58,brk:""}]},
+      {d:"Tue 11",city:"To Soria",w:"A short drive to Soria. Numantia ruins on the way in — the hilltop town that held off Rome for 20 years, then burned itself rather than surrender.",dv:"ok",stop:"sor",drive:[{a:"Burgos",b:"Soria",t:"2h00",h:2,brk:""}]},
+      D_ECLIPSE] },
+
+  rioja:{ label:"Rioja wine", tag:"vineyards + Gehry's winery hotel",
+    note:"<b>Wine country, no Bilbao.</b> Barcelona, then Zaragoza's Moorish palace, Pamplona, and two nights in La Rioja — the walled wine village of Laguardia and Frank Gehry's titanium winery-hotel — before Burgos and the eclipse.",
+    inc:'<span class="y">✓</span> Zaragoza · Pamplona · 2 nights in Rioja wine country · the Gehry hotel · Burgos &nbsp; <span class="x">✕</span> no Bilbao, no Figueres/Girona',
+    stops:[["bcn",2,"Aug 4–6"],["zar",1,"Aug 6–7"],["pam",1,"Aug 7–8"],["rio",2,"Aug 8–10"],["bur",1,"Aug 10–11"]],
+    waypts:["lleida","haro"],
+    route:[STOPS.bcn.ll,[41.62,0.62],STOPS.zar.ll,STOPS.pam.ll,STOPS.rio.ll,STOPS.bur.ll,STOPS.sor.ll],
+    days:[D_BCN_LAND,D_BCN_GAUDI,
+      {d:"Thu 6",city:"To Zaragoza",w:"Drive inland, coffee in Lleida. Afternoon in Zaragoza: a giant domed riverside basilica and the Aljafería, an 11th-century Moorish fortress-palace.",dv:"ok",stop:"zar",drive:[{a:"Barcelona",b:"Lleida",t:"1h40",h:1.67,brk:"coffee in Lleida"},{a:"Lleida",b:"Zaragoza",t:"1h10",h:1.17,brk:""}]},
+      {d:"Fri 7",city:"To Pamplona",w:"North to Pamplona — the star-fort ramparts, the walled old town, Café Iruña on the main square.",dv:"ok",stop:"pam",drive:[{a:"Zaragoza",b:"Pamplona",t:"1h45",h:1.75,brk:""}]},
+      {d:"Sat 8",city:"To La Rioja",w:"A short hop to the wine country: Laguardia, a tiny walled medieval town ringed by vineyards, with cellars dug beneath the streets.",dv:"ok",stop:"rio",drive:[{a:"Pamplona",b:"Laguardia",t:"1h10",h:1.17,brk:""}]},
+      {d:"Sun 9",city:"La Rioja",w:"A full day of wineries and hill towns — tour Frank Gehry's titanium-ribbon Marqués de Riscal winery in Elciego, taste in Haro's railway-station bodega quarter, walk Laguardia's walls.",stop:"rio"},
+      {d:"Mon 10",city:"To Burgos",w:"West to Burgos (a wine or lunch stop in Haro on the way) for its soaring Gothic cathedral. Sleep by the cathedral.",dv:"ok",stop:"bur",drive:[{a:"La Rioja",b:"Burgos",t:"1h25",h:1.42,brk:"wine stop in Haro"}]},
+      {d:"Tue 11",city:"To Soria",w:"A short drive to Soria; the Numantia ruins on the way in.",dv:"ok",stop:"sor",drive:[{a:"Burgos",b:"Soria",t:"2h00",h:2,brk:""}]},
+      D_ECLIPSE] },
+
+  pyrenees:{ label:"Pyrenees", tag:"Loarre castle + mountain town",
+    note:"<b>Castles and mountain air.</b> Barcelona, then Loarre — one of Europe's great Romanesque castles — and three nights in Aínsa, a medieval stone town that's the gateway to the Ordesa Pyrenees (easy valley walks), before Zaragoza and the eclipse.",
+    inc:'<span class="y">✓</span> Loarre castle · 3 nights in the Pyrenees (Aínsa + Ordesa) · Zaragoza &nbsp; <span class="x">✕</span> no Bilbao/Basque coast; one ~3h drive in',
+    stops:[["bcn",2,"Aug 4–6"],["loa",1,"Aug 6–7"],["ain",3,"Aug 7–10"],["zar",1,"Aug 10–11"]],
+    waypts:["lleida","huesca","barbastro"],
+    route:[STOPS.bcn.ll,[41.62,0.62],STOPS.loa.ll,STOPS.ain.ll,STOPS.zar.ll,STOPS.sor.ll],
+    days:[D_BCN_LAND,D_BCN_GAUDI,
+      {d:"Thu 6",city:"To Loarre",w:"Drive into Aragón (coffee in Lleida) to the village of Loarre, below its dramatic 11th-century Romanesque hilltop castle — climb the towers and battlements at golden hour. Sleep in the village.",dv:"stretch",stop:"loa",drive:[{a:"Barcelona",b:"Lleida",t:"1h40",h:1.67,brk:"coffee in Lleida"},{a:"Lleida",b:"Loarre",t:"1h35",h:1.58,brk:""}]},
+      {d:"Fri 7",city:"To Aínsa",w:"Up into the Pyrenees foothills (lunch in Barbastro, wine country) to Aínsa — a perfectly preserved medieval stone town with an arcaded Plaza Mayor and mountains on every side.",dv:"ok",stop:"ain",drive:[{a:"Loarre",b:"Barbastro",t:"1h05",h:1.08,brk:"Barbastro"},{a:"Barbastro",b:"Aínsa",t:"0h55",h:0.92,brk:""}]},
+      {d:"Sat 8",city:"Ordesa & the Pyrenees",w:"A day in Ordesa national park — a flat, easy valley walk under waterfalls and limestone walls (no big hike needed), or the Añisclo canyon drive. Back to Aínsa for the evening.",stop:"ain"},
+      {d:"Sun 9",city:"Aínsa",w:"A slow mountain day: the cobbled old town and castle, a drive up one of the green valleys, or the Saturday-feel market and terraces on the plaza.",stop:"ain"},
+      {d:"Mon 10",city:"To Zaragoza",w:"Back down the Cinca valley (Barbastro stop) to Zaragoza: the giant domed basilica and the Moorish Aljafería palace. Sleep in Zaragoza.",dv:"ok",stop:"zar",drive:[{a:"Aínsa",b:"Barbastro",t:"0h55",h:0.92,brk:"Barbastro"},{a:"Barbastro",b:"Zaragoza",t:"1h05",h:1.08,brk:""}]},
+      {d:"Tue 11",city:"To Soria",w:"Across the Ebro plain to Soria (Tarazona's Mudéjar old town is a nice stop). Numantia ruins on the way in.",dv:"ok",stop:"sor",drive:[{a:"Zaragoza",b:"Soria",t:"2h00",h:2,brk:"Tarazona"}]},
+      D_ECLIPSE] },
+
+  medieval:{ label:"Hidden medieval", tag:"a cliff village + a castle Parador",
+    note:"<b>Back-roads medieval Spain.</b> Barcelona, Zaragoza, then Albarracín — a pink-stone village stacked on a cliff above a gorge, one of Spain's prettiest — and two nights in Sigüenza, sleeping inside a real 12th-century castle near Soria.",
+    inc:'<span class="y">✓</span> Zaragoza · 2 nights in Albarracín · sleep in Sigüenza\'s castle · day-trip Medinaceli &nbsp; <span class="x">✕</span> no Basque/Bilbao; scenic winding roads',
+    stops:[["bcn",2,"Aug 4–6"],["zar",1,"Aug 6–7"],["alb",2,"Aug 7–9"],["sig",2,"Aug 9–11"]],
+    waypts:["lleida","teruel","molina","medinaceli"],
+    route:[STOPS.bcn.ll,[41.62,0.62],STOPS.zar.ll,WAYPTS.teruel.ll,STOPS.alb.ll,WAYPTS.molina.ll,STOPS.sig.ll,STOPS.sor.ll],
+    days:[D_BCN_LAND,D_BCN_GAUDI,
+      {d:"Thu 6",city:"To Zaragoza",w:"Drive inland, coffee in Lleida. Afternoon in Zaragoza: the giant domed basilica and the Moorish Aljafería palace.",dv:"ok",stop:"zar",drive:[{a:"Barcelona",b:"Lleida",t:"1h40",h:1.67,brk:"coffee in Lleida"},{a:"Lleida",b:"Zaragoza",t:"1h10",h:1.17,brk:""}]},
+      {d:"Fri 7",city:"To Albarracín",w:"South to Albarracín, with lunch in Teruel (its UNESCO Mudéjar towers). The last stretch is a winding mountain road up into the Sierra; Albarracín's pink-mud houses climb the cliff above the river.",dv:"stretch",stop:"alb",drive:[{a:"Zaragoza",b:"Teruel",t:"1h45",h:1.75,brk:"Teruel (Mudéjar towers, lunch)"},{a:"Teruel",b:"Albarracín",t:"0h40",h:0.67,brk:""}]},
+      {d:"Sat 8",city:"Albarracín",w:"Walk the walls up the ridge, the cathedral, the tiny lanes of carved-wood houses, and down to the Guadalaviar river gorge — pure storybook medieval Spain, with almost no crowds.",stop:"alb"},
+      {d:"Sun 9",city:"To Sigüenza",w:"A beautiful back-country drive across the Alto Tajo, a stop at Molina de Aragón's dramatic castle, to Sigüenza — sleep inside its 12th-century hilltop fortress.",dv:"stretch",stop:"sig",drive:[{a:"Albarracín",b:"Molina de Aragón",t:"1h05",h:1.08,brk:"Molina castle"},{a:"Molina de Aragón",b:"Sigüenza",t:"1h10",h:1.17,brk:""}]},
+      {d:"Mon 10",city:"Sigüenza",w:"The castle, the fortress-cathedral and the medieval lanes — and a short drive to Medinaceli, a tiny Roman-gated town on a ridge with a standing Roman arch.",stop:"sig"},
+      {d:"Tue 11",city:"To Soria",w:"An easy run across the meseta to Soria (Almazán's walls on the way). Numantia ruins on the way in.",dv:"ok",stop:"sor",drive:[{a:"Sigüenza",b:"Soria",t:"1h20",h:1.33,brk:"Medinaceli / Almazán"}]},
+      D_ECLIPSE] },
+
+  basque:{ label:"Basque base", tag:"San Sebastián beach, no Bilbao nights",
+    note:"<b>Beach base, Bilbao by day.</b> Skip the two-night Bilbao stay: drive to San Sebastián and unpack for three nights — La Concha beach, the pintxo bars, day trips to the Guggenheim and to Pamplona — then wine in La Rioja and Burgos before the eclipse.",
+    inc:'<span class="y">✓</span> 3 nights on the beach in San Sebastián · Bilbao + Pamplona as day trips · Rioja · Burgos &nbsp; <span class="x">✕</span> one long drive to reach the coast',
+    stops:[["bcn",2,"Aug 4–6"],["ss",3,"Aug 6–9"],["rio",1,"Aug 9–10"],["bur",1,"Aug 10–11"]],
+    waypts:["lleida","zaragoza","bilbao","pamplona","getaria","vitoria"],
+    route:[STOPS.bcn.ll,[41.62,0.62],STOPS.zar.ll,STOPS.ss.ll,STOPS.rio.ll,STOPS.bur.ll,STOPS.sor.ll],
+    days:[D_BCN_LAND,D_BCN_GAUDI,
+      {d:"Thu 6",city:"To San Sebastián",w:"The long transfer to the coast, split by lunch in Zaragoza, on to San Sebastián — a belle-époque beach city on a scallop-shaped bay. The one big driving day.",dv:"no",stop:"ss",drive:[{a:"Barcelona",b:"Zaragoza",t:"3h00",h:3,brk:"lunch in Zaragoza"},{a:"Zaragoza",b:"San Sebastián",t:"2h45",h:2.75,brk:""}]},
+      {d:"Fri 7",city:"San Sebastián",w:"La Concha beach, the old-town pintxos crawl, the funicular up Monte Igueldo — and an easy day trip to Bilbao's Guggenheim (about an hour each way).",dv:"ok",stop:"ss",drive:[{a:"San Sebastián",b:"Bilbao & back",t:"1h ea",h:2,brk:"Guggenheim day trip"}]},
+      {d:"Sat 8",city:"San Sebastián",w:"Another beach-base day: a day trip inland to Pamplona's ramparts and Café Iruña, or the coast road to Zumaia's tilted sea-cliffs and Getaria.",dv:"ok",stop:"ss",drive:[{a:"San Sebastián",b:"Pamplona & back",t:"1h10 ea",h:2.33,brk:"Pamplona day trip"}]},
+      {d:"Sun 9",city:"To La Rioja",w:"South to the wine country (Vitoria-Gasteiz's arcaded old town is the lunch stop) — Laguardia's walls and the vineyards. Sleep in Rioja.",dv:"ok",stop:"rio",drive:[{a:"San Sebastián",b:"La Rioja",t:"1h50",h:1.83,brk:"Vitoria-Gasteiz"}]},
+      {d:"Mon 10",city:"To Burgos",w:"West to Burgos (a wine or lunch stop in Haro on the way) for its great Gothic cathedral. Sleep by the cathedral.",dv:"ok",stop:"bur",drive:[{a:"La Rioja",b:"Burgos",t:"1h25",h:1.42,brk:"wine stop in Haro"}]},
+      {d:"Tue 11",city:"To Soria",w:"A short drive to Soria; the Numantia ruins on the way in.",dv:"ok",stop:"sor",drive:[{a:"Burgos",b:"Soria",t:"2h00",h:2,brk:""}]},
+      D_ECLIPSE] },
 };
 
-/* ---------- the five versions ---------- */
-const ITINS = {
-  cor:{ label:"Córdoba", tag:"Alhambra + the Mezquita", northType:"classic",
-    note:"<b>The marquee names, ending through Córdoba.</b> The classic run across the north, the eclipse, then central Spain (Madrid + Toledo) down to the Alhambra, with the Mezquita on the way to Seville. Córdoba and Ronda sit on opposite sides of the road to Seville — chaining both is a 6-hour day — so each gets its own version here.",
-    stops:[["bcn",3,"Aug 4–7"],["zar",1,"Aug 7–8"],["pam",1,"Aug 8–9"],["bio",2,"Aug 9–11"],["tol",1,"Aug 13–14"],["gra",1,"Aug 14–15"],["sev",1,"Aug 15–16"]],
-    waypts:["girona","lleida","madrid","valdepenas","cordoba"],
-    southDays:[D_MADTOL,D_TOLGRA,
-      {d:"Sat 15",city:"Alhambra → Córdoba → Seville",w:"Early at the Alhambra — the hilltop palace-city of Spain's last Muslim kingdom: the Lions fountain and its hidden plumbing, the gardens, the fort. Then the Mezquita in Córdoba — a forest of 850 red-and-white arches with a cathedral built right inside the mosque — and on to Seville.",dv:"ok",stop:"sev",drive:[{a:"Granada",b:"Córdoba",t:"2h05",h:2.1,brk:"the Mezquita (midday stop)"},{a:"Córdoba",b:"Seville",t:"1h30",h:1.5,brk:""}]},
-      D_FLY],
-    southRoute:[STOPS.sor.ll,WAYPTS.madrid.ll,STOPS.tol.ll,WAYPTS.valdepenas.ll,STOPS.gra.ll,WAYPTS.cordoba.ll,STOPS.sev.ll] },
-
-  ron:{ label:"Ronda", tag:"Alhambra + the gorge bridge", northType:"classic",
-    note:"<b>The marquee names, ending through Ronda.</b> The same run as the Córdoba version, but the last day swaps the Mezquita for Ronda — a town split by a 400-foot gorge crossed by a famous stone bridge. About 30 minutes more driving than Córdoba, and the only one of the two you can do (they're on opposite sides of the road to Seville).",
-    stops:[["bcn",3,"Aug 4–7"],["zar",1,"Aug 7–8"],["pam",1,"Aug 8–9"],["bio",2,"Aug 9–11"],["tol",1,"Aug 13–14"],["gra",1,"Aug 14–15"],["sev",1,"Aug 15–16"]],
-    waypts:["girona","lleida","madrid","valdepenas","ronda"],
-    southDays:[D_MADTOL,D_TOLGRA,
-      {d:"Sat 15",city:"Alhambra → Ronda → Seville",w:"Early at the Alhambra (the Lions fountain and its hidden plumbing, the gardens, the fort). Then Ronda — a town split by a 400-foot gorge crossed by a huge stone bridge — for a late lunch over the drop. Seville by night.",dv:"ok",stop:"sev",drive:[{a:"Granada",b:"Ronda",t:"2h20",h:2.33,brk:"the gorge & bridge (midday stop)"},{a:"Ronda",b:"Seville",t:"1h45",h:1.75,brk:""}]},
-      D_FLY],
-    southRoute:[STOPS.sor.ll,WAYPTS.madrid.ll,STOPS.tol.ll,WAYPTS.valdepenas.ll,STOPS.gra.ll,WAYPTS.ronda.ll,STOPS.sev.ll] },
-
-  slow:{ label:"Slow south", tag:"two nights in Granada", northType:"classic",
-    note:"<b>Skip central Spain; settle into Andalusia.</b> No Madrid or Toledo overnight — instead a long travel day straight to Granada, then a full unhurried day at the Alhambra (two nights), and the Mezquita in Córdoba on the way to Seville. The trade is real: Aug 13 is a six-hour driving day, broken into easy hops.",
-    stops:[["bcn",3,"Aug 4–7"],["zar",1,"Aug 7–8"],["pam",1,"Aug 8–9"],["bio",2,"Aug 9–11"],["gra",2,"Aug 13–15"],["sev",1,"Aug 15–16"]],
-    waypts:["girona","lleida","madrid","valdepenas","cordoba"],
-    southDays:[
-      {d:"Thu 13",city:"Soria → Granada",w:"The big transfer day, broken into easy hops: down to Madrid (2h15) for a Prado-and-lunch break, then on to Granada with a second stop in the Valdepeñas wine country. A long day on the road — the price of two unhurried nights in Granada. Albaicín sunset over the Alhambra.",dv:"no",stop:"gra",drive:[{a:"Soria",b:"Madrid",t:"2h15",h:2.25,brk:"the Prado + lunch in Madrid"},{a:"Madrid",b:"Valdepeñas",t:"2h00",h:2,brk:"a second break — Valdepeñas"},{a:"Valdepeñas",b:"Granada",t:"2h00",h:2,brk:""}]},
-      {d:"Fri 14",city:"The Alhambra, all day",w:"No clock. The Alhambra at the first morning slot — palaces, the Generalife gardens, the fort — then the old Moorish quarter (Albaicín) and the cave-flamenco hill (Sacromonte) in the evening. Sleep in Granada.",stop:"gra"},
-      {d:"Sat 15",city:"Granada → Córdoba → Seville",w:"West to Córdoba (2h) for the Mezquita — a forest of 850 red-and-white arches with a cathedral built right inside the mosque — then on to Seville (1h30).",dv:"ok",stop:"sev",drive:[{a:"Granada",b:"Córdoba",t:"2h05",h:2.1,brk:"the Mezquita (midday stop)"},{a:"Córdoba",b:"Seville",t:"1h30",h:1.5,brk:""}]},
-      D_FLY],
-    southRoute:[STOPS.sor.ll,WAYPTS.madrid.ll,WAYPTS.valdepenas.ll,STOPS.gra.ll,WAYPTS.cordoba.ll,STOPS.sev.ll] },
-
-  coast:{ label:"Coast & calm", tag:"Basque beaches, easy pace", northType:"coast",
-    note:"<b>A coastal north and the gentlest south.</b> Trade Zaragoza and Pamplona for two nights on the beach in San Sebastián plus the Basque coast, then the calmest finish: the Alhambra and a straight, easy run to Seville with no Córdoba or Ronda detour. The catch is one long transfer to reach the coast — Barcelona → San Sebastián, ~5¾h, split by a Zaragoza lunch.",
-    stops:[["bcn",3,"Aug 4–7"],["ss",2,"Aug 7–9"],["bio",2,"Aug 9–11"],["tol",1,"Aug 13–14"],["gra",1,"Aug 14–15"],["sev",1,"Aug 15–16"]],
-    waypts:["girona","lleida","zaragoza","getaria","madrid","valdepenas","antequera"],
-    southDays:[D_MADTOL,D_TOLGRA,
-      {d:"Sat 15",city:"The Alhambra → Seville",w:"The Alhambra in the morning (palaces, gardens, fort), then a straight, easy drive to Seville with a lunch stop in Antequera. No detour, no rush. Sleep in Seville.",dv:"ok",stop:"sev",drive:[{a:"Granada",b:"Antequera",t:"1h20",h:1.33,brk:"lunch in Antequera"},{a:"Antequera",b:"Seville",t:"1h15",h:1.25,brk:""}]},
-      D_FLY],
-    southRoute:[STOPS.sor.ll,WAYPTS.madrid.ll,STOPS.tol.ll,WAYPTS.valdepenas.ll,STOPS.gra.ll,WAYPTS.antequera.ll,STOPS.sev.ll] },
-
-  sevilleslow:{ label:"Seville slow", tag:"two nights in Seville", northType:"classic",
-    note:"<b>The Alhambra in a morning, then settle into Seville.</b> Skip Madrid and Toledo as overnights — a long travel day down to Granada, the Alhambra first thing the next morning, then two unhurried nights in Seville: the Alcázar palace, flamenco, the river, and an easy day trip to Cádiz on the Atlantic or Jerez (sherry and dancing horses). The trade: Aug 13 is a six-hour driving day, broken into hops.",
-    stops:[["bcn",3,"Aug 4–7"],["zar",1,"Aug 7–8"],["pam",1,"Aug 8–9"],["bio",2,"Aug 9–11"],["gra",1,"Aug 13–14"],["sev",2,"Aug 14–16"]],
-    waypts:["girona","lleida","madrid","valdepenas","antequera"],
-    southDays:[
-      {d:"Thu 13",city:"Soria → Granada",w:"The big transfer day, broken into easy hops: down to Madrid (2h15) for a Prado-and-lunch break, then on to Granada with a second stop in the Valdepeñas wine country. A long day on the road. Albaicín sunset over the Alhambra. Sleep in Granada.",dv:"no",stop:"gra",drive:[{a:"Soria",b:"Madrid",t:"2h15",h:2.25,brk:"the Prado + lunch in Madrid"},{a:"Madrid",b:"Valdepeñas",t:"2h00",h:2,brk:"a second break — Valdepeñas"},{a:"Valdepeñas",b:"Granada",t:"2h00",h:2,brk:""}]},
-      {d:"Fri 14",city:"Alhambra → Seville",w:"Early at the Alhambra — the hilltop palace-city of Spain's last Muslim kingdom: the Lions fountain and its hidden plumbing, the gardens, the fort. Then an easy drive to Seville with a lunch stop in Antequera. Sleep in Seville.",dv:"ok",stop:"sev",drive:[{a:"Granada",b:"Antequera",t:"1h20",h:1.33,brk:"lunch in Antequera"},{a:"Antequera",b:"Seville",t:"1h15",h:1.25,brk:""}]},
-      {d:"Sat 15",city:"Seville",w:"A full, slow day: the royal Alcázar palace (Dorne in Game of Thrones), the cathedral and its Giralda tower, the river and the Triana quarter, flamenco at night — or drive out to Cádiz on the Atlantic, or Jerez for sherry and dancing horses.",stop:"sev"},
-      D_FLY],
-    southRoute:[STOPS.sor.ll,WAYPTS.madrid.ll,WAYPTS.valdepenas.ll,STOPS.gra.ll,WAYPTS.antequera.ll,STOPS.sev.ll] },
+const SOUTHS = {
+  everything:{ label:"Everything", tag:"Alhambra + Córdoba + Ronda",
+    note:"<b>All three Andalusian sights.</b> A long travel day to Granada, the Alhambra and Córdoba's Mezquita (a night in Córdoba), then Ronda's gorge on the way to Seville.",
+    inc:'<span class="y">✓</span> Alhambra · Córdoba · Ronda &nbsp; <span class="x">✕</span> Madrid only a quick afternoon; one ~6 h driving day',
+    stops:[["gra",1,"Aug 13–14"],["cor",1,"Aug 14–15"],["sev",1,"Aug 15–16"]],
+    waypts:["madrid","valdepenas","ronda"],
+    route:[STOPS.sor.ll,WAYPTS.madrid.ll,WAYPTS.valdepenas.ll,STOPS.gra.ll,STOPS.cor.ll,WAYPTS.ronda.ll,STOPS.sev.ll],
+    days:[
+      {d:"Thu 13",city:"Soria → Granada",w:"The long push south in three hops: down to Madrid (the Prado + lunch), a break in the Valdepeñas wine country, then Granada by evening. Albaicín sunset over the Alhambra.",dv:"no",stop:"gra",drive:[{a:"Soria",b:"Madrid",t:"2h15",h:2.25,brk:"the Prado + lunch"},{a:"Madrid",b:"Valdepeñas",t:"2h00",h:2,brk:"second break"},{a:"Valdepeñas",b:"Granada",t:"2h00",h:2,brk:""}]},
+      {d:"Fri 14",city:"Alhambra → Córdoba",w:"The Alhambra first thing (the Lions fountain and its hidden plumbing, the gardens, the fort), then a short drive to Córdoba for the Mezquita — 850 red-and-white arches with a cathedral inside the mosque. Sleep in Córdoba.",dv:"ok",stop:"cor",drive:[{a:"Granada",b:"Córdoba",t:"2h05",h:2.1,brk:""}]},
+      {d:"Sat 15",city:"Córdoba → Ronda → Seville",w:"West to Ronda — a town split by a 400-foot gorge crossed by a huge stone bridge — for a late lunch over the drop, then on to Seville.",dv:"ok",stop:"sev",drive:[{a:"Córdoba",b:"Ronda",t:"2h25",h:2.42,brk:"the gorge & bridge"},{a:"Ronda",b:"Seville",t:"1h45",h:1.75,brk:""}]},
+      D_FLY] },
+  madridnight:{ label:"Madrid night", tag:"sleep in Madrid · keep Ronda",
+    note:"<b>A real evening in Madrid — and still Ronda.</b> An easy run to Madrid for the night (the Prado), then Granada for the Alhambra, and Ronda's gorge on the way to Seville. Gentler driving; the trade is Córdoba.",
+    inc:'<span class="y">✓</span> a Madrid night · Alhambra · Ronda · gentler driving &nbsp; <span class="x">✕</span> no Córdoba',
+    stops:[["mad",1,"Aug 13–14"],["gra",1,"Aug 14–15"],["sev",1,"Aug 15–16"]],
+    waypts:["valdepenas","ronda"],
+    route:[STOPS.sor.ll,STOPS.mad.ll,WAYPTS.valdepenas.ll,STOPS.gra.ll,WAYPTS.ronda.ll,STOPS.sev.ll],
+    days:[
+      {d:"Thu 13",city:"Soria → Madrid",w:"An easy ~2h down to Madrid for the afternoon and evening: the Prado (Velázquez, Goya, Picasso's 'Guernica' next door), Plaza Mayor, dinner out. Sleep in Madrid.",dv:"ok",stop:"mad",drive:[{a:"Soria",b:"Madrid",t:"2h15",h:2.25,brk:""}]},
+      {d:"Fri 14",city:"Madrid → Granada",w:"South to Granada with a lunch break in the Valdepeñas wine country. Albaicín sunset over the Alhambra. Sleep in Granada.",dv:"stretch",stop:"gra",drive:[{a:"Madrid",b:"Valdepeñas",t:"2h00",h:2,brk:"lunch in Valdepeñas"},{a:"Valdepeñas",b:"Granada",t:"2h00",h:2,brk:""}]},
+      {d:"Sat 15",city:"Alhambra → Ronda → Seville",w:"Early at the Alhambra (the Lions fountain and its hidden plumbing, the gardens, the fort). Then Ronda — a town split by a 400-foot gorge crossed by a huge stone bridge — for a late lunch over the drop. Seville by night.",dv:"ok",stop:"sev",drive:[{a:"Granada",b:"Ronda",t:"2h20",h:2.33,brk:"the gorge & bridge"},{a:"Ronda",b:"Seville",t:"1h45",h:1.75,brk:""}]},
+      D_FLY] },
 };
 
-const NROUTE = {
-  classic:[STOPS.bcn.ll,[41.62,0.62],STOPS.zar.ll,STOPS.pam.ll,[42.5,-2.5],STOPS.bio.ll,[42.85,-2.67],STOPS.sor.ll],
-  coast:[STOPS.bcn.ll,[41.62,0.62],STOPS.zar.ll,STOPS.ss.ll,[43.30,-2.23],STOPS.bio.ll,[42.85,-2.67],STOPS.sor.ll],
-};
+const NORTH_KEYS = ["bcn","zar","pam","ss","bio","bur","loa","ain","rio","alb","sig"];
 
-const NORTH_KEYS = ["bcn","zar","pam","ss","bio"];
-
-let state = {opt:"cor", openStop:null, picks:{bcn:1,zar:2,pam:1,ss:1,bio:3,tol:1,gra:1,cac:0,sev:1}};
+let state = {north:"classic", south:"everything", openStop:null,
+  picks:{bcn:1,zar:2,pam:1,ss:1,bio:3,bur:1,loa:1,ain:1,rio:0,alb:0,sig:1,mad:0,gra:1,cor:2,sev:1}};
 const PRESETS = {
-  saver:{bcn:0,zar:0,pam:0,ss:0,bio:0,tol:0,gra:0,cac:2,sev:0},
-  balanced:{bcn:1,zar:2,pam:1,ss:1,bio:3,tol:1,gra:1,cac:0,sev:1},
-  splurge:{bcn:6,zar:5,pam:6,ss:5,bio:6,tol:4,gra:7,cac:0,sev:7},
+  saver:{bcn:0,zar:0,pam:0,ss:0,bio:0,bur:0,loa:0,ain:0,rio:0,alb:0,sig:0,mad:0,gra:0,cor:0,sev:0},
+  balanced:{bcn:1,zar:2,pam:1,ss:1,bio:3,bur:1,loa:1,ain:1,rio:0,alb:0,sig:1,mad:0,gra:1,cor:2,sev:1},
+  splurge:{bcn:6,zar:4,pam:6,ss:6,bio:6,bur:4,loa:3,ain:3,rio:3,alb:2,sig:2,mad:4,gra:7,cor:5,sev:7},
 };
 
-function cur(){ return ITINS[state.opt]; }
-function fullDays(){ return NORTH_DAYS[cur().northType].concat(cur().southDays); }
-function dayTotal(d){ return d.drive ? d.drive.reduce((s,l)=>s+l.h,0) : 0; }
+function N(){return NORTHS[state.north];}
+function S(){return SOUTHS[state.south];}
+function curStops(){return N().stops.concat(S().stops);}
+function fullDays(){return N().days.concat(S().days);}
+function dayTotal(d){return d.drive ? d.drive.reduce((s,l)=>s+l.h,0) : 0;}
 
-/* ---------- render ---------- */
 function renderTabs(){
-  document.getElementById("tabs").innerHTML = Object.entries(ITINS).map(([k,o])=>
-    `<div class="tab ${state.opt===k?"on":""}" onclick="setOpt('${k}')"><span class="l">${o.label}</span><span class="n">${o.tag}</span></div>`).join("");
-  document.getElementById("optnote").innerHTML = cur().note;
+  document.getElementById("ntabs").innerHTML = Object.entries(NORTHS).map(([k,o])=>
+    `<div class="tab ${state.north===k?"on":""}" onclick="setNorth('${k}')"><span class="l">${o.label}</span><span class="n">${o.tag}</span></div>`).join("");
+  document.getElementById("stabs").innerHTML = Object.entries(SOUTHS).map(([k,o])=>
+    `<div class="tab ${state.south===k?"on":""}" onclick="setSouth('${k}')"><span class="l">${o.label}</span><span class="n">${o.tag}</span></div>`).join("");
+  document.getElementById("nnote").innerHTML = N().note;
+  document.getElementById("ninc").innerHTML = N().inc||"";
+  document.getElementById("snote").innerHTML = S().note;
+  document.getElementById("sinc").innerHTML = S().inc||"";
 }
 function renderDays(){
   document.getElementById("days").innerHTML = fullDays().map(d=>{
     const label = d.drive ? d.drive.map(l=>l.t).join(" + ") : "";
     return `<div class="day ${d.ecl?"ecl":""}" onclick="focusStop('${d.stop}')">
-       <div class="d">${d.d}</div>
-       <div><div class="c">${d.city}</div><div class="w">${d.w}</div></div>
-       <div class="drv d${d.dv||"ok"}">${label}</div>
-     </div>`;}).join("");
+       <div class="d">${d.d}</div><div><div class="c">${d.city}</div><div class="w">${d.w}</div></div>
+       <div class="drv d${d.dv||"ok"}">${label}</div></div>`;}).join("");
 }
 function renderDriving(){
   const days = fullDays().filter(d=>d.drive && d.drive.length);
   let total=0, maxDay=0, stretchDays=0, longDays=0;
   days.forEach(d=>{ const t=dayTotal(d); total+=t; if(t>maxDay)maxDay=t; if(d.dv==="stretch")stretchDays++; if(d.dv==="no")longDays++; });
   let verdict;
-  if(longDays>0) verdict = `<b style="color:var(--red)">${longDays} long driving day</b>, split into short hops`;
+  if(longDays>0) verdict = `<b style="color:var(--red)">${longDays} long driving day${longDays>1?"s":""}</b>${stretchDays?` + ${stretchDays} to split`:""}, all broken into short hops`;
   else if(stretchDays>0) verdict = `${stretchDays} day${stretchDays>1?"s":""} worth a lunch-stop split — nothing over 5 hours`;
   else verdict = `every day stays in the easy range`;
-  document.getElementById("drivesum").innerHTML =
-    `≈ <b>${fmtHrs(total)}</b> of driving over the 12 days · longest day <b>${fmtHrs(maxDay)}</b> · ${verdict}.`;
+  document.getElementById("drivesum").innerHTML = `≈ <b>${fmtHrs(total)}</b> of driving over the 12 days · longest day <b>${fmtHrs(maxDay)}</b> · ${verdict}.`;
   document.getElementById("drivelegs").innerHTML = days.map(d=>{
     const route = d.drive[0].a + d.drive.map(l=>" → "+l.b).join("");
-    const body = d.drive.map(l=>
-      `<div class="dvleg"><span class="dvt">${l.t}</span><span>${l.a} → ${l.b}</span></div>` +
-      (l.brk ? `<div class="dvbrk">↳ ${l.brk}</div>` : "")
-    ).join("");
-    return `<div class="dvday">
-      <div class="dvhead"><span class="dvdate">${d.d} · ${d.city}</span><span class="dvtot d${d.dv}">${fmtHrs(dayTotal(d))}</span></div>
-      <div class="dvroute">${route}</div>${body}</div>`;
+    const body = d.drive.map(l=>`<div class="dvleg"><span class="dvt">${l.t}</span><span>${l.a} → ${l.b}</span></div>`+(l.brk?`<div class="dvbrk">↳ ${l.brk}</div>`:"")).join("");
+    return `<div class="dvday"><div class="dvhead"><span class="dvdate">${d.d} · ${d.city}</span><span class="dvtot d${d.dv}">${fmtHrs(dayTotal(d))}</span></div><div class="dvroute">${route}</div>${body}</div>`;
   }).join("");
 }
 function renderHotels(){
-  let html = "", soriaShown = false;
-  cur().stops.forEach(([stop,n,dates])=>{
+  let html="", soriaShown=false;
+  curStops().forEach(([stop,n,dates])=>{
     if(!soriaShown && !NORTH_KEYS.includes(stop)){
       html += `<div class="citerow fixed"><div class="cityname">Soria<span class="sub2">Aug 11–13 · the eclipse base — already booked</span></div><div class="citypick"></div><div class="chev"></div></div>`;
-      soriaShown = true;
+      soriaShown=true;
     }
-    const sel = HOTELS[stop][state.picks[stop]];
-    const open = state.openStop===stop;
-    const label = STOPS[stop].name + (stop==="tol" ? " &amp; Madrid" : "");
+    const sel=HOTELS[stop][state.picks[stop]], open=state.openStop===stop, cityName=STOPS[stop].name;
     html += `<div class="citerow ${open?"open":""}" id="stop-${stop}" onclick="toggleStop('${stop}')">
-      <div class="cityname">${label}<span class="sub2">${dates} · ${n} night${n>1?"s":""} — ${sel.name}</span></div>
-      <div class="citypick"><b>${fmtE(sel.price)}</b>${fmtD(sel.price)}/nt</div>
-      <div class="chev">${open?"▾":"▸"}</div>
-    </div>`;
+      <div class="cityname">${cityName}<span class="sub2">${dates} · ${n} night${n>1?"s":""} — ${sel.name}</span></div>
+      <div class="citypick"><b>${fmtE(sel.price)}</b>${fmtD(sel.price)}/nt</div><div class="chev">${open?"▾":"▸"}</div></div>`;
     if(open){
-      html += `<div class="cityopts">` + HOTELS[stop].map((h,i)=>`
-        <div class="hrow ${state.picks[stop]===i?"sel":""}" onclick="pick('${stop}',${i});event.stopPropagation()">
-          <span class="dot"></span>
-          <span>
-            <span class="hname">${h.name}${h.price>360?'<span class="splurgetag">splurge</span>':''} <a href="${h.url}" target="_blank" onclick="event.stopPropagation()">↗</a></span>
-            <div class="hwhy">${h.why}</div>
-            ${h.bed?`<div class="hbed">${h.bed}</div>`:""}
-            ${h.caveat?`<div class="hcav">${h.caveat}</div>`:""}
-          </span>
-          <span class="hprice">${fmtE(h.price)}<small>${fmtD(h.price)}</small></span>
-        </div>`).join("") + `</div>`;
+      html += `<div class="cityopts">`+HOTELS[stop].map((h,i)=>`
+        <div class="hrow ${state.picks[stop]===i?"sel":""}" onclick="pick('${stop}',${i})">
+          <span class="dot"></span><span>
+            <span class="hname">${h.name}${h.price>360?'<span class="splurgetag">splurge</span>':''}</span>
+            <div class="hwhy">${h.why}</div>${h.bed?`<div class="hbed">${h.bed}</div>`:""}${h.caveat?`<div class="hcav">${h.caveat}</div>`:""}
+            <div class="hlinks"><a href="${h.url}" target="_blank" onclick="event.stopPropagation()">photos ↗</a><a href="${mapsUrl(h.name,cityName)}" target="_blank" onclick="event.stopPropagation()">map ↗</a></div>
+          </span><span class="hprice">${fmtE(h.price)}<small>${fmtD(h.price)}</small></span></div>`).join("")+`</div>`;
     }
   });
-  document.getElementById("hotels").innerHTML = html;
+  document.getElementById("hotels").innerHTML=html;
 }
-function toggleStop(s){ state.openStop = (state.openStop===s ? null : s); renderHotels(); }
+function toggleStop(s){ state.openStop=(state.openStop===s?null:s); renderHotels(); }
 function totals(){
-  let total = 0, lines = [];
-  cur().stops.forEach(([s,n])=>{
-    const h = HOTELS[s][state.picks[s]];
-    total += h.price*n;
-    lines.push({stop:STOPS[s].name, hotel:h.name, n, cost:h.price*n});
-  });
-  return {total, lines, avg: Math.round(total/10)};
+  let total=0, lines=[];
+  curStops().forEach(([s,n])=>{ const h=HOTELS[s][state.picks[s]]; total+=h.price*n; lines.push({stop:STOPS[s].name,hotel:h.name,n,cost:h.price*n}); });
+  return {total, lines, avg:Math.round(total/10)};
 }
 function renderTotal(){
-  const {total, avg} = totals();
-  document.getElementById("tNum").textContent = `${fmtE(total)} · ${fmtD(total)}`;
-  document.getElementById("tPer").textContent =
-    `10 nights to book · ${fmtE(avg)} a night (${fmtD(avg)}) — ${avg>350?"over the band":avg>=260?"inside $300–400":"under budget"}`;
+  const {total,avg}=totals();
+  document.getElementById("tNum").textContent=`${fmtE(total)} · ${fmtD(total)}`;
+  document.getElementById("tPer").textContent=`10 nights to book · ${fmtE(avg)} a night (${fmtD(avg)}) — ${avg>350?"over the band":avg>=260?"inside $300–400":"under budget"}`;
 }
 function renderUrgent(){
-  const items = [];
-  items.push(`<div class="u"><span class="when">This week</span><b>Alhambra tickets</b> — timed Nasrid Palaces entry, passport-named, non-refundable, sells out for August. Every version visits it. <a href="https://tickets.alhambra-patronato.es/en/" target="_blank">official site</a></div>`);
+  const items=[];
+  items.push(`<div class="u"><span class="when">This week</span><b>Alhambra tickets</b> — timed Nasrid Palaces entry, passport-named, non-refundable, sells out for August. Every second leg visits it. <a href="https://tickets.alhambra-patronato.es/en/" target="_blank">official site</a></div>`);
   items.push(`<div class="u"><span class="when">Today</span><b>Parador de Granada</b> — to sleep inside the Alhambra walls, check now; the rate refunds and it books months out. <a href="https://paradores.es/en/parador-de-granada" target="_blank">availability</a></div>`);
-  if(state.opt==="coast") items.push(`<div class="u"><span class="when">This week</span><b>San Sebastián (Aug 7–9)</b> — these nights are the city's biggest festival; rooms run 2–3× and need a long lead. Book a triple now.</div>`);
-  if(cur().stops.some(s=>s[0]==="pam")) items.push(`<div class="u"><span class="when">This week</span><b>Pamplona (Aug 8)</b> — La Perla and Palacio Guendulain are tiny; book a triple early.</div>`);
-  items.push(`<div class="u"><span class="when">This week</span><b>Historic triples</b> — most of these are small old houses with only a few 3-person rooms. Book the dedicated triple, not a double.</div>`);
-  document.getElementById("urgent").innerHTML = items.join("");
+  if(state.north==="basque") items.push(`<div class="u"><span class="when">This week</span><b>San Sebastián (Aug 6–9)</b> — these nights overlap the city's biggest festival; rooms run 2–3× and need a long lead. Book a triple now.</div>`);
+  if(curStops().some(s=>s[0]==="rio")) items.push(`<div class="u"><span class="when">This week</span><b>Rioja / the Gehry hotel</b> — the wine-country rooms-for-three are scarce; book early.</div>`);
+  if(curStops().some(s=>s[0]==="cor")) items.push(`<div class="u"><span class="when">This week</span><b>Córdoba (Aug 14)</b> — the old-town boutiques are tiny; book a triple early.</div>`);
+  items.push(`<div class="u"><span class="when">This week</span><b>Historic triples</b> — most are small old houses with only a few 3-person rooms. Book the dedicated triple, not a double.</div>`);
+  document.getElementById("urgent").innerHTML=items.join("");
 }
 function picksText(){
-  const {total, lines, avg} = totals();
-  return `SPAIN — picks\nVersion: ${cur().label} (${cur().tag})\n` +
-    lines.map(l=>`${l.stop}: ${l.hotel} — ${l.n}n, ${fmtE(l.cost)}`).join("\n") +
+  const {total,lines,avg}=totals();
+  return `SPAIN — picks\nFirst leg: ${N().label} (${N().tag})\nSecond leg: ${S().label} (${S().tag})\n`+
+    lines.map(l=>`${l.stop}: ${l.hotel} — ${l.n}n, ${fmtE(l.cost)}`).join("\n")+
     `\nTotal: ${fmtE(total)} (${fmtD(total)}), ${fmtE(avg)}/night`;
 }
 function copyPicks(btn){
-  const done = ()=>{ const t=btn.textContent; btn.textContent="Copied"; setTimeout(()=>btn.textContent=t,1400); };
-  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(picksText()).then(done);
-  else prompt("Copy:", picksText());
+  const done=()=>{const t=btn.textContent;btn.textContent="Copied";setTimeout(()=>btn.textContent=t,1400);};
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(picksText()).then(done);
+  else prompt("Copy:",picksText());
 }
 
-/* ---------- map ---------- */
-let map, northLayer, southLayer, markerLayer;
+let map,northLayer,southLayer,markerLayer,ctxLayer;
 function initMap(){
-  if(typeof L === "undefined"){ document.getElementById("map").style.display="none"; return; }
-  const BOUNDS = [[36.2,-7.6],[43.9,3.6]];
-  map = L.map("map",{scrollWheelZoom:true,zoomControl:true});
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png",
-    {attribution:"&copy; OpenStreetMap &copy; CARTO", subdomains:"abcd", maxZoom:19}).addTo(map);
+  if(typeof L==="undefined"){ document.getElementById("map").style.display="none"; return; }
+  const BOUNDS=[[36.2,-7.6],[43.9,3.6]];
+  map=L.map("map",{scrollWheelZoom:true,zoomControl:true});
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png",{attribution:"&copy; OpenStreetMap &copy; CARTO",subdomains:"abcd",maxZoom:19}).addTo(map);
   map.setView([40.2,-2.2],6);
-  northLayer = L.layerGroup().addTo(map);
-  southLayer = L.layerGroup().addTo(map);
-  markerLayer = L.layerGroup().addTo(map);
-  drawRoute(); drawMarkers();
-  const fit = ()=>{ map.invalidateSize(); const s=map.getSize(); if(s.x>0&&s.y>0) map.fitBounds(BOUNDS,{padding:[14,14]}); };
-  setTimeout(fit,150); setTimeout(fit,500);
-  window.addEventListener("resize",fit);
-  if(window.ResizeObserver){
-    let lastW=0;
-    new ResizeObserver(es=>{ const w=es[0].contentRect.width; if(w>0 && w!==lastW){ lastW=w; fit(); } })
-      .observe(document.getElementById("map"));
-  }
+  northLayer=L.layerGroup().addTo(map); southLayer=L.layerGroup().addTo(map); markerLayer=L.layerGroup().addTo(map); ctxLayer=L.layerGroup().addTo(map);
+  drawContext(); drawRoute(); drawMarkers();
+  const fit=()=>{ map.invalidateSize(); const s=map.getSize(); if(s.x>0&&s.y>0) map.fitBounds(BOUNDS,{padding:[14,14]}); };
+  setTimeout(fit,150); setTimeout(fit,500); window.addEventListener("resize",fit);
+  if(window.ResizeObserver){ let lastW=0; new ResizeObserver(es=>{const w=es[0].contentRect.width; if(w>0&&w!==lastW){lastW=w;fit();}}).observe(document.getElementById("map")); }
+}
+function drawContext(){
+  if(!map) return; ctxLayer.clearLayers();
+  CONTEXT_CITIES.forEach(c=>{ L.circleMarker(c.ll,{radius:1.6,color:"#c4bca9",weight:1,fillColor:"#c4bca9",fillOpacity:1}).addTo(ctxLayer).bindTooltip(c.n,{permanent:true,direction:c.dir,offset:lblOffset(c.dir),className:"lbl ctx",opacity:1}); });
 }
 function drawRoute(){
-  if(!map) return;
-  northLayer.clearLayers(); southLayer.clearLayers();
-  L.polyline(NROUTE[cur().northType],{color:"#39434e",weight:2.5,opacity:.9}).addTo(northLayer);
-  L.polyline(cur().southRoute,{color:"#c0361c",weight:2.5,opacity:.95}).addTo(southLayer);
+  if(!map) return; northLayer.clearLayers(); southLayer.clearLayers();
+  L.polyline(N().route,{color:"#39434e",weight:2.5,opacity:.9}).addTo(northLayer);
+  L.polyline(S().route,{color:"#c0361c",weight:2.5,opacity:.95}).addTo(southLayer);
 }
 function drawMarkers(){
-  if(!map) return;
-  markerLayer.clearLayers();
+  if(!map) return; markerLayer.clearLayers();
   L.circleMarker(STOPS.sor.ll,{radius:10,color:"#c0361c",weight:1.2,fill:false}).addTo(markerLayer);
-  const sc = L.circleMarker(STOPS.sor.ll,{radius:5.5,color:"#c0361c",weight:2,fillColor:"#f7f4ec",fillOpacity:1}).addTo(markerLayer);
+  const sc=L.circleMarker(STOPS.sor.ll,{radius:5.5,color:"#c0361c",weight:2,fillColor:"#f7f4ec",fillOpacity:1}).addTo(markerLayer);
   sc.on("click",()=>focusStop("sor"));
-  sc.bindTooltip(`Soria<span class="nts">total eclipse · aug 12</span>`,
-    {permanent:true,direction:STOPS.sor.dir,offset:lblOffset(STOPS.sor.dir),className:"lbl ecl",opacity:1});
-  cur().stops.forEach(([k,n])=>{
-    const south = !NORTH_KEYS.includes(k);
-    const c = L.circleMarker(STOPS[k].ll,{radius:5.5,color:south?"#c0361c":"#39434e",weight:2,fillColor:"#f7f4ec",fillOpacity:1}).addTo(markerLayer);
-    c.on("click",()=>focusStop(k));
-    c.bindTooltip(`${STOPS[k].name}<span class="nts">${n} night${n>1?"s":""}</span>`,
-      {permanent:true,direction:STOPS[k].dir,offset:lblOffset(STOPS[k].dir),className:"lbl",opacity:1});
-  });
-  cur().waypts.forEach(key=>{
-    const w = WAYPTS[key];
-    L.circleMarker(w.ll,{radius:2.8,color:"#7a7468",weight:1.4,fillColor:"#f7f4ec",fillOpacity:1})
-      .addTo(markerLayer)
-      .bindTooltip(w.n,{permanent:true,direction:w.dir,offset:lblOffset(w.dir),className:"lbl small",opacity:1});
-  });
+  sc.bindTooltip(`Soria<span class="nts">total eclipse · aug 12</span>`,{permanent:true,direction:STOPS.sor.dir,offset:lblOffset(STOPS.sor.dir),className:"lbl ecl",opacity:1});
+  N().stops.forEach(([k,n])=>mk(k,n,"#39434e"));
+  S().stops.forEach(([k,n])=>mk(k,n,"#c0361c"));
+  N().waypts.concat(S().waypts).forEach(key=>{ const w=WAYPTS[key]; L.circleMarker(w.ll,{radius:2.8,color:"#7a7468",weight:1.4,fillColor:"#f7f4ec",fillOpacity:1}).addTo(markerLayer).bindTooltip(w.n,{permanent:true,direction:w.dir,offset:lblOffset(w.dir),className:"lbl small",opacity:1}); });
 }
-function lblOffset(dir){
-  return dir==="right"?[8,0]:dir==="left"?[-8,0]:dir==="top"?[0,-9]:[0,9];
+function mk(k,n,color){
+  const c=L.circleMarker(STOPS[k].ll,{radius:5.5,color,weight:2,fillColor:"#f7f4ec",fillOpacity:1}).addTo(markerLayer);
+  c.on("click",()=>focusStop(k));
+  c.bindTooltip(`${STOPS[k].name}<span class="nts">${n} night${n>1?"s":""}</span>`,{permanent:true,direction:STOPS[k].dir,offset:lblOffset(STOPS[k].dir),className:"lbl",opacity:1});
 }
-function focusStop(k){ if(map && STOPS[k]) map.flyTo(STOPS[k].ll, 7, {duration:.7}); }
+function lblOffset(dir){ return dir==="right"?[8,0]:dir==="left"?[-8,0]:dir==="top"?[0,-9]:[0,9]; }
+function focusStop(k){ if(map&&STOPS[k]) map.flyTo(STOPS[k].ll,7,{duration:.7}); }
 
-/* ---------- actions / state ---------- */
-function setOpt(k){ state.opt=k; state.openStop=null; renderAll(); }
+function setNorth(k){ state.north=k; state.openStop=null; renderAll(); }
+function setSouth(k){ state.south=k; state.openStop=null; renderAll(); }
 function pick(stop,i){ state.picks[stop]=i; renderHotels(); renderTotal(); saveHash(); }
-function applyPreset(name){ state.picks = {...PRESETS[name]}; renderHotels(); renderTotal(); saveHash(); }
-
-function saveHash(){
-  const p = Object.entries(state.picks).map(([k,v])=>k+v).join(".");
-  history.replaceState(null,"",`#o=${state.opt}&p=${p}`);
-}
+function applyPreset(name){ state.picks={...PRESETS[name]}; renderHotels(); renderTotal(); saveHash(); }
+function saveHash(){ const p=Object.entries(state.picks).map(([k,v])=>k+v).join("."); history.replaceState(null,"",`#n=${state.north}&s=${state.south}&p=${p}`); }
 function loadHash(){
-  const h = location.hash.slice(1);
-  if(!h) return;
-  const q = Object.fromEntries(h.split("&").map(x=>x.split("=")));
-  if(q.o && ITINS[q.o]) state.opt = q.o;
-  if(q.p) q.p.split(".").forEach(tok=>{
-    const m = tok.match(/^([a-z]+)(\d)$/);
-    if(m && state.picks[m[1]]!==undefined && HOTELS[m[1]] && HOTELS[m[1]][+m[2]]) state.picks[m[1]] = +m[2];
-  });
+  const h=location.hash.slice(1); if(!h) return;
+  const q=Object.fromEntries(h.split("&").map(x=>x.split("=")));
+  if(q.n&&NORTHS[q.n]) state.north=q.n;
+  if(q.s&&SOUTHS[q.s]) state.south=q.s;
+  if(q.p) q.p.split(".").forEach(tok=>{ const m=tok.match(/^([a-z]+)(\d)$/); if(m&&state.picks[m[1]]!==undefined&&HOTELS[m[1]]&&HOTELS[m[1]][+m[2]]) state.picks[m[1]]=+m[2]; });
 }
+function renderAll(){ renderTabs(); renderDays(); renderDriving(); renderHotels(); renderUrgent(); renderTotal(); drawRoute(); drawMarkers(); saveHash(); }
 
-function renderAll(){
-  renderTabs(); renderDays(); renderDriving(); renderHotels(); renderUrgent(); renderTotal();
-  drawRoute(); drawMarkers(); saveHash();
-}
-
-loadHash();
-renderAll();
-initMap();
+loadHash(); renderAll(); initMap();
 </script>
 </body>
 </html>
