@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spain 2026 — Air conditioning, hotel by hotel</title>
+<style>
+  :root{--paper:#f7f4ec;--ink:#1c1b18;--muted:#7a7468;--hair:#ddd6c6;
+        --red:#c0361c;--tint:#efe9da;--ok:#3f7a4f;--warn:#b0741a;}
+  *{box-sizing:border-box}
+  body{margin:0;padding:34px 22px 70px;background:var(--paper);color:var(--ink);
+       font:15px/1.5 "Iowan Old Style",Palatino,Georgia,serif;}
+  .wrap{max-width:1000px;margin:0 auto}
+  h1{font-size:27px;margin:0;letter-spacing:-.01em;font-weight:600}
+  .sub{color:var(--muted);font-size:13.5px;margin-top:5px}
+  .rule{height:1px;background:var(--ink);margin:16px 0 0}
+  .key{display:flex;gap:20px;flex-wrap:wrap;margin:16px 0 4px;font-size:12.5px;color:var(--muted)}
+  h2{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+     font-weight:700;margin:38px 0 0;padding-bottom:7px;border-bottom:1px solid var(--ink)}
+  table{width:100%;border-collapse:collapse;margin-top:0}
+  td{border-bottom:1px solid var(--hair);padding:11px 12px 11px 0;vertical-align:top;font-size:13.5px}
+  td em{display:block;font-style:normal;font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .c{font-weight:700;white-space:nowrap;width:120px}
+  .h,.h2{font-weight:600;width:250px}
+  .h2{padding-left:14px}
+  .p{width:64px;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+  .p em{text-align:right}
+  .a{width:96px;white-space:nowrap}
+  .n{color:var(--muted);font-size:12.3px;line-height:1.45}
+  .yes,.but,.unk{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.09em;
+       text-transform:uppercase;border-radius:2px;padding:2px 6px;font-family:system-ui,sans-serif}
+  .yes{color:#fff;background:var(--ok)}
+  .but{color:#fff;background:var(--warn)}
+  .unk{color:#fff;background:var(--red)}
+  .pick{display:inline-block;font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+        color:var(--red);border:1px solid var(--red);border-radius:2px;padding:0 4px;margin-left:5px;
+        vertical-align:1px;font-family:system-ui,sans-serif}
+  tr.fixed td{background:#f2ece0}
+  tr.cityhead td{padding:24px 0 6px;font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+                 font-weight:700;border-bottom:1px solid var(--ink)}
+  tr.cityhead span{letter-spacing:0;text-transform:none;color:var(--muted);font-weight:400}
+  .note{background:var(--tint);border-left:2px solid var(--red);padding:11px 14px;
+        margin-top:16px;font-size:12.8px;line-height:1.5}
+  .foot{margin-top:30px;font-size:11.8px;color:var(--muted);line-height:1.55}
+  @media(max-width:720px){
+    td{font-size:12.5px} .c,.h,.h2{width:auto} .n{font-size:11.5px}
+    .h2{padding-left:0}
+  }
+</style></head><body><div class="wrap">
+
+<h1>Air conditioning, hotel by hotel</h1>
+<div class="sub">Spain · August 4–16, 2026 · three people, one room per stop</div>
+<div class="rule"></div>
+<div class="key">
+  <span><span class="yes">YES</span> &nbsp;confirmed, no catch</span>
+  <span><span class="but">YES · but</span> &nbsp;it exists, but read the note</span>
+  <span><span class="unk">NOT CHECKED</span> &nbsp;hotel unknown to me</span>
+</div>
+
+<h2>The trip, start to finish</h2>
+<table><tr>
+  <td class="c">Barcelona<em>Aug 4–7 · 3 nights</em></td>
+  <td class="h">Grand Hotel Central<em>Land midday Tue 4. Gothic Quarter, Sagrada Família, day out to Figueres + Girona.</em></td>
+  <td class="p">€430<em>$494</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, and each room has its own thermostat you control. Stated on the hotel's own site.</td>
+</tr><tr>
+  <td class="c">Pamplona<em>Aug 7–8 · 1 night</em></td>
+  <td class="h">Pamplona Catedral Hotel<em>Drive over with a lunch stop in Zaragoza. 3h00 + 1h45.</em></td>
+  <td class="p">€210<em>$241</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes — “air conditioning and heating” on the hotel's own site. They don't publish a room-by-room breakdown.</td>
+</tr><tr>
+  <td class="c">Bilbao<em>Aug 8–10 · 2 nights</em></td>
+  <td class="h">Sercotel Coliseo Bilbao<em>Via San Sebastián — beach and pintxos lunch. Guggenheim, old town, cable car.</em></td>
+  <td class="p">€215<em>$247</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, on every room type, and described as individually regulated. Best-documented in Bilbao.</td>
+</tr><tr>
+  <td class="c">Burgos<em>Aug 10–11 · 1 night</em></td>
+  <td class="h">NH Collection Palacio de Burgos<em>Gothic cathedral, El Cid&#x27;s tomb. 1h35 from Bilbao.</em></td>
+  <td class="p">€262<em>$301</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, stated on NH's own hotel page. It's a 16th-century convent shell but a 110-room modern retrofit inside.</td>
+</tr><tr class="fixed">
+  <td class="c">Soria<em>Aug 11–13 · 2 nights</em></td>
+  <td class="h">Already booked — hotel name unknown<em>ALREADY BOOKED — eclipse base. Numantia ruins on the way in. Totality 8:30pm Wed 12.</em></td>
+  <td class="p">—</td>
+  <td class="a"><span class="unk">NOT CHECKED</span></td>
+  <td class="n">This is the one room on the trip whose air conditioning has not been verified, because the booking confirmation was not available. Forward it and it gets checked.</td>
+</tr><tr>
+  <td class="c">Madrid<em>Aug 13–14 · 1 night</em></td>
+  <td class="h">Catalonia Plaza Mayor<em>2h15 down from Soria. The Prado.</em></td>
+  <td class="p">€190<em>$218</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes — an “integrated intelligent air conditioning system”; other listings describe it as individually adjustable.</td>
+</tr><tr>
+  <td class="c">Granada<em>Aug 14–15 · 1 night</em></td>
+  <td class="h">Hotel Cortijo del Marqués<em>Via a lunch stop in Valdepeñas. 2h00 + 2h15. The Alhambra.</em></td>
+  <td class="p">€296<em>$340</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, in all 15 rooms per three independent sources, plus ceiling fans. The hotel's own site hides its text from search, so the confirmation is secondhand. It also sits at 2,600 ft, which keeps nights cooler on its own.</td>
+</tr><tr>
+  <td class="c">Seville<em>Aug 15–16 · 1 night</em></td>
+  <td class="h">Parador de Carmona<em>The long day: Córdoba 2h05, Ronda 2h20, Seville 1h45. Fly home Sun 16.</em></td>
+  <td class="p">€200<em>$230</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes, but the temperature is fixed — one guest's room was locked at 74°F and too warm to sleep, and Spanish reviews say it can't be regulated. It's a 1970s conversion inside a Moorish fortress. Don't expect a cold room.</td>
+</tr></table>
+<div class="note">Alternate south — “Seville day”: skip Madrid, go Soria → Granada Aug 13–14, then two nights in Seville Aug 14–16. Same hotels, one fewer stop.</div>
+<div class="note"><b>Two hotels were removed for failing this check.</b>
+Crisol Mesón del Cid in Burgos — the operator's own site lists amenities for all six room types with no A/C,
+and one listing states outright that the rooms don't have it; a guest reported it switched off for the season,
+room stuck at 73°F with the window open. And Mas Salagros EcoResort outside Barcelona — three room pages on
+their own site list 10–14 amenities each and never mention air conditioning; they sell passive
+&ldquo;bioclimatic&rdquo; cooling instead.</div>
+
+<h2>Every option, city by city — 43 clean, 17 with a catch</h2>
+<table><tr class="cityhead"><td colspan="4">Barcelona <span>— 9 options</span></td></tr><tr>
+  <td class="h2">Grand Hotel Central <span class="pick">top pick</span></td>
+  <td class="p">€430<em>$494</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, and each room has its own thermostat you control. Stated on the hotel's own site.</td>
+</tr><tr>
+  <td class="h2">Cotton House Hotel, Autograph Collection</td>
+  <td class="p">€460<em>$529</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes per Expedia's amenity list — but the hotel's own room pages never mention it. Worth a one-line email before you pay.</td>
+</tr><tr>
+  <td class="h2">Uma House by Yurbban Trafalgar</td>
+  <td class="p">€290<em>$334</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes. Listed in the room amenities on the hotel's own site.</td>
+</tr><tr>
+  <td class="h2">Hotel Granados 83</td>
+  <td class="p">€300<em>$345</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes — “air conditioner and heating” on the hotel's own site.</td>
+</tr><tr>
+  <td class="h2">Catalonia Barcelona Plaza</td>
+  <td class="p">€300<em>$345</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes per Expedia (all 347 rooms), but Catalonia's own services list leaves it out — odd, since their other hotels list it. Confirm at booking.</td>
+</tr><tr>
+  <td class="h2">NH Collection Barcelona Pódium</td>
+  <td class="p">€250<em>$288</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes — “Climate Control” listed on every single room type. One of the best-documented on the whole trip.</td>
+</tr><tr>
+  <td class="h2">Catalonia Diagonal Centro</td>
+  <td class="p">€240<em>$276</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes. The building runs either cooling or heat, not both at once — in August it's cooling.</td>
+</tr><tr>
+  <td class="h2">Hotel SB Diagonal Zero 4*Sup</td>
+  <td class="p">€220<em>$253</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, individual units in all 262 rooms.</td>
+</tr><tr>
+  <td class="h2">Hesperia Presidente</td>
+  <td class="p">€200<em>$230</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, adjustable from inside the room. Runs as cooling in summer.</td>
+</tr><tr class="cityhead"><td colspan="4">Pamplona <span>— 7 options</span></td></tr><tr>
+  <td class="h2">Pamplona Catedral Hotel <span class="pick">top pick</span></td>
+  <td class="p">€210<em>$241</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes — “air conditioning and heating” on the hotel's own site. They don't publish a room-by-room breakdown.</td>
+</tr><tr>
+  <td class="h2">Hotel Tres Reyes Pamplona</td>
+  <td class="p">€170<em>$195</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, listed on all six room types.</td>
+</tr><tr>
+  <td class="h2">NH Pamplona Iruña Park</td>
+  <td class="p">€140<em>$161</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, in NH's own services list.</td>
+</tr><tr>
+  <td class="h2">Hotel El Cerco</td>
+  <td class="p">€90<em>$103</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes — each room's own page lists it, though one page elsewhere on the same site mentions only the common areas. Rooms are tiny (~130 sq ft) inside a 13th-century wall tower. Worth one confirming email.</td>
+</tr><tr>
+  <td class="h2">Parador de Olite (Príncipe de Viana)</td>
+  <td class="p">€190<em>$218</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes. The whole place reopened in May 2026 after a €8.6M gut renovation, so everything is new. They don't say whether the old castle wing and the modern wing differ — ask which one you're assigned.</td>
+</tr><tr>
+  <td class="h2">Hotel Pamplona Plaza</td>
+  <td class="p">€130<em>$150</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes. Their FAQ answers it outright: every room has A/C and heat.</td>
+</tr><tr>
+  <td class="h2">Occidental Pamplona (Barceló Group)</td>
+  <td class="p">€175<em>$201</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, listed on the Superior and Triple rooms. Barceló's room cards only show three amenities each, so it's missing from some cards for space, not because it's absent.</td>
+</tr><tr class="cityhead"><td colspan="4">Bilbao <span>— 10 options</span></td></tr><tr>
+  <td class="h2">Sercotel Coliseo Bilbao <span class="pick">top pick</span></td>
+  <td class="p">€215<em>$247</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, on every room type, and described as individually regulated. Best-documented in Bilbao.</td>
+</tr><tr>
+  <td class="h2">Spirit Hotel Gran Bilbao</td>
+  <td class="p">€210<em>$241</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes — but it only shows up once you open an individual room page, not the room index. One guest called it “mediocre” during a heat wave.</td>
+</tr><tr>
+  <td class="h2">Hotel Bilbi</td>
+  <td class="p">€150<em>$172</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes on paper — but about six reviews call it noisy and ineffective, and outside listings describe it as centrally controlled rather than yours to set. The weakest A/C on the whole list. Call first, or pick something else.</td>
+</tr><tr>
+  <td class="h2">Hotel Palacio Urgoiti</td>
+  <td class="p">€180<em>$207</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, clean per-room listing on the hotel's own site. No complaints found.</td>
+</tr><tr>
+  <td class="h2">Petit Palace Arana</td>
+  <td class="p">€190<em>$218</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes. Seasonal changeover — the building is in cooling mode in August.</td>
+</tr><tr>
+  <td class="h2">Hotel Tayko Bilbao</td>
+  <td class="p">€360<em>$414</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, listed under room services.</td>
+</tr><tr>
+  <td class="h2">Palacio Arriluce Hotel (The Leading Hotels of the World)</td>
+  <td class="p">€650<em>$747</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, on the hotel's own room pages. No complaints found.</td>
+</tr><tr>
+  <td class="h2">Barcelo Bilbao Nervion</td>
+  <td class="p">€150<em>$172</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes, but centrally controlled — you may not be able to set your own temperature. Barceló's own room pages never list it; the confirmation comes from Booking.</td>
+</tr><tr>
+  <td class="h2">Hesperia Bilbao</td>
+  <td class="p">€160<em>$184</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes — “all rooms have air conditioning.” One review titled “Bad air conditioning,” which reads like a single broken unit rather than the building.</td>
+</tr><tr>
+  <td class="h2">Catalonia Gran Via Bilbao</td>
+  <td class="p">€175<em>$201</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes. 2021 building, cooled by seven heat pumps with dedicated air handling for the guest rooms.</td>
+</tr><tr class="cityhead"><td colspan="4">Burgos <span>— 7 options</span></td></tr><tr>
+  <td class="h2">NH Collection Palacio de Burgos <span class="pick">top pick</span></td>
+  <td class="p">€262<em>$301</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, stated on NH's own hotel page. It's a 16th-century convent shell but a 110-room modern retrofit inside.</td>
+</tr><tr>
+  <td class="h2">abba Burgos</td>
+  <td class="p">€300<em>$345</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes per abba's own FAQ (“rooms are equipped with their own air conditioning”), but their room amenity lists never mention it and one trade listing calls it centrally controlled. Confirm at booking.</td>
+</tr><tr>
+  <td class="h2">Hotel Landa</td>
+  <td class="p">€365<em>$420</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes per the regional tourism registry and Booking's room feed — but Landa's own website never mentions A/C anywhere, and only 3 of its 37 rooms are documented. Several rooms sit inside the 14th-century tower. Ask about your specific room.</td>
+</tr><tr>
+  <td class="h2">Hotel Rey Arturo Burgos</td>
+  <td class="p">€90<em>$103</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes on the amenity list and on each room type — though one summary line on the same page says “fan” instead. Worth one question. It's 3 miles outside Burgos.</td>
+</tr><tr>
+  <td class="h2">Sercotel Corona de Castilla</td>
+  <td class="p">€130<em>$150</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, on the hotel's own services list. Cleanest in Burgos alongside the NH.</td>
+</tr><tr>
+  <td class="h2">Abba Burgos Hotel</td>
+  <td class="p">€140<em>$161</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Same building as abba Burgos above — it's listed twice at different rates. Same A/C caveat applies.</td>
+</tr><tr>
+  <td class="h2">Spirit Hotel Ciudad de Burgos</td>
+  <td class="p">€114<em>$131</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes — “air conditioning during the summer season,” so it's switched on centrally by season. Fine for August. It's 6 miles outside Burgos in Rubena.</td>
+</tr><tr class="cityhead"><td colspan="4">Madrid <span>— 9 options</span></td></tr><tr>
+  <td class="h2">Catalonia Plaza Mayor <span class="pick">top pick</span></td>
+  <td class="p">€190<em>$218</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes — an “integrated intelligent air conditioning system”; other listings describe it as individually adjustable.</td>
+</tr><tr>
+  <td class="h2">Dear Hotel Madrid</td>
+  <td class="p">€215<em>$247</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes — listed as “AC Individual,” meaning you control your own room.</td>
+</tr><tr>
+  <td class="h2">Hotel Madrid Centro, Affiliated by Melia</td>
+  <td class="p">€175<em>$201</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, on all four room types. Seasonal changeover, so cooling in August.</td>
+</tr><tr>
+  <td class="h2">Hotel Meninas - Boutique Opera</td>
+  <td class="p">€175<em>$201</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes. The rooms overview page only says “intelligent temperature system”; the actual A/C listing lives on each room's own page — including the hot top-floor room.</td>
+</tr><tr>
+  <td class="h2">El Antiguo Convento de Boadilla del Monte</td>
+  <td class="p">€160<em>$184</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, in the room equipment list on the hotel's own Spanish page, backed by TripAdvisor. It's a 17th-century stone building with 17 rooms and no statement about whether you control the thermostat — one confirming email is worth it.</td>
+</tr><tr>
+  <td class="h2">Hotel Agumar Atocha</td>
+  <td class="p">€175<em>$201</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, on every room type.</td>
+</tr><tr>
+  <td class="h2">Exe Moncloa</td>
+  <td class="p">€165<em>$190</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, on every room type.</td>
+</tr><tr>
+  <td class="h2">Hotel Praga</td>
+  <td class="p">€130<em>$150</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes — “air conditioning and heating” on each room.</td>
+</tr><tr>
+  <td class="h2">Mercure Madrid Centro</td>
+  <td class="p">€215<em>$247</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes, stated twice on Accor's own page — but one trade listing claims the opposite, Accor's own guest “Comfort” score is 4.6/10, and a guest reported a dead unit in a room whose windows can't open because of street noise.</td>
+</tr><tr class="cityhead"><td colspan="4">Granada <span>— 8 options</span></td></tr><tr>
+  <td class="h2">Hotel Cortijo del Marqués <span class="pick">top pick</span></td>
+  <td class="p">€296<em>$340</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, in all 15 rooms per three independent sources, plus ceiling fans. The hotel's own site hides its text from search, so the confirmation is secondhand. It also sits at 2,600 ft, which keeps nights cooler on its own.</td>
+</tr><tr>
+  <td class="h2">Hotel Casa Morisca (DELUXE ROOM only)</td>
+  <td class="p">€260<em>$299</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Read this one carefully. The hotel's own page lists A/C for the Standard, Executive and Mirador rooms — but NOT for the Deluxe, which is the room this plan uses. Hotel-wide listings say all rooms have it, and guests call it weak (“more of an air cooling system”). Get the Deluxe confirmed in writing before you pay.</td>
+</tr><tr>
+  <td class="h2">Parador de Granada</td>
+  <td class="p">€380<em>$437</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Officially yes, all 40 rooms. But recent guests report units that were broken or never got cold, one of them needing a room change. Check it works the minute you walk in and ask to move if it doesn't.</td>
+</tr><tr>
+  <td class="h2">Barceló Carmen Granada</td>
+  <td class="p">€210<em>$241</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, ticked on every room type including the family room.</td>
+</tr><tr>
+  <td class="h2">Hotel Alhambra Palace</td>
+  <td class="p">€320<em>$368</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, plus double-glazed windows. Verified on the Deluxe room page — spot-check if you book a different type.</td>
+</tr><tr>
+  <td class="h2">Hotel Monjas del Carmen</td>
+  <td class="p">€180<em>$207</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, all 32 rooms, described as the latest A/C plus soundproofing.</td>
+</tr><tr>
+  <td class="h2">Gran Hotel Luna de Granada</td>
+  <td class="p">€135<em>$155</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, though they call it a “sustainable air conditioning system” — that wording can mean centrally managed rather than fully yours to set.</td>
+</tr><tr>
+  <td class="h2">Catalonia Granada</td>
+  <td class="p">€140<em>$161</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, all 153 rooms. Built and renovated 2018.</td>
+</tr><tr class="cityhead"><td colspan="4">Seville <span>— 10 options</span></td></tr><tr>
+  <td class="h2">Parador de Carmona <span class="pick">top pick</span></td>
+  <td class="p">€200<em>$230</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes, but the temperature is fixed — one guest's room was locked at 74°F and too warm to sleep, and Spanish reviews say it can't be regulated. It's a 1970s conversion inside a Moorish fortress. Don't expect a cold room.</td>
+</tr><tr>
+  <td class="h2">Hotel Doña María</td>
+  <td class="p">€220<em>$253</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes, but mixed. Some guests say “perfect”; others say “very hot in the room despite the air conditioning” at 113°F outside. It's a palace-house conversion, so it likely varies room to room.</td>
+</tr><tr>
+  <td class="h2">Hotel Fernando III</td>
+  <td class="p">€290<em>$334</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, on all room types, and reviews single it out — “excellent air conditioning.” The cleanest in Seville.</td>
+</tr><tr>
+  <td class="h2">Cortijo Torre de la Reina</td>
+  <td class="p">€160<em>$184</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes, all rooms, year-round, per the hotel's own site. Unrelated but worth knowing: the restaurant closes for August, and a recent guest flagged tired rooms and poor insulation.</td>
+</tr><tr>
+  <td class="h2">Hotel Alfonso XIII, a Luxury Collection Hotel (Marriott)</td>
+  <td class="p">€700<em>$805</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes. The best August testimonial anywhere on this trip — “an oasis of cool in a very hot August Seville.” Marriott's own pages don't list it; Booking does.</td>
+</tr><tr>
+  <td class="h2">Hotel Alcázar (Sercotel)</td>
+  <td class="p">€110<em>$126</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Technically yes, but this is the worst signal on the trip: repeated reports of centrally controlled A/C guests can't adjust, units blowing hot air, and warm rooms. One guest found it still set to heat in March. At 105°F that's a real gamble.</td>
+</tr><tr>
+  <td class="h2">Hotel Sevilla Center</td>
+  <td class="p">€120<em>$138</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes, and mostly praised (“the best I've ever experienced”), but one guest reported it shuts off at 6pm, and the west-facing rooms bake. Ask for an east-facing room.</td>
+</tr><tr>
+  <td class="h2">Catalonia Giralda</td>
+  <td class="p">€130<em>$150</em></td>
+  <td class="a"><span class="yes">YES</span></td>
+  <td class="n">Yes — and the only Seville hotel here where reviews confirm you get your own controls: “separate, highly efficient air conditioning controls.”</td>
+</tr><tr>
+  <td class="h2">Eurostars Al-Ándalus Palace</td>
+  <td class="p">€165<em>$190</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes, but the hotel sets the mode by season and there's no thermostat in the room — just a fan-speed knob. 623 rooms run off one central plant, with reports of dead units.</td>
+</tr><tr>
+  <td class="h2">Hotel Don Paco</td>
+  <td class="p">€115<em>$132</em></td>
+  <td class="a"><span class="but">YES · but</span></td>
+  <td class="n">Yes, but explicitly “centralized,” so no real in-room control. August reviews are good though — “excellent and very welcome as the outside temperature was in the 40s celsius” (over 105°F).</td>
+</tr></table>
+
+<div class="foot">
+Each hotel was checked against its own website first, then brand pages, booking sites and regional tourism
+registries, then summer guest reviews. Nothing here is assumed from a star rating or from &ldquo;most Spanish
+hotels have A/C&rdquo; — every YES has a quoted source behind it. Where a hotel controls the thermostat centrally,
+where the specific room being booked isn't documented, or where guests have said it can't keep up in a heat
+wave, it's marked <span class="but">YES · but</span> and the reason is in the note.
+</div>
+
+</div></body></html>

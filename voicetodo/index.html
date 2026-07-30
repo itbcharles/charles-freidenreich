@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VoiceToDo — talk it out, get it done</title>
+  <meta name="description" content="VoiceToDo turns a rambling voice note into an organized to-do list with smart reminders. Tap record, just talk.">
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; margin: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #1d1d1f; background: #fff; line-height: 1.6;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { color: #e8e8ed; background: #161617; }
+      .card { background: #232326 !important; }
+      a { color: #6ea8ff; }
+    }
+    main { max-width: 42rem; margin: 0 auto; padding: 4rem 1.25rem 5rem; }
+    .mark {
+      width: 76px; height: 76px; border-radius: 20px;
+      background: #f45a66; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .mark svg { width: 42px; height: 42px; }
+    h1 { font-size: 2.4rem; line-height: 1.15; letter-spacing: -0.02em; }
+    .tagline { font-size: 1.2rem; color: #86868b; margin: 0.75rem 0 2.25rem; }
+    .card {
+      background: #f5f5f7; border-radius: 16px; padding: 1.4rem 1.5rem; margin: 1rem 0;
+    }
+    .card h2 { font-size: 1.05rem; margin-bottom: 0.35rem; }
+    .card p { font-size: 0.95rem; color: #86868b; }
+    .badge {
+      display: inline-block; font-size: 0.85rem; font-weight: 600;
+      background: #f45a6622; color: #f45a66; border-radius: 999px;
+      padding: 0.35rem 0.9rem; margin-bottom: 2.5rem;
+    }
+    footer {
+      margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid #8884;
+      font-size: 0.9rem; color: #86868b;
+    }
+    footer a { margin-right: 1.25rem; }
+    h3.section { margin-top: 3rem; font-size: 1.3rem; }
+    .support p { margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round">
+        <path d="M4 10v4"/><path d="M8 7v10"/><path d="M12 4v16"/><path d="M16 7v10"/><path d="M20 10v4"/>
+      </svg>
+    </div>
+
+    <h1>VoiceToDo</h1>
+    <p class="tagline">Talk it out. Get it done.</p>
+    <span class="badge">Coming soon to the App&nbsp;Store</span>
+
+    <div class="card">
+      <h2>Just talk</h2>
+      <p>Tap record and ramble — errands, deadlines, half-formed thoughts. A live transcript streams as you speak, even with the screen locked.</p>
+    </div>
+    <div class="card">
+      <h2>Watch it organize itself</h2>
+      <p>When you stop, your stream of consciousness becomes clean tasks with due dates, urgency, and reminder schedules — appearing one by one, with one-tap undo.</p>
+    </div>
+    <div class="card">
+      <h2>Reminders that listen</h2>
+      <p>"Remind me a bajillion times on the 14th." "No notifications weekdays before 9." Say it once — VoiceToDo sets it up.</p>
+    </div>
+    <div class="card">
+      <h2>Private by design</h2>
+      <p>No account, no sign-in, no tracking. Your tasks live on your phone, and audio is deleted the moment it's processed.</p>
+    </div>
+
+    <h3 class="section" id="support">Support</h3>
+    <div class="support">
+      <p>Questions, bugs, or feedback? Email <a href="mailto:cafreidenreich@gmail.com">cafreidenreich@gmail.com</a> and I'll get back to you.</p>
+    </div>
+
+    <footer>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+      <p style="margin-top: 0.75rem;">© 2026 Charles Freidenreich</p>
+    </footer>
+  </main>
+</body>
+</html>

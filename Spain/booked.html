@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spain 2026 — what's actually booked</title>
+<style>
+  :root{
+    --paper:#f7f4ec; --ink:#1c1b18; --muted:#7a7468; --hair:#ddd6c6;
+    --red:#c0361c; --slate:#39434e; --tint:#efe9da;
+    --ok:#3f7a4f; --warn:#b0741a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+       color:var(--ink);background:var(--paper);font-size:15px;line-height:1.5;
+       -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:34px 22px 90px}
+
+  .masthead{border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:26px}
+  h1{font-size:27px;font-weight:600;letter-spacing:-.01em;margin:0}
+  .sub{font-size:12.5px;color:var(--muted);margin-top:6px;letter-spacing:.02em}
+  .ver{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.12em;
+       text-transform:uppercase;color:var(--paper);background:var(--red);
+       padding:2px 7px;border-radius:2px;margin-top:10px}
+
+  h2{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+     color:var(--muted);margin:40px 0 0;padding-bottom:7px;border-bottom:1px solid var(--ink)}
+  h2 .r{float:right;text-transform:none;letter-spacing:.02em;font-weight:400;font-size:10.5px}
+
+  .alarm{border:2px solid var(--red);padding:15px 17px;margin:26px 0 0;background:#fff}
+  .alarm .hd{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+             color:var(--red);margin-bottom:7px}
+  .alarm p{margin:0 0 9px;font-size:14px;line-height:1.5}
+  .alarm p:last-child{margin-bottom:0}
+  .alarm b{font-weight:700}
+  .vs{display:flex;gap:0;margin:12px 0;border:1px solid var(--hair);background:var(--tint)}
+  .vs div{flex:1;padding:10px 12px;border-right:1px solid var(--hair)}
+  .vs div:last-child{border-right:0}
+  .vs .k{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .vs .v{font-size:19px;font-weight:600;margin-top:2px;line-height:1.15}
+  .vs .n{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+  .vs .bad .v{color:var(--red)} .vs .good .v{color:var(--ok)}
+
+  table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+  th{text-align:left;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+     color:var(--muted);padding:0 10px 7px 0;border-bottom:1px solid var(--ink);vertical-align:bottom;
+     white-space:nowrap}
+  td{padding:11px 10px 11px 0;border-bottom:1px solid var(--hair);vertical-align:top}
+  tr:last-child td{border-bottom:1px solid var(--ink)}
+  .dt{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:12.5px}
+  .dt b{display:block;font-size:13.5px;font-weight:600}
+  .dt span{color:var(--muted);font-size:11px}
+  .pl{font-weight:600}
+  .pl span{display:block;font-weight:400;font-size:11.5px;color:var(--muted);margin-top:1px}
+  .note{font-size:12px;color:var(--muted);line-height:1.42}
+  .note b{color:var(--ink);font-weight:600}
+
+  .ac{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+      white-space:nowrap;padding:2px 7px;border-radius:2px;display:inline-block}
+  .ac.y{color:var(--ok);border:1px solid var(--ok)}
+  .ac.q{color:var(--warn);border:1px solid var(--warn)}
+  .ac.n{color:var(--paper);background:var(--red);border:1px solid var(--red)}
+  .ac.na{color:var(--muted);border:1px solid var(--hair)}
+  .acn{font-size:11.5px;color:var(--muted);line-height:1.4;margin-top:4px;display:block;
+       white-space:normal;text-transform:none;letter-spacing:0;font-weight:400}
+
+  .st{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
+  .st.ok{color:var(--ok)} .st.no{color:var(--red)} .st.pend{color:var(--warn)}
+  .st span{display:block;font-weight:400;font-size:11px;color:var(--muted);
+           text-transform:none;letter-spacing:0;margin-top:2px;white-space:normal}
+
+  tr.gap td{background:#faf0ed}
+  tr.air td{background:var(--tint)}
+
+  .todo{margin-top:14px}
+  .todo .i{display:flex;gap:13px;padding:11px 0;border-bottom:1px solid var(--hair);align-items:baseline}
+  .todo .i:last-child{border-bottom:1px solid var(--ink)}
+  .todo .w{flex:0 0 108px;font-size:9.5px;font-weight:700;letter-spacing:.09em;
+           text-transform:uppercase;color:var(--red);padding-top:2px}
+  .todo .w.soft{color:var(--muted)}
+  .todo .b{flex:1;font-size:13.5px;line-height:1.45}
+  .todo .b b{font-weight:700}
+  .todo .b em{font-style:normal;color:var(--muted);font-size:12px;display:block;margin-top:2px}
+
+  .legend{margin-top:12px;font-size:11.5px;color:var(--muted);line-height:1.6}
+  .legend .ac{margin-right:5px}
+  .foot{margin-top:44px;padding-top:12px;border-top:1px solid var(--hair);
+        font-size:11px;color:var(--muted);line-height:1.6}
+  a{color:var(--red);text-decoration:none;border-bottom:1px solid rgba(192,54,28,.3)}
+
+  @media(max-width:760px){
+    .wrap{padding:24px 15px 70px}
+    table,thead,tbody,tr,td{display:block;width:100%}
+    thead{display:none}
+    tr{border-bottom:1px solid var(--ink);padding:13px 0}
+    tr:last-child{border-bottom:1px solid var(--ink)}
+    td{border:0;padding:2px 0}
+    td:before{content:attr(data-l);display:block;font-size:8.5px;font-weight:700;
+              letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+    td:first-child:before{margin-top:0}
+    .vs{flex-direction:column} .vs div{border-right:0;border-bottom:1px solid var(--hair)}
+    .todo .i{flex-direction:column;gap:3px} .todo .w{flex:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <h1>Spain 2026 — what is actually booked</h1>
+    <div class="sub">Three adults · Los Angeles → Barcelona → Seville → Paris → Los Angeles · August 3–17, 2026</div>
+    <div class="ver">Built from the reservation emails · checked July 25, 2026</div>
+  </div>
+
+  <div class="alarm">
+    <div class="hd">Read this first — the eclipse</div>
+    <p>The total eclipse is <b>Wednesday, August 12</b>. The hotel booked for that night is <b>CC Opera Suites in Madrid</b> (August 11–14, paid, non-refundable).</p>
+    <p><b>Madrid is not in the path of totality.</b> It gets a 99.96% partial eclipse — the sun never fully disappears, there is no corona, no darkness, no horizon-to-horizon sunset. It is a fundamentally different event from a total eclipse.</p>
+    <div class="vs">
+      <div class="bad"><div class="k">Madrid — where you sleep Aug 12</div><div class="v">99.96% partial</div><div class="n">No totality. Daylight the whole time.</div></div>
+      <div class="good"><div class="k">Burgos — 1h 50m north</div><div class="v">1 min 44 sec total</div><div class="n">Maximum at 8:29 pm local time.</div></div>
+    </div>
+    <p>There is a Hotel Rey Arturo booking in Burgos, but its dates are locked inside two PDF attachments in Olivia's "burgos and paris" email, which I can't open. <b>Someone needs to open those two PDFs and confirm whether Burgos covers the night of August 12.</b> If it doesn't, the choice is to drive north from Madrid that evening or to move the eclipse night.</p>
+    <p>One more thing about this eclipse: totality happens with the sun only a few degrees above the horizon, so wherever you end up, you need an <b>unobstructed view to the west</b> — no ridgeline, no buildings. That matters more than the exact town.</p>
+  </div>
+
+  <h2>Every night, start to finish <span class="r">A/C verified property by property</span></h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:12%">Dates</th>
+        <th style="width:20%">Where</th>
+        <th style="width:12%">Booked?</th>
+        <th style="width:22%">Air conditioning</th>
+        <th style="width:34%">What to know</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr class="air">
+        <td class="dt" data-l="Dates"><b>Mon Aug 3</b><span>overnight</span></td>
+        <td class="pl" data-l="Where">In the air<span>LAX 7:00 am → Frankfurt → Zurich → Barcelona</span></td>
+        <td data-l="Booked?"><span class="st ok">Ticketed<span>United DE9JXZ · CCYBS3</span></span></td>
+        <td data-l="Air conditioning"><span class="ac na">N/A</span></td>
+        <td class="note" data-l="What to know">Only <b>Charles's</b> LAX–Frankfurt seat has been bought ($51.36). Olivia has no seat purchased, and the Frankfurt→Zurich leg is unassigned for both — it's a 55-minute connection, so seats barely matter there, but the 11-hour LAX leg does.</td>
+      </tr>
+
+      <tr>
+        <td class="dt" data-l="Dates"><b>Aug 4–7</b><span>3 nights</span></td>
+        <td class="pl" data-l="Where">Barcelona<span>Hostal Cèntric · Superior Triple</span></td>
+        <td data-l="Booked?"><span class="st ok">Booked &amp; paid<span>€590.74 · non-refundable · conf 18535-65391</span></span></td>
+        <td data-l="Air conditioning"><span class="ac y">Yes</span>
+          <span class="acn">Confirmed in the reservation email itself: "All rooms have TV, telephone, safe, hair dryer, <b>air conditioning</b> and heating."</span></td>
+        <td class="note" data-l="What to know">€69.30 tourist tax still owed <b>at the front desk</b>. Parking is €17/24h cash in a garage across the street and <b>cannot be reserved</b>. Barcelona has a Low Emissions Zone — a rental car needs to be registered to drive into the center.</td>
+      </tr>
+
+      <tr>
+        <td class="dt" data-l="Dates"><b>Aug 7–8</b><span>1 night</span></td>
+        <td class="pl" data-l="Where">Irún<span>Hotel Alcazar Irun · Comfort Triple</span></td>
+        <td data-l="Booked?"><span class="st ok">Booked &amp; paid<span>€185 · non-refundable · conf 6398399408</span></span></td>
+        <td data-l="Air conditioning"><span class="ac y">Yes</span>
+          <span class="acn">"Individually-controlled heating and <b>air conditioning</b>" — you set your own room. Listed on the Triple Room page specifically.</span></td>
+        <td class="note" data-l="What to know"><b>The beds are not guaranteed.</b> The hotel's own wording is "a double bed <em>or</em> twin beds (subject to hotel availability) and a sofa bed." Call +34 943 620 900 and ask them to note two twins plus the sofa bed. Free parking but limited and unreservable; the entrance is a steep driveway that's easy to miss.</td>
+      </tr>
+
+      <tr class="gap">
+        <td class="dt" data-l="Dates"><b>Aug 8–10</b><span>2 nights</span></td>
+        <td class="pl" data-l="Where">Laukiz, Bizkaia<span>Casa Rural Eguzkilore · 15 min north of Bilbao</span></td>
+        <td data-l="Booked?"><span class="st no">Not booked<span>Email sent June 15 — never answered</span></span></td>
+        <td data-l="Air conditioning"><span class="ac n">No A/C</span>
+          <span class="acn">Heating only. Confirmed across four sources including the Basque government's own lodging registry. This is the one property on the trip with no air conditioning at all.</span></td>
+        <td class="note" data-l="What to know">Two problems, not one. <b>It was never confirmed</b> — Olivia's Spanish-language request to the owners got no reply. And their published August rate is <b>whole-house only, €990/night, four-night minimum</b>, which doesn't fit a two-night single-room stay. Booking.com sometimes sells individual rooms there when direct booking won't. Mitigating: coastal Bizkaia only reaches about 77°F in August, and there's a heated saltwater pool.</td>
+      </tr>
+
+      <tr>
+        <td class="dt" data-l="Dates"><b>Aug 10 –<br>unknown</b><span>dates unclear</span></td>
+        <td class="pl" data-l="Where">Burgos<span>Hotel Rey Arturo · in Villagonzalo Pedernales</span></td>
+        <td data-l="Booked?"><span class="st pend">Booked, dates unknown<span>Two PDFs nobody has opened</span></span></td>
+        <td data-l="Air conditioning"><span class="ac y">Yes</span>
+          <span class="acn">Listed on the amenity list and on each room type. One summary line elsewhere on their site says "fan" instead — worth one clarifying question.</span></td>
+        <td class="note" data-l="What to know"><b>This is the booking that decides whether you see the eclipse.</b> Olivia's July 11 email has two separate Rey Arturo confirmation PDFs — possibly two rooms, possibly two stays. Open them. The hotel is <b>3 miles outside Burgos</b>, so you need the car. Separately: they sent an anti-fraud warning on July 22 saying they will never send you a payment link — relevant, because Granada legitimately will.</td>
+      </tr>
+
+      <tr>
+        <td class="dt" data-l="Dates"><b>Aug 11–14</b><span>3 nights</span></td>
+        <td class="pl" data-l="Where">Madrid<span>CC Opera Suites · Quadruple Room</span></td>
+        <td data-l="Booked?"><span class="st ok">Booked &amp; paid<span>€292.09 · non-refundable · conf 6471061734</span></span></td>
+        <td data-l="Air conditioning"><span class="ac q">Yes, but test it</span>
+          <span class="acn">Every room type lists "aire acondicionado." But guests on the hotel's <em>own</em> review carousel report the panel not responding — "we couldn't set the room temperature, we don't know if it was broken, but it was a bit hot."</span></td>
+        <td class="note" data-l="What to know">Madrid hits the high 90s in August and there is <b>no night staff</b> — check-in is a door code. If the A/C doesn't respond, report it the first evening, not the third. Rooms are <b>below street level</b> ("Calle de la Flora 3, Bajo"): guests describe little daylight and poor ventilation. Beds are one 150 cm double plus two 90 cm singles, so all three of you have a real bed. Stephanie wrote in June that she didn't think this one got booked — <b>it did, and it's paid.</b></td>
+      </tr>
+
+      <tr>
+        <td class="dt" data-l="Dates"><b>Aug 14–15</b><span>1 night</span></td>
+        <td class="pl" data-l="Where">Granada<span>Hotel Monjas del Carmen · Triple + parking</span></td>
+        <td data-l="Booked?"><span class="st pend">Booked, needs prepaying<span>€105.60 · conf 246827</span></span></td>
+        <td data-l="Air conditioning"><span class="ac y">Yes</span>
+          <span class="acn">All 32 rooms, described as "the latest technology in climate control and soundproofing." No summer complaints found.</span></td>
+        <td class="note" data-l="What to know">You asked for three separate beds; what's booked is <b>two singles plus a sofa bed</b> in 25 m². Worth a call if that matters. Parking for one car is included in the rate — the streets around the hotel are traffic-restricted, so call for the approach. <b>They will email a payment link about August 12 and cancel if it isn't paid</b> — that's legitimate, but verify by phone (+34 958 101 619) before paying, since it looks exactly like the scam Burgos warned about.</td>
+      </tr>
+
+      <tr>
+        <td class="dt" data-l="Dates"><b>Aug 15–16</b><span>1 night</span></td>
+        <td class="pl" data-l="Where">Seville<span>Hotel Abanico Casa Palacio · Family Room</span></td>
+        <td data-l="Booked?"><span class="st pend">Booked, not yet paid<span>€174 · free cancel until Jul 31</span></span></td>
+        <td data-l="Air conditioning"><span class="ac q">Yes — but reception controls it</span>
+          <span class="acn">Proven in real heat: a guest reported it "very efficient, particularly as the temperature reached 41 C" (106°F). But repeated reports say it's <b>centrally controlled</b> — ask the front desk to change the setpoint rather than expecting the wall unit to obey.</span></td>
+        <td class="note" data-l="What to know"><b>The only decision with a hard clock on it — free cancellation ends July 31.</b> An 18th-century palace house, thick walls, cool interior patio. Two catches: some rooms have <b>no window at all</b>, and the family room is two spaces with <b>no door between them</b>. Ask for an exterior room. <b>No parking of any kind</b> — nearest is a public garage on foot.</td>
+      </tr>
+
+      <tr>
+        <td class="dt" data-l="Dates"><b>Aug 16–17</b><span>1 night</span></td>
+        <td class="pl" data-l="Where">Paris, Charles de Gaulle<span>Sheraton Paris CDG · inside Terminal 2</span></td>
+        <td data-l="Booked?"><span class="st pend">Booked, details in a PDF<span>Same email as the Burgos ones</span></span></td>
+        <td data-l="Air conditioning"><span class="ac y">Yes</span>
+          <span class="acn">All 252 rooms. Rooms are also fully soundproofed — sleep quality is one of its best-rated features despite sitting directly over the runways.</span></td>
+        <td class="note" data-l="What to know">The only hotel physically <b>inside</b> CDG — you walk to it, no shuttle, and walk to Terminal 2E for the Los Angeles flight. Wi-Fi is €19/day unless someone has a Marriott Bonvoy account (then free). Parking is €80/day, irrelevant if the car is already returned.</td>
+      </tr>
+
+      <tr class="air">
+        <td class="dt" data-l="Dates"><b>Mon Aug 17</b><span>fly home</span></td>
+        <td class="pl" data-l="Where">Paris → Los Angeles<span>Air France · conf ZYK83S</span></td>
+        <td data-l="Booked?"><span class="st ok">Ticketed<span>Seville → Paris on Aug 16</span></span></td>
+        <td data-l="Air conditioning"><span class="ac na">N/A</span></td>
+        <td class="note" data-l="What to know">No seats selected on either Air France leg. Travel insurance runs out <b>August 17</b>, so it covers the trip exactly to the day and not an hour longer.</td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <div class="legend">
+    <span class="ac y">Yes</span> confirmed in writing by the property, works as expected &nbsp;·&nbsp;
+    <span class="ac q">Yes, but</span> it exists, with a catch worth a phone call &nbsp;·&nbsp;
+    <span class="ac n">No A/C</span> the property has none &nbsp;·&nbsp;
+    <span class="ac na">N/A</span> not a hotel night
+  </div>
+
+  <h2>Everything else that's booked</h2>
+  <table>
+    <thead><tr><th style="width:12%">When</th><th style="width:26%">What</th><th style="width:16%">Cost</th><th style="width:46%">Details</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="dt" data-l="When"><b>Fri Aug 14</b><span>4:30 pm</span></td>
+        <td class="pl" data-l="What">The Alhambra<span>Small-group guided tour, in English</span></td>
+        <td class="note" data-l="Cost"><b>$208.62</b><br>paid, 3 adults</td>
+        <td class="note" data-l="Details">Alhambra &amp; Nasrid Palaces, 3 hours, run by Passepartours through GetYourGuide (ref <b>GYGRFQM9WLNV</b>). Full-entry tickets are secured. Meet at Paseo del Generalife 1F by <b>4:20 pm</b> — <b>bring passports</b>, the tickets are issued in your names and checked at the door. Only 60% refundable, and only before 4:30 pm on Aug 13. Olivia's separate request for a private tour through Cicerone was never answered — this one replaced it.</td>
+      </tr>
+      <tr>
+        <td class="dt" data-l="When"><b>Jun 14 –<br>Aug 17</b></td>
+        <td class="pl" data-l="What">Travel insurance<span>Seven Corners Trip Protection Choice</span></td>
+        <td class="note" data-l="Cost"><b>$147.00</b><br>paid Jun 13</td>
+        <td class="note" data-l="Details">Certificate <b>2TPC26-CA-102317</b>, bought through Squaremouth. The confirmation email lists only the plan name and dates — it does <b>not</b> say what's covered or who is named on it. Worth logging in to check that all three of you are on the certificate.</td>
+      </tr>
+      <tr class="gap">
+        <td class="dt" data-l="When"><b>Aug 4–16</b></td>
+        <td class="pl" data-l="What">Rental car<span>Barcelona → Seville</span></td>
+        <td class="note" data-l="Cost"><b>Nothing booked</b></td>
+        <td class="note" data-l="Details">There is <b>no car reservation anywhere in the mailbox</b> — I checked every major agency by sender and by keyword, including trash. The itinerary can't work without one: Rey Arturo is 3 miles outside Burgos, Granada's rate includes parking for a car, and there is no other way to get between the Basque coast and Burgos. In August, one-way Barcelona-to-Seville rentals get expensive and scarce. Book automatic transmission explicitly if anyone can't drive stick.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>The gaps <span class="r">nights with nothing confirmed</span></h2>
+  <table>
+    <thead><tr><th style="width:16%">Night</th><th style="width:36%">Situation</th><th style="width:48%">What it would take</th></tr></thead>
+    <tbody>
+      <tr class="gap">
+        <td class="dt" data-l="Night"><b>Aug 8</b><span>Saturday</span></td>
+        <td class="note" data-l="Situation">Eguzkilore never wrote back, and their August terms are whole-house, four nights minimum.</td>
+        <td class="note" data-l="What it would take" rowspan="2">Either chase Eguzkilore through Booking.com instead of email, or pick something else on the Basque coast. Note that whatever you choose here, <b>this is the stretch where A/C is least likely</b> — Basque guesthouses often skip it because the climate doesn't demand it. If A/C is non-negotiable, look at Bilbao or San Sebastián hotels rather than a casa rural.</td>
+      </tr>
+      <tr class="gap">
+        <td class="dt" data-l="Night"><b>Aug 9</b><span>Sunday</span></td>
+        <td class="note" data-l="Situation">Same booking, same problem.</td>
+      </tr>
+      <tr class="gap">
+        <td class="dt" data-l="Night"><b>Aug 10</b><span>Monday</span></td>
+        <td class="note" data-l="Situation">Possibly covered by Rey Arturo — nobody knows until those PDFs are opened.</td>
+        <td class="note" data-l="What it would take">Open the two Burgos PDFs. That single step resolves this night <em>and</em> the eclipse question.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>What needs doing, in order</h2>
+  <div class="todo">
+    <div class="i"><div class="w">Today</div><div class="b"><b>Open the two Burgos PDFs.</b> They're attached to Olivia's July 11 email titled "burgos and paris." Everything else on this page is downstream of knowing those dates.<em>Determines whether you see totality on Aug 12, and whether Aug 10 is covered.</em></div></div>
+    <div class="i"><div class="w">By Jul 31</div><div class="b"><b>Decide on Seville.</b> Hotel Abanico's free cancellation ends July 31 at 11:59 pm Spain time. After that the €174 is locked and unrefundable. It's the only booking you can still walk away from for free.<em>Six days from now.</em></div></div>
+    <div class="i"><div class="w">This week</div><div class="b"><b>Book the rental car.</b> Nothing exists. August one-way rentals across Spain get scarce and pricey, and the itinerary depends on it entirely.</div></div>
+    <div class="i"><div class="w">This week</div><div class="b"><b>Sort out Aug 8–9.</b> Eguzkilore is unconfirmed and can't take a two-night single room in August at their published terms. Two nights of the trip have nowhere to sleep.</div></div>
+    <div class="i"><div class="w">This week</div><div class="b"><b>Buy the remaining seats.</b> Olivia has no seat on the eleven-hour Los Angeles→Frankfurt leg, and nobody has seats on either Air France leg home.</div></div>
+    <div class="i"><div class="w soft">Before you go</div><div class="b"><b>Call two hotels about beds.</b> Irún's triple may show up as a double plus a sofa bed rather than two twins. Granada is booked as two singles plus a sofa bed, not the three separate beds that were requested.</div></div>
+    <div class="i"><div class="w soft">Aug 12</div><div class="b"><b>Pay Granada through the link they send</b> — but call +34 958 101 619 first to confirm it's really them. Burgos just warned that fake payment links are circulating for exactly this kind of booking.</div></div>
+    <div class="i"><div class="w soft">At check-in</div><div class="b"><b>Test the A/C in Madrid immediately.</b> There's no night staff at CC Opera Suites, so a problem found at 11 pm on Aug 11 is a problem you live with for three nights.</div></div>
+    <div class="i"><div class="w soft">Aug 14</div><div class="b"><b>Bring passports to the Alhambra.</b> Tickets are issued in your names and checked at the entrance. Be at the meeting point by 4:20 pm.</div></div>
+  </div>
+
+  <div class="foot">
+    Air conditioning was checked one property at a time against each hotel's own website first, then Booking.com, Expedia, regional tourism registries, and recent summer guest reviews. "Yes" means the property states it in writing for the room type booked. "Yes, but" means it exists and a specific, documented catch applies. Reservation details come from the confirmation emails themselves. The Burgos and Paris bookings could not be verified because their details exist only as PDF attachments.<br><br>
+    Eclipse figures: <a href="https://astronomia.ign.es/en/eclipses-de-sol-y-luna/eclipse-total-sol-de-12-de-agosto-2026" target="_blank">Instituto Geográfico Nacional</a> · <a href="https://www.exoatlas.com/eclipse/2026-08-12/burgos/" target="_blank">Burgos timings</a> · <a href="https://eclipsophile.com/tse2026/" target="_blank">Eclipsophile</a>
+  </div>
+
+</div>
+</body>
+</html>
