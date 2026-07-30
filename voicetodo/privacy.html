@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>VoiceToDo — Privacy Policy</title>
+  <style>
+
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">:root { color-scheme: light dark; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+max-width: 44rem; margin: 0 auto; padding: 2.5rem 1.25rem 5rem; line-height: 1.65; color: #1d1d1f; background: #fff; }
+@media (prefers-color-scheme: dark) { body { color: #e8e8ed; background: #161617; } a { color: #6ea8ff; } }
+h1 { font-size: 1.8rem; line-height: 1.25; } h2 { font-size: 1.25rem; margin-top: 2.2rem; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+th, td { border: 1px solid #8884; padding: 0.5rem 0.6rem; text-align: left; vertical-align: top; }
+code { font-size: 0.9em; } hr { border: none; border-top: 1px solid #8884; margin: 2.5rem 0; }
+strong { font-weight: 600; }
+</style>
+</head>
+<body>
+<h1 id="voicetodo-privacy-policy">VoiceToDo — Privacy Policy</h1>
+<p><strong>Effective date:</strong> July 30, 2026</p>
+<p>VoiceToDo is developed and operated by Charles Freidenreich, an
+individual developer (“<strong>I</strong>,” “<strong>me</strong>,”
+“<strong>Developer</strong>”). This policy explains what data VoiceToDo
+handles, why, where it goes, and your choices. It is written to be read,
+not skimmed — but here is the short version first.</p>
+<h2 id="the-short-version">The short version</h2>
+<ul>
+<li><strong>No accounts.</strong> VoiceToDo never asks for your name,
+email, or any sign-in.</li>
+<li><strong>Your tasks live on your device.</strong> There is no
+server-side database of your content. Delete the app (or use Delete All
+Data in Settings) and it’s gone.</li>
+<li><strong>To work, the app sends data to two service providers, with
+your explicit in-app consent:</strong> your voice audio goes to
+<strong>ElevenLabs</strong> to be transcribed, and the text transcript
+goes to <strong>OpenAI</strong> to be organized into tasks. That’s the
+entire data flow.</li>
+<li><strong>No ads, no analytics SDKs, no tracking, no sale or sharing
+of your data.</strong> Ever.</li>
+</ul>
+<h2 id="data-voicetodo-handles">1. Data VoiceToDo handles</h2>
+<p><strong>Voice recordings.</strong> When you tap record, audio from
+your microphone is (a) streamed to ElevenLabs’ transcription service and
+(b) saved temporarily to your device as a backup so nothing is lost if
+your connection drops. The on-device audio file is deleted automatically
+once your recording has been successfully turned into tasks. Recording
+only ever starts when you tap the record button, and only after you have
+granted microphone permission and agreed to the in-app data-sharing
+disclosure.</p>
+<p><strong>Transcripts and tasks.</strong> The text transcript of your
+recording is sent to OpenAI, which returns structured tasks,
+completions, and reminder rules. Transcripts, tasks, and reminder
+schedules are stored only on your device. I do not operate a database of
+user transcripts or tasks.</p>
+<p><strong>A random install identifier.</strong> The app generates a
+random identifier (not derived from you or your device’s hardware) that
+accompanies requests to my server. Its only purposes are rate limiting
+and abuse prevention (for example, enforcing free-tier limits). It is
+not linked to your identity and cannot be, because I collect no identity
+information.</p>
+<p><strong>Subscription status.</strong> If you subscribe to VoiceToDo
+Pro, the purchase is processed entirely by Apple. I receive only an
+anonymized entitlement signal from Apple’s StoreKit system confirming an
+active subscription. I never see your name, payment details, or Apple
+Account information.</p>
+<p><strong>What VoiceToDo does not collect:</strong> your name, email
+address, phone number, contacts, location, photos, browsing activity,
+advertising identifiers, or any analytics or behavioral data. The app
+contains no third-party analytics or advertising SDKs.</p>
+<h2 id="how-data-is-used">2. How data is used</h2>
+<p>Your audio, transcripts, and tasks are used for exactly one purpose:
+providing the app’s features to you — transcribing your voice,
+organizing it into tasks, and scheduling the reminders you asked for. I
+do not use your data for advertising, profiling, or any secondary
+purpose, and <strong>I do not use your data to train AI
+models.</strong></p>
+<h2 id="who-receives-data-service-providers">3. Who receives data
+(service providers)</h2>
+<p>Data is shared only with the service providers necessary to operate
+the app, acting on my behalf:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Provider</th>
+<th>What they receive</th>
+<th>Why</th>
+<th>Their policy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ElevenLabs</strong></td>
+<td>Voice audio</td>
+<td>Speech-to-text transcription</td>
+<td>elevenlabs.io/privacy</td>
+</tr>
+<tr>
+<td><strong>OpenAI</strong></td>
+<td>Text transcript, your timezone, and titles of your open tasks (so
+spoken completions can be matched)</td>
+<td>Parsing transcripts into structured tasks</td>
+<td>openai.com/privacy</td>
+</tr>
+<tr>
+<td><strong>Apple</strong></td>
+<td>Purchase transactions; notification delivery is handled by iOS
+on-device</td>
+<td>App distribution, payments, OS services</td>
+<td>apple.com/privacy</td>
+</tr>
+<tr>
+<td><strong>Hosting/CDN for my relay server</strong></td>
+<td>Encrypted request traffic in transit</td>
+<td>Securely relaying requests without exposing API credentials in the
+app</td>
+<td>per provider</td>
+</tr>
+</tbody>
+</table>
+<p>My relay server does not persist your audio or transcripts; it
+forwards them and discards them. ElevenLabs and OpenAI process this data
+under their API terms to provide their services to me; under those
+terms, API data is not used to train their models, though they may
+retain it for a limited period (on the order of up to 30 days) for abuse
+and safety monitoring before deletion. These providers are bound by
+their published terms and policies to protections consistent with this
+policy. I do not sell your personal information, and I do not share it
+for cross-context behavioral advertising.</p>
+<h2 id="consent">4. Consent</h2>
+<p>Before your first recording, the app presents a disclosure naming
+ElevenLabs and OpenAI, describing exactly what is sent to each, and
+asking for your explicit agreement. Recording is disabled until you
+agree. You can review or revoke this consent at any time in Settings;
+revoking disables recording (the rest of the app, including your
+existing tasks, keeps working).</p>
+<h2 id="storage-retention-and-deletion">5. Storage, retention, and
+deletion</h2>
+<ul>
+<li>On-device audio: deleted automatically after successful
+processing.</li>
+<li>Transcripts, tasks, reminders: stored on your device until you
+delete them, use <strong>Settings → Delete All Data</strong>, or delete
+the app.</li>
+<li>My server: no user content is stored. Transient processing only,
+plus short-lived operational logs (timestamps, status codes, the random
+install identifier — never audio or transcript content) retained briefly
+for abuse prevention and debugging.</li>
+<li>Service providers: limited retention for abuse monitoring as
+described in Section 3, per their policies.</li>
+</ul>
+<h2 id="security">6. Security</h2>
+<p>All data in transit is encrypted using TLS. API credentials for
+service providers are held server-side and are never embedded in the
+app. Because there are no accounts and no content database, there is no
+central store of user content to breach. No system is perfectly secure,
+but the architecture is deliberately designed so that the most sensitive
+data — your recordings and tasks — stays in your hands.</p>
+<h2 id="your-rights-and-choices">7. Your rights and choices</h2>
+<ul>
+<li><strong>Access and portability:</strong> everything the app knows
+about you is visible in the app itself, on your device.</li>
+<li><strong>Deletion:</strong> Settings → Delete All Data, or delete the
+app. Because I hold no server-side content, there is nothing further for
+me to delete on request — but you may contact me at
+cafreidenreich@gmail.com with any request and I will honor it.</li>
+<li><strong>Permissions:</strong> microphone and notification access can
+be revoked at any time in iOS Settings.</li>
+<li><strong>California residents:</strong> the California Consumer
+Privacy Act, as amended, grants rights to know, delete, correct, and opt
+out of sale/sharing of personal information, with a right against
+discrimination for exercising them. VoiceToDo does not sell or share
+personal information as those terms are defined in the CCPA, and honors
+these rights regardless of whether the law’s thresholds technically
+apply to a developer of this size. To exercise any right, email
+cafreidenreich@gmail.com.</li>
+<li><strong>Other jurisdictions:</strong> if your local law grants you
+additional rights, contact me and I will make good-faith efforts to
+honor them.</li>
+</ul>
+<h2 id="children">8. Children</h2>
+<p>VoiceToDo is not directed at children under 13, and I do not
+knowingly collect personal information from children under 13. If you
+believe a child under 13 has used the app in a way that provided
+personal information to me, contact cafreidenreich@gmail.com and I will
+delete it.</p>
+<h2 id="changes-to-this-policy">9. Changes to this policy</h2>
+<p>If this policy changes materially, the effective date above will
+change and the app will provide reasonable notice. Prior versions will
+remain available on request.</p>
+<h2 id="contact">10. Contact</h2>
+<p>Charles Freidenreich cafreidenreich@gmail.com</p>
+</body>
+</html>
