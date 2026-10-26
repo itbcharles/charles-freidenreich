@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:wght@400;700&amp;display=swap" rel="stylesheet"><style>body{margin:0;background:#f0eee9;font-family:'Shantell Sans',system-ui,sans-serif;color:#222}a{color:#222}a:hover{color:#c6471f}select,input,textarea{font:inherit;color:inherit}select:focus,input:focus,textarea:focus{outline:1.5px solid #c6471f;outline-offset:1px}</style></helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+<sc-if value="{{ showReviewBar }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;align-items:center;gap:6px 16px;flex-wrap:wrap;padding:8px 20px;font:12px/1.4 system-ui,sans-serif;color:#555;border-bottom:1px solid rgba(0,0,0,.08)">
+<b style="color:#1a1a1a">Kodama wireframe · for approval</b>
+<span>Sign in <a href="Kodama%20Wireframes.dc.html#1a">1a</a></span>
+<span>Matches <a href="Kodama%20Wireframes.dc.html#6a">6a</a></span>
+<span>Watching <a href="Kodama%20Wireframes.dc.html#4b">4b</a></span>
+<span>Settings <a href="Kodama%20Wireframes.dc.html#4g">4g</a> + <a href="Kodama%20Wireframes.dc.html#6d">6d</a></span>
+<a href="Kodama%20Role%20Families.dc.html">Role families · 220</a>
+<a href="Kodama%20Wireframes.dc.html" style="margin-left:auto">Board →</a>
+<span onClick="{{ reset }}" style="cursor:pointer;text-decoration:underline">Reset</span>
+</div>
+</sc-if>
+<sc-if value="{{ signedOut }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Sign in" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:110px 20px;text-align:center">
+<div style="font-weight:700;font-size:30px">Kodama</div>
+<div style="color:#555">USF undergrad internships, as they post.</div>
+<span onClick="{{ signIn }}" style="display:inline-block;border:1.5px solid #222;background:#222;color:#fff;padding:9px 20px;font-weight:700;font-size:14px;cursor:pointer;user-select:none" style-hover="background:#c6471f;border-color:#c6471f">Sign in with USF</span>
+</div>
+</sc-if>
+<sc-if value="{{ signedIn }}" hint-placeholder-val="{{ false }}">
+<div style="width:100%;max-width:1160px;margin:24px auto 48px;padding:0 16px;box-sizing:border-box">
+<div style="background:#fff;border:1.5px solid #222">
+<div style="display:flex;align-items:center;gap:22px;padding:10px 18px;border-bottom:1.5px solid #222">
+<span style="font-weight:700;font-size:16px">Kodama</span>
+<div style="display:flex;gap:16px;font-size:13px"><sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3"><span onClick="{{ t.go }}" style="{{ t.style }}">{{ t.label }}</span></sc-for></div>
+<span style="margin-left:auto;font-size:12px;color:#777">Maya Chen</span>
+<span style="width:22px;height:22px;border-radius:50%;border:1.5px solid #222"></span>
+</div>
+
+<sc-if value="{{ isMatches }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Matches" style="padding:16px 18px 22px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+<span style="font-weight:700;font-size:18px">Matches · {{ matchCount }}</span>
+<div style="display:flex;border:1.5px solid #222"><sc-for list="{{ sortOpts }}" as="o" hint-placeholder-count="3"><span onClick="{{ o.pick }}" style="{{ o.style }}">{{ o.label }}</span></sc-for></div>
+<input value="{{ search }}" onChange="{{ onSearch }}" placeholder="Search" style="margin-left:auto;width:150px;border:1.5px solid #222;padding:3px 8px;font-size:12px;background:#fff;outline:none">
+<select value="{{ ptype }}" onChange="{{ onPtype }}" style="border:1px solid #bbb;border-radius:999px;padding:1px 6px;font-size:11px;background:#fff;cursor:pointer;color:#555"><option>All programs</option><option>Summer Analyst</option><option>Insight</option><option>Co-op</option></select>
+<select value="{{ where }}" onChange="{{ onWhere }}" style="border:1px solid #bbb;border-radius:999px;padding:1px 6px;font-size:11px;background:#fff;cursor:pointer;color:#555"><option>Anywhere</option><option>New York</option><option>San Francisco</option><option>Los Angeles</option><option>Oakland</option><option>Charlotte</option><option>Remote</option></select>
+<span onClick="{{ toggleCols }}" style="{{ colsChipStyle }}">Columns ▾</span>
+</div>
+<sc-if value="{{ showCols }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-wrap:wrap;gap:8px 16px;border:1.5px solid #c6471f;padding:8px 10px;font-size:12px"><sc-for list="{{ colOpts }}" as="c" hint-placeholder-count="6"><label style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" checked="{{ c.on }}" onChange="{{ c.toggle }}" style="margin:0;accent-color:#c6471f">{{ c.label }}</label></sc-for></div>
+</sc-if>
+<div ref="{{ scrollerRef }}" style="overflow-x:auto"><div style="min-width:{{ tableMin }}px">
+<div style="display:flex;gap:10px;align-items:center;padding:4px 8px;border-bottom:1.5px solid #222;font-size:12px;font-weight:700"><span style="width:22px;flex:none"></span><sc-for list="{{ headers }}" as="h" hint-placeholder-count="6"><span style="{{ h.style }}">{{ h.label }}</span></sc-for></div>
+<sc-for list="{{ rows }}" as="p" hint-placeholder-count="8">
+<div>
+<div onClick="{{ p.toggle }}" style="display:flex;gap:10px;align-items:center;padding:6px 8px;border-bottom:1px solid #ddd;font-size:12px;cursor:pointer;background:{{ p.bg }};font-weight:{{ p.fw }}" style-hover="background:#f4f4f4"><span style="width:22px;flex:none;color:#777">{{ p.chev }}</span><sc-for list="{{ p.cells }}" as="cell" hint-placeholder-count="6"><span style="{{ cell.style }}"><b>{{ cell.b }}</b>{{ cell.t }}</span></sc-for></div>
+<sc-if value="{{ p.open }}" hint-placeholder-val="{{ false }}">
+<div style="position:sticky;left:0;width:{{ panelW }}px;box-sizing:border-box;display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;padding:12px 12px 16px 34px;border-left:3px solid #c6471f;border-bottom:1.5px solid #222;font-size:12px;background:#fff">
+<div style="display:grid;grid-template-columns:auto 1fr;gap:5px 16px;flex:1;min-width:280px;align-content:start">
+<span style="color:#777">Checked</span><span style="color:#1d7a3e">{{ p.domain }} · {{ p.checkedFull }} · open</span>
+<span style="color:#777">Division</span><span>{{ p.cat }} · {{ p.family }}</span>
+<span style="color:#777">Program dates</span><span>{{ p.dates }}</span>
+<span style="color:#777">Pay</span><span>{{ p.pay }}</span>
+<span style="color:#777">Class of</span><span>{{ p.classOf }}</span>
+<span style="color:#777">Majors</span><span>{{ p.majors }}</span>
+<span style="color:#777">Work authorization</span><span>{{ p.auth }}</span>
+<span style="color:#777">Minimum GPA</span><span>{{ p.gpa }}</span>
+<span style="color:#777">Posted</span><span>{{ p.postedFull }}</span>
+<span style="color:#777">Deadline</span><b>{{ p.dueLong }}</b>
+</div>
+<div style="width:280px;flex:none;display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+<a href="#" onClick="{{ noop }}" style="display:inline-block;border:1.5px solid #222;padding:6px 12px;font-weight:700;font-size:12px;white-space:nowrap;cursor:pointer;user-select:none;background:#222;color:#fff;text-decoration:none" style-hover="background:#c6471f;border-color:#c6471f">Apply on company site →</a>
+<span onClick="{{ p.toggleWatch }}" style="display:inline-block;border:1.5px solid #222;padding:4px 10px;font-weight:700;font-size:12px;white-space:nowrap;cursor:pointer;user-select:none;background:#fff;color:#222" style-hover="background:#f4f4f4">{{ p.watchLabel }}</span>
+<span onClick="{{ p.toggleReport }}" style="color:#777;cursor:pointer;text-decoration:underline;font-size:12px">Report a problem</span>
+<sc-if value="{{ p.reporting }}" hint-placeholder-val="{{ false }}">
+<div style="border:1.5px solid #222;padding:10px;display:flex;flex-direction:column;gap:6px;width:100%;box-sizing:border-box">
+<sc-for list="{{ p.reasons }}" as="rs" hint-placeholder-count="3"><label style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="radio" checked="{{ rs.checked }}" onChange="{{ rs.pick }}" style="margin:0;accent-color:#c6471f">{{ rs.label }}</label></sc-for>
+<textarea rows="2" placeholder="Notes" style="border:1.5px solid #222;padding:4px 8px;font-size:12px;resize:vertical;outline:none"></textarea>
+<span onClick="{{ p.sendReport }}" style="display:inline-block;border:1.5px solid #222;padding:4px 12px;font-weight:700;font-size:12px;cursor:pointer;user-select:none;background:#222;color:#fff;align-self:flex-start" style-hover="background:#c6471f;border-color:#c6471f">Send</span>
+</div>
+</sc-if>
+<sc-if value="{{ p.reported }}" hint-placeholder-val="{{ false }}"><span style="color:#1d7a3e">Report sent</span></sc-if>
+</div>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isWatching }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Watching" style="padding:16px 18px 22px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+<span style="font-weight:700;font-size:18px">Firms · 212</span>
+<input value="{{ csearch }}" onChange="{{ onCsearch }}" placeholder="Search" style="margin-left:auto;width:170px;border:1.5px solid #222;padding:3px 8px;font-size:12px;background:#fff;outline:none">
+<span onClick="{{ chipWatching.toggle }}" style="{{ chipWatching.style }}">{{ chipWatching.label }}</span>
+<span onClick="{{ chipHiring.toggle }}" style="{{ chipHiring.style }}">{{ chipHiring.label }}</span>
+<select value="{{ sector }}" onChange="{{ onSector }}" style="border:1px solid #bbb;border-radius:999px;padding:1px 6px;font-size:11px;background:#fff;cursor:pointer;color:#555"><option>All sectors</option><option>Asset Management</option><option>Commercial Banking</option><option>Consulting</option><option>Corporate</option><option>Equity Research</option><option>Growth Equity</option><option>Hedge Fund</option><option>Insurance</option><option>Investment Banking</option><option>Private Equity</option><option>Sales &amp; Trading</option><option>Venture Capital</option><option>Wealth Management</option></select>
+</div>
+<div style="overflow-x:auto"><div style="min-width:820px">
+<div style="display:grid;grid-template-columns:22px minmax(150px,1.4fr) minmax(120px,1.1fr) minmax(120px,1.1fr) 130px 100px 44px;gap:0 10px;align-items:center;padding:4px 8px;border-bottom:1.5px solid #222;font-size:12px;font-weight:700"><span></span><span>Firm</span><span>Sector</span><span>HQ</span><span>Open roles for you</span><span>Checked</span><span></span></div>
+<sc-for list="{{ crows }}" as="c" hint-placeholder-count="8">
+<div>
+<sc-if value="{{ c.isDivider }}" hint-placeholder-val="{{ false }}"><div style="padding:9px 8px 3px;border-bottom:1.5px solid #222;font-size:12px;font-weight:700">{{ c.label }}</div></sc-if>
+<sc-if value="{{ c.isRow }}" hint-placeholder-val="{{ true }}">
+<div onClick="{{ c.toggle }}" style="display:grid;grid-template-columns:22px minmax(150px,1.4fr) minmax(120px,1.1fr) minmax(120px,1.1fr) 130px 100px 44px;gap:0 10px;align-items:center;padding:6px 8px;border-bottom:1px solid #ddd;font-size:12px;cursor:pointer" style-hover="background:#f4f4f4">
+<span style="color:#777">{{ c.chev }}</span><b>{{ c.name }}</b><span>{{ c.sector }}</span><span>{{ c.hq }}</span><span>{{ c.count }}</span><span>{{ c.checked }}</span>
+<span onClick="{{ c.toggleWatch }}" style="display:inline-block;width:28px;height:15px;border:1.5px solid #222;border-radius:999px;position:relative;cursor:pointer;justify-self:end"><sc-if value="{{ c.watching }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:1px;right:1px;width:11px;height:11px;border-radius:50%;background:#c6471f"></span></sc-if><sc-if value="{{ c.notWatching }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:1px;left:1px;width:11px;height:11px;border-radius:50%;background:#222"></span></sc-if></span>
+</div>
+<sc-if value="{{ c.open }}" hint-placeholder-val="{{ false }}">
+<div style="padding:10px 12px 14px 34px;border-left:3px solid #c6471f;border-bottom:1.5px solid #222;font-size:12px;display:flex;flex-direction:column;gap:7px">
+<sc-for list="{{ c.roleRows }}" as="rp" hint-placeholder-count="1">
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><b>{{ rp.program }}</b><span style="color:#777">{{ rp.division }} · {{ rp.where }} · Class of {{ rp.classOf }} · {{ rp.dueLong }}</span><a href="#" onClick="{{ noop }}" style="margin-left:auto;display:inline-block;border:1.5px solid #222;padding:1px 7px;font-weight:700;font-size:12px;white-space:nowrap;text-decoration:none;background:#fff" style-hover="background:#f4f4f4">Apply ↗</a></div>
+</sc-for>
+<span style="color:#777">{{ c.url }} ↗</span>
+</div>
+</sc-if>
+</sc-if>
+</div>
+</sc-for>
+<div style="padding:8px;font-size:12px;color:#777">… {{ moreCount }} more</div>
+</div></div>
+<span style="font-size:12px;color:#777;text-decoration:underline;cursor:pointer">Suggest a firm</span>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Settings" style="padding:16px 18px 24px;display:flex;flex-direction:column;gap:16px">
+<span style="font-weight:700;font-size:18px">Settings</span>
+<sc-if value="{{ eligView }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;border:1.5px solid #222;padding:8px 12px;font-size:12px"><span><b>{{ standing }}</b> · {{ eligRest }}</span><span onClick="{{ editElig }}" style="margin-left:auto;display:inline-block;border:1.5px solid #222;padding:3px 10px;font-weight:700;font-size:12px;cursor:pointer;user-select:none;background:#fff" style-hover="background:#f4f4f4">Edit</span></div>
+</sc-if>
+<sc-if value="{{ eligEdit }}" hint-placeholder-val="{{ false }}">
+<div style="border:1.5px solid #222;padding:12px;display:flex;flex-direction:column;gap:10px;font-size:12px">
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="color:#777;width:150px;flex:none">Class standing</span><select value="{{ standing }}" onChange="{{ onStanding }}" style="border:1.5px solid #222;padding:2px 6px;font-size:12px;background:#fff"><option>Freshman</option><option>Sophomore</option><option>Junior</option><option>Senior</option></select><select value="{{ classOf }}" onChange="{{ onClassOf }}" style="border:1.5px solid #222;padding:2px 6px;font-size:12px;background:#fff"><option>2027</option><option>2028</option><option>2029</option><option>2030</option></select></div>
+<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span style="color:#777;width:150px;flex:none">Majors</span><sc-for list="{{ majorChips }}" as="mc" hint-placeholder-count="2"><span onClick="{{ mc.remove }}" style="display:inline-block;border:1px solid #222;border-radius:999px;padding:0 8px;font-size:11px;cursor:pointer;user-select:none">{{ mc.label }}</span></sc-for><sc-for list="{{ majorAdd }}" as="ma" hint-placeholder-count="3"><span onClick="{{ ma.add }}" style="display:inline-block;border:1px solid #bbb;color:#888;border-radius:999px;padding:0 8px;font-size:11px;cursor:pointer;user-select:none">{{ ma.label }}</span></sc-for></div>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="color:#777;width:150px;flex:none">GPA</span><input value="{{ gpa }}" onChange="{{ onGpa }}" style="width:50px;border:1.5px solid #222;padding:2px 8px;font-size:12px;background:#fff;outline:none"></div>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="color:#777;width:150px;flex:none">Work authorization</span><select value="{{ auth }}" onChange="{{ onAuth }}" style="border:1.5px solid #222;padding:2px 6px;font-size:12px;background:#fff"><option>US citizen</option><option>Permanent resident</option><option>F-1 (CPT / OPT)</option><option>Other</option></select></div>
+<div style="display:flex;align-items:center;gap:8px"><span style="width:150px;flex:none"></span><span onClick="{{ doneElig }}" style="display:inline-block;border:1.5px solid #222;padding:3px 10px;font-weight:700;font-size:12px;cursor:pointer;user-select:none;background:#fff" style-hover="background:#f4f4f4">Done</span></div>
+</div>
+</sc-if>
+<div style="display:flex;flex-direction:column;gap:6px;font-size:12px"><b>Roles</b>
+<div style="display:flex;flex-direction:column;gap:4px;max-width:620px">
+<sc-for list="{{ rolesRows }}" as="rr" hint-placeholder-count="3"><div style="display:flex;align-items:center;gap:8px;border:1.5px solid #222;padding:3px 8px"><b>{{ rr.n }}</b><span style="flex:1;min-width:0">{{ rr.label }} <span style="color:#777;font-size:11px">{{ rr.sub }}</span></span><span onClick="{{ rr.up }}" style="cursor:pointer;color:#777;user-select:none">▲</span><span onClick="{{ rr.down }}" style="cursor:pointer;color:#777;user-select:none">▼</span><span onClick="{{ rr.remove }}" style="cursor:pointer;color:#777;user-select:none;padding-left:4px">×</span></div></sc-for>
+<span onClick="{{ togglePicker }}" style="align-self:flex-start;display:inline-block;border:1.5px solid #222;padding:3px 10px;font-weight:700;font-size:12px;cursor:pointer;user-select:none;background:#fff" style-hover="background:#f4f4f4">{{ pickerLabel }}</span>
+</div>
+<sc-if value="{{ pickerOpen }}" hint-placeholder-val="{{ false }}">
+<div style="border:1.5px solid #c6471f;padding:10px 12px;display:flex;flex-direction:column;gap:8px">
+<input value="{{ pickQ }}" onChange="{{ onPickQ }}" placeholder="Search roles" style="width:240px;border:1.5px solid #222;padding:3px 8px;font-size:12px;background:#fff;outline:none">
+<sc-for list="{{ catRows }}" as="cr" hint-placeholder-count="6">
+<div style="display:flex;flex-direction:column;gap:6px;border-top:1px solid #ddd;padding-top:6px">
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span onClick="{{ cr.toggleOpen }}" style="cursor:pointer;user-select:none;display:flex;gap:6px;align-items:center;flex:1;min-width:0"><span style="color:#777;width:12px">{{ cr.chev }}</span><b>{{ cr.name }}</b><span style="color:#777">· {{ cr.count }}</span></span><span onClick="{{ cr.all.toggle }}" style="{{ cr.all.style }}">{{ cr.all.label }}</span></div>
+<sc-if value="{{ cr.open }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-wrap:wrap;gap:5px;padding-left:18px"><sc-for list="{{ cr.fams }}" as="f" hint-placeholder-count="6"><span onClick="{{ f.toggle }}" style="{{ f.style }}">{{ f.label }}</span></sc-for></div></sc-if>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px"><span style="color:#777;width:150px;flex:none">Terms</span><sc-for list="{{ termChips }}" as="ch" hint-placeholder-count="3"><span onClick="{{ ch.toggle }}" style="{{ ch.style }}">{{ ch.label }}</span></sc-for></div>
+<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px"><span style="color:#777;width:150px;flex:none">Locations</span><sc-for list="{{ locChips }}" as="ch" hint-placeholder-count="4"><span onClick="{{ ch.toggle }}" style="{{ ch.style }}">{{ ch.label }}</span></sc-for></div>
+<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px"><span style="color:#777;width:150px;flex:none">Firm size</span><sc-for list="{{ sizeChips }}" as="ch" hint-placeholder-count="3"><span onClick="{{ ch.toggle }}" style="{{ ch.style }}">{{ ch.label }}</span></sc-for></div>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px"><span style="color:#777;width:150px;flex:none">Résumé</span><sc-if value="{{ noResume }}" hint-placeholder-val="{{ true }}"><span onClick="{{ upload }}" style="display:inline-block;border:1.5px dashed #999;color:#777;padding:3px 10px;font-size:11px;cursor:pointer;user-select:none">Upload PDF</span></sc-if><sc-if value="{{ hasResume }}" hint-placeholder-val="{{ false }}"><span>{{ resume }}</span><span onClick="{{ removeResume }}" style="color:#777;cursor:pointer">×</span></sc-if></div>
+<div style="border-top:1.5px solid #222"></div>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px"><span style="color:#777;width:150px;flex:none">Email</span><span>maya.chen@dons.usfca.edu</span></div>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px"><span style="color:#777;width:150px;flex:none">Days</span><div style="display:flex;gap:5px"><sc-for list="{{ dayChips }}" as="dc" hint-placeholder-count="7"><span onClick="{{ dc.toggle }}" style="{{ dc.style }}">{{ dc.label }}</span></sc-for></div><span style="color:#777;margin-left:10px">at</span><select value="{{ time }}" onChange="{{ onTime }}" style="border:1.5px solid #222;padding:2px 6px;font-size:12px;background:#fff"><option>6:00 am</option><option>7:00 am</option><option>8:00 am</option><option>9:00 am</option><option>12:00 pm</option><option>5:00 pm</option><option>8:00 pm</option></select></div>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px"><span style="color:#777;width:150px;flex:none">Watched firms</span><span onClick="{{ toggleInstant }}" style="display:inline-block;width:28px;height:15px;border:1.5px solid #222;border-radius:999px;position:relative;cursor:pointer"><sc-if value="{{ instant }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:1px;right:1px;width:11px;height:11px;border-radius:50%;background:#c6471f"></span></sc-if><sc-if value="{{ notInstant }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:1px;left:1px;width:11px;height:11px;border-radius:50%;background:#222"></span></sc-if></span><span>Instant</span></div>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;opacity:.45"><span style="color:#777;width:150px;flex:none">Text</span><span style="display:inline-block;width:28px;height:15px;border:1.5px solid #bbb;border-radius:999px;position:relative"><span style="position:absolute;top:1px;left:1px;width:11px;height:11px;border-radius:50%;background:#bbb"></span></span><span style="display:inline-block;border:1.5px solid #c6471f;color:#c6471f;padding:0 6px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transform:rotate(-4deg)">Coming soon</span><span style="color:#777;margin-left:24px">Push</span><span style="display:inline-block;width:28px;height:15px;border:1.5px solid #bbb;border-radius:999px;position:relative"><span style="position:absolute;top:1px;left:1px;width:11px;height:11px;border-radius:50%;background:#bbb"></span></span><span style="display:inline-block;border:1.5px solid #c6471f;color:#c6471f;padding:0 6px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transform:rotate(-4deg)">Coming soon</span></div>
+<div style="display:flex;align-items:center;gap:12px;font-size:12px"><span style="width:150px;flex:none"></span><span onClick="{{ save }}" style="display:inline-block;border:1.5px solid #222;padding:6px 14px;font-weight:700;font-size:12px;cursor:pointer;user-select:none;background:#222;color:#fff" style-hover="background:#c6471f;border-color:#c6471f">Save</span><span style="color:#1d7a3e">{{ savedLabel }}</span></div>
+</div>
+</sc-if>
+</div></div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;skipSignIn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;showReviewBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+const TAX = [
+['Investment Banking',['Generalist & Rotational Banking','Mergers & Acquisitions','Equity Capital Markets','Debt Capital Markets','Leveraged Finance','Restructuring','Financial Sponsors Coverage','Industry Coverage (TMT, Healthcare, FIG, Consumer, Industrials, Energy, Real Estate)','Structured Finance & Securitization','Project & Infrastructure Finance','Private Capital Advisory & Placement','Public Finance Banking (Municipal)']],
+['Sales, Trading & Markets',['Equities Sales & Trading','FICC Sales & Trading','Rates & FX Trading','Credit Trading','Commodities Trading','Physical Commodity & Energy Trading','Derivatives Structuring','Quantitative & Systematic Trading','Market Making & Proprietary Trading','Electronic Trading & Execution','Prime Brokerage & Securities Financing','Institutional Sales & Client Coverage']],
+['Research',['Equity Research','Credit & Fixed Income Research','Macro & Economic Research','Quantitative Research','Commodities Research','ESG & Sustainability Research','Credit Ratings','Index & Financial Data Research']],
+['Private Equity & Private Markets',['Buyout Private Equity','Growth Equity','Venture Capital','Private Credit & Direct Lending','Distressed & Special Situations','Secondaries','Fund of Funds & Multi-Manager','Infrastructure Investing','Real Assets & Natural Resources','Impact Investing','Family Office Investing','Sovereign Wealth & Pension Investing','Search Funds & Entrepreneurship Through Acquisition','Portfolio Operations & Value Creation','Investor Relations & Fundraising']],
+['Hedge Funds',['Long/Short Equity','Global Macro','Multi-Strategy','Event-Driven & Merger Arbitrage','Credit & Distressed','Quantitative & Systematic','Activist Investing','Business Development & Fund Operations']],
+['Asset & Wealth Management',['Equity Portfolio Management & Research','Fixed Income Portfolio Management','Multi-Asset & Asset Allocation','ETF & Index Products','Manager Research & Due Diligence','Investment Consulting & OCIO','Endowment & Foundation Investing','Insurance Asset Management','Wealth Management & Private Banking','Financial Planning & Advisory','Trust & Estate Services','Multi-Family Office','Fund Product & Operations','Distribution & Client Relations']],
+['Consulting & Advisory',['Management & Strategy Consulting','Economic Consulting & Litigation Support','Transaction Advisory & Due Diligence','Valuation Advisory','Restructuring & Turnaround Advisory','Operations & Supply Chain Consulting','Technology & Digital Consulting','Risk & Regulatory Consulting','Human Capital & Organization Consulting','Healthcare & Life Sciences Consulting','Public Sector & Government Consulting','Nonprofit & Social Impact Consulting','Forensic Accounting & Investigations','Pricing & Commercial Strategy','ESG & Sustainability Consulting','Real Estate Advisory','Actuarial & Benefits Consulting']],
+['Commercial & Corporate Banking',['Commercial Banking & Middle-Market Lending','Corporate Banking','Credit Analysis & Underwriting','Treasury & Transaction Banking','Trade & Supply Chain Finance','Asset-Based Lending & Leasing','Syndicated Loans & Loan Capital Markets','Small Business Banking','Community & Regional Banking','Retail Banking Management','Consumer Lending, Cards & Mortgage','Specialty & Agricultural Lending','Bank Strategy & Product']],
+['Corporate Finance & Strategy',['Financial Planning & Analysis','Corporate Development & In-House M&A','Corporate Strategy','Treasury','Investor Relations','Controllership & Accounting Operations','Internal Audit','Finance Leadership Development Programs','Strategic Finance','Pricing & Revenue Management','Finance Business Partnering','Business Unit & Divisional Finance','In-House Tax']],
+['Accounting, Audit & Tax',['Audit & Assurance','Tax Advisory','Deals & Transaction Services','Forensic Accounting','Accounting Advisory & Technical Accounting','Risk Assurance & IT Audit','Fund Accounting & Administration','Government & Nonprofit Accounting']],
+['Real Estate',['Real Estate Private Equity & Acquisitions','Real Estate Development','REIT Investing & Analysis','Commercial Real Estate Lending','CRE Brokerage & Capital Markets','Real Estate Asset Management','Property Management','Affordable Housing Finance','Appraisal & Valuation','Proptech & Real Estate Operations']],
+['Risk, Compliance & Controls',['Market Risk','Credit Risk','Operational & Enterprise Risk','Model Risk & Validation','Liquidity & Treasury Risk','Compliance','Financial Crime, AML & KYC','Regulatory Affairs & Policy','Internal Controls & SOX','Third-Party & Vendor Risk','Climate & ESG Risk']],
+['Quantitative Finance, Fintech & Data',['Quantitative Analyst & Strats','Quantitative Developer','Financial Engineering & Derivatives Pricing','Data Science & Analytics','Fintech Product Management','Payments','Digital Assets & Crypto','Lending Technology & Credit Modeling','Insurtech','Wealthtech & Robo-Advisory','Banking Technology & Financial Software','Financial Data & Index Providers','Exchanges & Market Infrastructure','Trading Technology']],
+['Insurance & Actuarial',['Actuarial (Life, P&C, Health, Pensions)','Underwriting','Claims','Reinsurance','Insurance Brokerage','Insurance Investments & ALM','Insurance Product & Pricing','Catastrophe Modeling','Insurance Strategy & Operations']],
+['Public Finance, Policy & Economics',['Municipal Advisory','Central Banking','Financial Regulation (SEC, FDIC, OCC, CFPB, FINRA)','Government Finance & Budget','Economic Research & Think Tanks','Development Finance (World Bank, IFC, IDB, DFC)','Housing Finance Agencies','International Trade & Economics','Public Policy Analysis','Nonprofit & CDFI Finance']],
+['Operations & Middle Office',['Trade Support & Middle Office','Settlements & Clearing','Fund Administration','Custody & Securities Services','Client Onboarding & KYC Operations','Product Control & Valuation Control','Collateral & Margin','Business Management & COO Office','Transformation & Change Management','Data Management & Governance']],
+['Specialty Finance',['Equipment & Vehicle Finance','Aviation & Shipping Finance','Fund Finance & NAV Lending','Litigation Finance','Royalty, Music & Film Finance','Sports Finance','Art & Collectibles Finance','Factoring & Receivables Finance']],
+['General Management & Business Operations',['General Management Rotational Programs','Business Operations & Strategy','Chief of Staff & Business Management','Operations Management','Supply Chain & Logistics','Procurement & Sourcing','Project & Program Management','Product Management','Business Development & Partnerships','B2B Sales & Account Management','Revenue Operations & Customer Success','Marketing & Brand Management','Market Research & Consumer Insights','Human Resources & Talent','Communications & Public Relations','Corporate Social Responsibility','Retail & Franchise Management','Hospitality & Tourism Management','Healthcare Administration','Sports Business & Management','Media & Entertainment Business','Fashion & Luxury Business','Nonprofit Management']],
+['Entrepreneurship & Startups',['Startup Generalist & Founder\'s Associate','Venture Studio, Incubator & Accelerator','Social Enterprise','Small Business Operations','Entrepreneur-in-Residence Programs']]
+];
+const CAT_OF = {}; TAX.forEach(([c, fs]) => fs.forEach(f => { CAT_OF[f] = c; }));
+const CATS = TAX.map(t => t[0]);
+const P = (id, firm, program, ptype, family, division, where, classOf, pay, due, dueDays, posted, postedH, postedFull, checked, stale, checkedFull, domain, dates, majors, auth, gpa, top) => ({id, firm, program, ptype, family, cat: CAT_OF[family], division, where, classOf, pay, rolling: dueDays === null, due, dueDays, dueLong: dueDays === null ? 'Rolling' : due + ' · ' + dueDays + ' days', posted, postedH, postedFull, checked, stale, checkedFull, domain, dates, majors, auth, gpa, top});
+const POSTINGS = [
+P(1,'Halcyon Partners','Investment Banking Summer Analyst 2027','Summer Analyst','Mergers & Acquisitions','M&A','New York','2028','$110,000 / yr, prorated','Nov 14',24,'9:02 today',2,'Today, 9:02am','2h ago',false,'today 9:14am','halcyonpartners.com/careers','Jun 7 – Aug 13, 2027 · 10 weeks','Any','US work authorization required','3.5',true),
+P(2,'Marlowe & Reed','Private Equity Summer Analyst 2027','Summer Analyst','Buyout Private Equity','Buyout','San Francisco','2028','$95,000 / yr, prorated','Dec 1',41,'7:40 today',3,'Today, 7:40am','4h ago',false,'today 7:40am','marlowereed.com/careers','Jun 14 – Aug 20, 2027 · 10 weeks','Finance, Economics, Accounting','US work authorization required','3.5',true),
+P(3,'Ashcombe Strategy','Summer Business Analyst 2027','Summer Analyst','Management & Strategy Consulting','Generalist','San Francisco','2028','$9,500 / month','Nov 30',40,'Tue 10:55am',23,'Tue Oct 20, 10:55am','2h ago',false,'today 9:14am','ashcombe.com/careers/students','Jun 1 – Aug 6, 2027 · 10 weeks','Any','Not stated','Not stated',true),
+P(4,'Tidewater Bank','Commercial Banking Summer Analyst 2027','Summer Analyst','Commercial Banking & Middle-Market Lending','Middle Market','San Francisco','2028','$38 / hour','Jan 8',79,'Tue 4:30pm',18,'Tue Oct 20, 4:30pm','3h ago',false,'today 8:00am','tidewaterbank.com/careers','Jun 7 – Aug 13, 2027 · 10 weeks','Finance, Accounting, Economics','US work authorization required','3.0',false),
+P(5,'Wexford & Co','Investment Banking Insight Week','Insight','Generalist & Rotational Banking','Generalist','New York','2028, 2029','Travel covered','Nov 7',17,'Mon 9:30am',49,'Mon Oct 19, 9:30am','1h ago',false,'today 10:02am','wexfordco.com/early-careers','Jan 11 – Jan 15, 2027 · 1 week','Any','Not stated','Not stated',false),
+P(6,'Northgate Securities','Sales & Trading Summer Analyst 2027','Summer Analyst','Equities Sales & Trading','Equities','New York','2028','$100,000 / yr, prorated','Rolling',null,'Oct 17',100,'Sat Oct 17, 8:15am','yesterday',true,'yesterday 6:40pm','northgatesec.com/campus','Jun 7 – Aug 13, 2027 · 10 weeks','Any','US work authorization required','3.3',false),
+P(7,'Carrick Capital','Growth Equity Summer Analyst 2027','Summer Analyst','Growth Equity','Growth','San Francisco','2028','$45 / hour','Dec 10',50,'Oct 16',118,'Fri Oct 16, 11:20am','2h ago',false,'today 9:10am','carrickcap.com/careers','Jun 1 – Aug 13, 2027 · 11 weeks','Finance, Economics','US work authorization required','Not stated',false),
+P(8,'Lumen Advisory','Restructuring Summer Analyst 2027','Summer Analyst','Restructuring','Restructuring','Los Angeles','2028','$110,000 / yr, prorated','Nov 20',30,'Oct 15',140,'Thu Oct 15, 4:05pm','5h ago',false,'today 6:00am','lumenadvisory.com/careers','Jun 7 – Aug 13, 2027 · 10 weeks','Any','US work authorization required','3.5',false),
+P(9,'Beacon Group','Corporate Strategy Summer Intern 2027','Summer Analyst','Corporate Strategy','Corporate Strategy','Remote','2028','$42 / hour','Dec 15',55,'Oct 14',165,'Wed Oct 14, 1:45pm','6h ago',false,'today 5:00am','beacongroup.com/careers','Jun 14 – Aug 20, 2027 · 10 weeks','Any','Not stated','Not stated',false),
+P(10,'Alder & Co','Management Consulting Co-op · Spring 2027','Co-op','Management & Strategy Consulting','Generalist','Oakland','2028','$36 / hour','Dec 5',45,'Oct 14',170,'Wed Oct 14, 9:02am','2h ago',false,'today 8:05am','alderco.com/careers','Jan 11 – Jun 25, 2027 · 6 months','Any','US work authorization required','Not stated',false),
+P(11,'Pacific Crest Bank','Wealth Management Summer Analyst 2027','Summer Analyst','Wealth Management & Private Banking','Private Wealth','San Francisco','2028','$32 / hour','Jan 15',86,'Oct 13',190,'Tue Oct 13, 3:30pm','1h ago',false,'today 10:00am','pacificcrestbank.com/careers','Jun 7 – Aug 13, 2027 · 10 weeks','Finance, Economics, Business','Not stated','Not stated',false),
+P(12,'Sable Partners','Equity Research Summer Analyst 2027','Summer Analyst','Equity Research','Equity Research','New York','2028','$95,000 / yr, prorated','Rolling',null,'Oct 12',215,'Mon Oct 12, 10:00am','3h ago',false,'today 8:00am','sablepartners.com/careers','Jun 1 – Aug 6, 2027 · 10 weeks','Finance, Economics, Accounting','US work authorization required','3.4',false),
+P(13,'Juniper Capital','Early Insight Program','Insight','Equity Portfolio Management & Research','Asset Management','San Francisco','2028, 2029','Travel covered','Nov 9',19,'Oct 10',260,'Sat Oct 10, 7:00am','3h ago',false,'today 8:00am','junipercap.com/early-careers','Jan 6 – Jan 8, 2027 · 3 days','Any','Not stated','Not stated',false),
+P(14,'Meridian Bank','Corporate Banking Summer Analyst 2027','Summer Analyst','Corporate Banking','Corporate Banking','Charlotte','2028','$40 / hour','Dec 20',60,'Oct 9',290,'Fri Oct 9, 2:20pm','2h ago',false,'today 9:00am','meridianbank.com/students','Jun 7 – Aug 13, 2027 · 10 weeks','Finance, Accounting, Economics','US work authorization required','3.0',false)
+];
+const FIRMS = [
+{id:'halcyon',name:'Halcyon Partners',sector:'Investment Banking',hq:'New York',checked:'2h ago',url:'halcyonpartners.com/careers'},
+{id:'marlowe',name:'Marlowe & Reed',sector:'Private Equity',hq:'San Francisco',checked:'4h ago',url:'marlowereed.com/careers'},
+{id:'ashcombe',name:'Ashcombe Strategy',sector:'Consulting',hq:'San Francisco',checked:'2h ago',url:'ashcombe.com/careers/students'},
+{id:'wexford',name:'Wexford & Co',sector:'Investment Banking',hq:'New York',checked:'1h ago',url:'wexfordco.com/early-careers'},
+{id:'alder',name:'Alder & Co',sector:'Consulting',hq:'Oakland',checked:'2h ago',url:'alderco.com/careers'},
+{id:'arbor',name:'Arbor Capital',sector:'Hedge Fund',hq:'New York',checked:'7h ago',url:'arborcapital.com/careers'},
+{id:'beacon',name:'Beacon Group',sector:'Corporate',hq:'Remote',checked:'6h ago',url:'beacongroup.com/careers'},
+{id:'carrick',name:'Carrick Capital',sector:'Growth Equity',hq:'San Francisco',checked:'2h ago',url:'carrickcap.com/careers'},
+{id:'crestline',name:'Crestline Partners',sector:'Private Equity',hq:'Chicago',checked:'yesterday',url:'crestlinepartners.com/careers'},
+{id:'everpine',name:'Everpine Advisors',sector:'Consulting',hq:'Boston',checked:'3h ago',url:'everpine.com/careers'},
+{id:'foxglove',name:'Foxglove Ventures',sector:'Venture Capital',hq:'San Francisco',checked:'5h ago',url:'foxglove.vc/jobs'},
+{id:'granite',name:'Granite Insurance',sector:'Insurance',hq:'San Francisco',checked:'yesterday',url:'graniteins.com/careers'},
+{id:'juniper',name:'Juniper Capital',sector:'Asset Management',hq:'San Francisco',checked:'3h ago',url:'junipercap.com/early-careers'},
+{id:'lumen',name:'Lumen Advisory',sector:'Investment Banking',hq:'Los Angeles',checked:'5h ago',url:'lumenadvisory.com/careers'},
+{id:'meridian',name:'Meridian Bank',sector:'Commercial Banking',hq:'Charlotte',checked:'2h ago',url:'meridianbank.com/students'},
+{id:'northgate',name:'Northgate Securities',sector:'Sales & Trading',hq:'New York',checked:'yesterday',url:'northgatesec.com/campus'},
+{id:'pacificcrest',name:'Pacific Crest Bank',sector:'Wealth Management',hq:'San Francisco',checked:'1h ago',url:'pacificcrestbank.com/careers'},
+{id:'sable',name:'Sable Partners',sector:'Equity Research',hq:'New York',checked:'3h ago',url:'sablepartners.com/careers'},
+{id:'tidewater',name:'Tidewater Bank',sector:'Commercial Banking',hq:'San Francisco',checked:'3h ago',url:'tidewaterbank.com/careers'},
+{id:'westbay',name:'Westbay Credit Union',sector:'Commercial Banking',hq:'San Francisco',checked:'4h ago',url:'westbaycu.org/careers'}
+];
+const COLS = [['division','Division',140],['where','Where',115],['classOf','Class of',80],['pay','Pay',150],['due','Due',105],['posted','Posted',95],['dates','Program dates',190],['majors','Majors',170],['auth','Work auth',175],['gpa','Min. GPA',70]];
+const REASONS = ['The posting is closed','The apply link doesn\'t work','Eligibility is wrong','A fact is wrong','Not an undergrad internship, insight program or co-op','Duplicate posting','Something else'];
+const TERM_OPTIONS = ['Summer 2027','Spring 2027','Fall 2027'];
+const LOC_OPTIONS = ['New York','SF Bay Area','Los Angeles','Chicago','Boston','Charlotte','Houston','Remote'];
+const SIZE_OPTIONS = ['Boutique','Middle market','Large'];
+const MAJOR_OPTIONS = ['Finance','Economics','Accounting','Business Administration','Mathematics','Data Science','Computer Science','Political Science'];
+const DAYS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+const CHIP = {display:'inline-block',borderRadius:999,padding:'0 8px',fontSize:11,lineHeight:'18px',whiteSpace:'nowrap',cursor:'pointer',userSelect:'none'};
+const CHIP_ON = {...CHIP,border:'1px solid #c6471f',color:'#c6471f'};
+const CHIP_OFF = {...CHIP,border:'1px solid #222',color:'#222'};
+const CHIP_DIM = {...CHIP,border:'1px solid #bbb',color:'#888'};
+const SEG = {padding:'2px 10px',fontSize:12,cursor:'pointer',userSelect:'none',whiteSpace:'nowrap'};
+const SEG_ON = {...SEG,background:'#222',color:'#fff'};
+const SEG_OFF = {...SEG,background:'#fff',color:'#222'};
+const TAB_ON = {color:'#222',borderBottom:'2px solid #c6471f',paddingBottom:2,cursor:'pointer',fontWeight:700,userSelect:'none'};
+const TAB_OFF = {color:'#666',borderBottom:'2px solid transparent',paddingBottom:2,cursor:'pointer',userSelect:'none'};
+const CELL = {minWidth:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'};
+const FIRM = {...CELL,flex:'1 1 150px',minWidth:120};
+const PROG = {...CELL,flex:'1.4 1 190px',minWidth:150};
+const fixed = w => ({...CELL,flex:'none',width:w});
+const initial = () => ({
+  signedIn:false, tab:'matches', openPosting:null, openFirm:null,
+  watched:['halcyon','marlowe','ashcombe','wexford'],
+  search:'', ptype:'All programs', where:'Anywhere', sort:'Best match', cols:['division','where','classOf','pay','due','posted'], showCols:false,
+  reporting:null, reason:null, reported:[],
+  csearch:'', fWatching:false, fHiring:false, sector:'All sectors',
+  editElig:false, standing:'Junior', classOf:'2028', majors:['Finance','Economics'], gpa:'3.7', auth:'US citizen',
+  roles:['Mergers & Acquisitions','Investment Banking','Buyout Private Equity','Management & Strategy Consulting','Growth Equity'], pickerOpen:false, pickQ:'', openCat:null,
+  terms:['Summer 2027'], locations:['New York','SF Bay Area'], sizes:['Boutique','Large'], resume:null,
+  days:['Tu','Th'], time:'8:00 am', instant:true, saved:false
+});
+class Component extends DCLogic {
+  state = initial();
+  scrollerRef = el => { if (this._ro) { this._ro.disconnect(); this._ro = null; } this._scroller = el; if (!el) return; this._ro = new ResizeObserver(() => { const w = el.clientWidth; if (w && w !== this.state.panelW) this.setState({panelW: w}); }); this._ro.observe(el); const w = el.clientWidth; if (w && w !== this.state.panelW) this.setState({panelW: w}); };
+  componentWillUnmount(){ if (this._ro) this._ro.disconnect(); clearTimeout(this._t); }
+  tog(key, v){ this.setState(s => ({[key]: s[key].includes(v) ? s[key].filter(x => x !== v) : [...s[key], v], saved:false})); }
+  move(key, i, d){ this.setState(s => { const a = [...s[key]], j = i + d; if (j < 0 || j >= a.length) return null; [a[i], a[j]] = [a[j], a[i]]; return {[key]: a, saved:false}; }); }
+  chips(options, key){ return options.map(o => { const on = this.state[key].includes(o); return {label: on ? o + ' ✓' : o, style: on ? CHIP_ON : CHIP_OFF, toggle: () => this.tog(key, o)}; }); }
+  renderVals(){
+    const s = this.state, p = this.props;
+    const signedIn = s.signedIn || !!p.skipSignIn;
+    const firmId = name => (FIRMS.find(c => c.name === name) || {}).id;
+    const q = s.search.trim().toLowerCase();
+    const filtered = POSTINGS.filter(x => (s.ptype === 'All programs' || x.ptype === s.ptype) && (s.where === 'Anywhere' || x.where === s.where) && (!q || (x.firm + ' ' + x.program + ' ' + x.family + ' ' + x.division).toLowerCase().includes(q)));
+    const rankOf = x => { let r = Infinity; s.roles.forEach((pick, i) => { if (i < r && (pick === x.family || pick === x.cat)) r = i; }); return r; };
+    const cmp = {'Best match': (a, b) => ((b.top ? 1 : 0) - (a.top ? 1 : 0)) || (rankOf(a) - rankOf(b)) || (a.postedH - b.postedH), 'Newest': (a, b) => a.postedH - b.postedH, 'Deadline': (a, b) => (a.dueDays ?? -1) - (b.dueDays ?? -1)}[s.sort];
+    const sorted = filtered.slice().sort(cmp);
+    const colOn = COLS.filter(([k]) => s.cols.includes(k));
+    const headers = [{label:'Firm', style:FIRM}, {label:'Program', style:PROG}, ...colOn.map(([k, l, w]) => ({label:l, style:fixed(w)})), {label:'Checked', style:fixed(90)}];
+    const tableMin = 22 + 150 + 190 + 90 + colOn.reduce((n, c) => n + c[2], 0) + 10 * (headers.length + 1) + 16;
+    const rows = sorted.map(x => { const id = firmId(x.firm); const watching = s.watched.includes(id); const open = s.openPosting === x.id;
+      const cells = [{b:x.firm, t:'', style:FIRM}, {b:'', t:x.program, style:PROG}, ...colOn.map(([k, l, w]) => k === 'due' && x.rolling ? {b:'Rolling', t:'', style:fixed(w)} : {b:'', t: k === 'due' ? x.due + ' · ' + x.dueDays + 'd' : x[k], style:fixed(w)}), {b:'', t:x.checked, style:{...fixed(90), color: x.stale ? '#c6471f' : '#222'}}];
+      return {...x, open, chev: open ? '▾' : '▸', bg: '#fff', fw: x.top ? 700 : 400, cells,
+        toggle: () => this.setState(t => ({openPosting: t.openPosting === x.id ? null : x.id, reporting:null})),
+        watchLabel: watching ? 'Watching ' + x.firm + ' ✓' : 'Watch ' + x.firm,
+        toggleWatch: e => { e.stopPropagation(); this.tog('watched', id); },
+        reporting: s.reporting === x.id,
+        toggleReport: () => this.setState(t => ({reporting: t.reporting === x.id ? null : x.id, reason:null})),
+        reasons: REASONS.map(r => ({label: r, checked: s.reason === r, pick: () => this.setState({reason: r})})),
+        sendReport: () => this.setState(t => ({reported: [...t.reported, x.id], reporting:null})),
+        reported: s.reported.includes(x.id)}; });
+    const cq = s.csearch.trim().toLowerCase();
+    const firms = FIRMS.map(c => ({...c, roles: POSTINGS.filter(x => x.firm === c.name)})).filter(c => (!cq || c.name.toLowerCase().includes(cq)) && (s.sector === 'All sectors' || c.sector === s.sector) && (!s.fHiring || c.roles.length));
+    const crow = c => { const watching = s.watched.includes(c.id); const open = s.openFirm === c.id; return {...c, isRow:true, isDivider:false, open, chev: open ? '▾' : '▸', count: c.roles.length, watching, notWatching: !watching, roleRows: c.roles,
+      toggle: () => this.setState(t => ({openFirm: t.openFirm === c.id ? null : c.id})),
+      toggleWatch: e => { e.stopPropagation(); this.tog('watched', c.id); }}; };
+    const wl = firms.filter(c => s.watched.includes(c.id)), ol = s.fWatching ? [] : firms.filter(c => !s.watched.includes(c.id));
+    const crows = [];
+    if (wl.length) crows.push({isDivider:true, isRow:false, label:'Watching · ' + wl.length});
+    wl.forEach(c => crows.push(crow(c)));
+    if (ol.length) crows.push({isDivider:true, isRow:false, label:'All firms'});
+    ol.forEach(c => crows.push(crow(c)));
+    const hiring = FIRMS.filter(c => POSTINGS.some(x => x.firm === c.name)).length;
+    const roleChip = (val, label) => { const on = s.roles.includes(val); return {label: on ? label + ' ✓' : label, style: on ? CHIP_ON : CHIP_DIM, toggle: () => this.tog('roles', val)}; };
+    const pq = s.pickQ.trim().toLowerCase();
+    const catRows = TAX.map(([cat, fams]) => { const shown = pq ? fams.filter(f => f.toLowerCase().includes(pq)) : fams; if (pq && !shown.length && !cat.toLowerCase().includes(pq)) return null; const open = pq ? true : s.openCat === cat;
+      return {name: cat, count: fams.length, open, chev: open ? '▾' : '▸', toggleOpen: () => this.setState(t => ({openCat: t.openCat === cat ? null : cat})), all: roleChip(cat, 'All'), fams: shown.map(f => roleChip(f, f))}; }).filter(Boolean);
+    const set = key => e => this.setState({[key]: e.target.value, saved:false});
+    const tabs = [['matches','Matches'],['watching','Watching'],['settings','Settings']].map(([k, l]) => ({label: l, style: s.tab === k ? TAB_ON : TAB_OFF, go: () => this.setState({tab: k})}));
+    return {
+      showReviewBar: p.showReviewBar ?? true,
+      signedOut: !signedIn, signedIn, signIn: () => this.setState({signedIn:true}), reset: () => this.setState(initial()), noop: e => e.preventDefault(),
+      tabs, isMatches: s.tab === 'matches', isWatching: s.tab === 'watching', isSettings: s.tab === 'settings',
+      matchCount: filtered.length, search: s.search, onSearch: e => this.setState({search: e.target.value}), ptype: s.ptype, onPtype: set('ptype'), where: s.where, onWhere: set('where'),
+      sortOpts: ['Best match','Newest','Deadline'].map(o => ({label: o, style: s.sort === o ? SEG_ON : SEG_OFF, pick: () => this.setState({sort: o})})),
+      showCols: s.showCols, toggleCols: () => this.setState(t => ({showCols: !t.showCols})), colsChipStyle: s.showCols ? CHIP_ON : CHIP_DIM,
+      colOpts: COLS.map(([k, l]) => ({label: l, on: s.cols.includes(k), toggle: () => this.tog('cols', k)})),
+      headers, tableMin, rows, panelW: s.panelW || 720, scrollerRef: this.scrollerRef,
+      csearch: s.csearch, onCsearch: e => this.setState({csearch: e.target.value}),
+      chipWatching: {label: 'Watching · ' + s.watched.length, style: s.fWatching ? CHIP_ON : CHIP_OFF, toggle: () => this.setState(t => ({fWatching: !t.fWatching}))},
+      chipHiring: {label: 'Hiring now · ' + hiring, style: s.fHiring ? CHIP_ON : CHIP_OFF, toggle: () => this.setState(t => ({fHiring: !t.fHiring}))},
+      sector: s.sector, onSector: set('sector'), crows, moreCount: 212 - FIRMS.length,
+      eligView: !s.editElig, eligEdit: s.editElig, editElig: () => this.setState({editElig:true}), doneElig: () => this.setState({editElig:false}),
+      standing: s.standing, onStanding: set('standing'), classOf: s.classOf, onClassOf: set('classOf'),
+      eligRest: 'Class of ' + s.classOf + ' · ' + s.majors.join(', ') + ' · GPA ' + s.gpa + ' · ' + s.auth,
+      majorChips: s.majors.map(m => ({label: m + ' ×', remove: () => this.tog('majors', m)})), majorAdd: MAJOR_OPTIONS.filter(m => !s.majors.includes(m)).map(m => ({label: m, add: () => this.tog('majors', m)})),
+      gpa: s.gpa, onGpa: set('gpa'), auth: s.auth, onAuth: set('auth'),
+      rolesRows: s.roles.map((r, i) => { const isCat = CATS.includes(r); return {n: i + 1, label: isCat ? 'All ' + r : r, sub: isCat ? '' : CAT_OF[r], up: () => this.move('roles', i, -1), down: () => this.move('roles', i, 1), remove: () => this.tog('roles', r)}; }),
+      pickerOpen: s.pickerOpen, pickerLabel: s.pickerOpen ? 'Done' : 'Add roles', togglePicker: () => this.setState(t => ({pickerOpen: !t.pickerOpen, pickQ:''})), pickQ: s.pickQ, onPickQ: e => this.setState({pickQ: e.target.value}), catRows,
+      termChips: this.chips(TERM_OPTIONS, 'terms'), locChips: this.chips(LOC_OPTIONS, 'locations'), sizeChips: this.chips(SIZE_OPTIONS, 'sizes'),
+      hasResume: !!s.resume, noResume: !s.resume, resume: s.resume, upload: () => this.setState({resume:'maya-chen-resume.pdf', saved:false}), removeResume: () => this.setState({resume:null, saved:false}),
+      dayChips: this.chips(DAYS, 'days'), time: s.time, onTime: set('time'), instant: s.instant, notInstant: !s.instant, toggleInstant: () => this.setState(t => ({instant: !t.instant, saved:false})),
+      save: () => { this.setState({saved:true}); clearTimeout(this._t); this._t = setTimeout(() => this.setState({saved:false}), 2500); }, savedLabel: s.saved ? 'Saved' : ''
+    };
+  }
+}
+</script>
+</body>
+</html>

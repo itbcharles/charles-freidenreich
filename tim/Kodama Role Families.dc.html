@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:wght@400;700&amp;display=swap" rel="stylesheet"><style>body{margin:0;background:#f0eee9;font-family:'Shantell Sans',system-ui,sans-serif;color:#222}a{color:#222}a:hover{color:#c6471f}</style></helmet>
+<div style="max-width:1240px;margin:0 auto;padding:40px 44px 60px;box-sizing:border-box">
+<div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px"><span style="font-weight:700;font-size:22px">Kodama · Role families</span><span style="font-size:13px;color:#777">{{ famCount }} families in {{ catCount }} categories · draft for approval</span><a href="Kodama%20Wireframes.dc.html#6d" style="margin-left:auto;font-size:12px">Picker wireframe 6d →</a><a href="Kodama%20Wireframe%20Prototype.dc.html" style="font-size:12px">Prototype →</a></div>
+<p style="font:13px/1.55 system-ui,sans-serif;color:#333;max-width:860px;margin:0 0 28px;text-wrap:pretty">Students pick any number of families, or a whole category, and rank their picks; the Matches list follows that order. Every posting carries exactly one family, set when it is classified and correctable by an admin. Names, groupings, additions and merges are edited in Labels. Firm type (bulge bracket, boutique, Big 4…) is deliberately not here.</p>
+<div style="column-width:270px;column-gap:32px">
+<sc-for list="{{ cats }}" as="c" hint-placeholder-count="6">
+<div style="break-inside:avoid;margin:0 0 22px;padding-top:8px;border-top:1.5px solid #222">
+<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px"><b style="font-size:14px">{{ c.name }}</b><span style="font-size:11px;color:#777">{{ c.count }}</span></div>
+<sc-for list="{{ c.fams }}" as="f" hint-placeholder-count="8"><div style="font-size:12px;line-height:1.55;padding-left:10px;text-indent:-10px">{{ f.name }}</div></sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const TAX = [
+['Investment Banking',['Generalist & Rotational Banking','Mergers & Acquisitions','Equity Capital Markets','Debt Capital Markets','Leveraged Finance','Restructuring','Financial Sponsors Coverage','Industry Coverage (TMT, Healthcare, FIG, Consumer, Industrials, Energy, Real Estate)','Structured Finance & Securitization','Project & Infrastructure Finance','Private Capital Advisory & Placement','Public Finance Banking (Municipal)']],
+['Sales, Trading & Markets',['Equities Sales & Trading','FICC Sales & Trading','Rates & FX Trading','Credit Trading','Commodities Trading','Physical Commodity & Energy Trading','Derivatives Structuring','Quantitative & Systematic Trading','Market Making & Proprietary Trading','Electronic Trading & Execution','Prime Brokerage & Securities Financing','Institutional Sales & Client Coverage']],
+['Research',['Equity Research','Credit & Fixed Income Research','Macro & Economic Research','Quantitative Research','Commodities Research','ESG & Sustainability Research','Credit Ratings','Index & Financial Data Research']],
+['Private Equity & Private Markets',['Buyout Private Equity','Growth Equity','Venture Capital','Private Credit & Direct Lending','Distressed & Special Situations','Secondaries','Fund of Funds & Multi-Manager','Infrastructure Investing','Real Assets & Natural Resources','Impact Investing','Family Office Investing','Sovereign Wealth & Pension Investing','Search Funds & Entrepreneurship Through Acquisition','Portfolio Operations & Value Creation','Investor Relations & Fundraising']],
+['Hedge Funds',['Long/Short Equity','Global Macro','Multi-Strategy','Event-Driven & Merger Arbitrage','Credit & Distressed','Quantitative & Systematic','Activist Investing','Business Development & Fund Operations']],
+['Asset & Wealth Management',['Equity Portfolio Management & Research','Fixed Income Portfolio Management','Multi-Asset & Asset Allocation','ETF & Index Products','Manager Research & Due Diligence','Investment Consulting & OCIO','Endowment & Foundation Investing','Insurance Asset Management','Wealth Management & Private Banking','Financial Planning & Advisory','Trust & Estate Services','Multi-Family Office','Fund Product & Operations','Distribution & Client Relations']],
+['Consulting & Advisory',['Management & Strategy Consulting','Economic Consulting & Litigation Support','Transaction Advisory & Due Diligence','Valuation Advisory','Restructuring & Turnaround Advisory','Operations & Supply Chain Consulting','Technology & Digital Consulting','Risk & Regulatory Consulting','Human Capital & Organization Consulting','Healthcare & Life Sciences Consulting','Public Sector & Government Consulting','Nonprofit & Social Impact Consulting','Forensic Accounting & Investigations','Pricing & Commercial Strategy','ESG & Sustainability Consulting','Real Estate Advisory','Actuarial & Benefits Consulting']],
+['Commercial & Corporate Banking',['Commercial Banking & Middle-Market Lending','Corporate Banking','Credit Analysis & Underwriting','Treasury & Transaction Banking','Trade & Supply Chain Finance','Asset-Based Lending & Leasing','Syndicated Loans & Loan Capital Markets','Small Business Banking','Community & Regional Banking','Retail Banking Management','Consumer Lending, Cards & Mortgage','Specialty & Agricultural Lending','Bank Strategy & Product']],
+['Corporate Finance & Strategy',['Financial Planning & Analysis','Corporate Development & In-House M&A','Corporate Strategy','Treasury','Investor Relations','Controllership & Accounting Operations','Internal Audit','Finance Leadership Development Programs','Strategic Finance','Pricing & Revenue Management','Finance Business Partnering','Business Unit & Divisional Finance','In-House Tax']],
+['Accounting, Audit & Tax',['Audit & Assurance','Tax Advisory','Deals & Transaction Services','Forensic Accounting','Accounting Advisory & Technical Accounting','Risk Assurance & IT Audit','Fund Accounting & Administration','Government & Nonprofit Accounting']],
+['Real Estate',['Real Estate Private Equity & Acquisitions','Real Estate Development','REIT Investing & Analysis','Commercial Real Estate Lending','CRE Brokerage & Capital Markets','Real Estate Asset Management','Property Management','Affordable Housing Finance','Appraisal & Valuation','Proptech & Real Estate Operations']],
+['Risk, Compliance & Controls',['Market Risk','Credit Risk','Operational & Enterprise Risk','Model Risk & Validation','Liquidity & Treasury Risk','Compliance','Financial Crime, AML & KYC','Regulatory Affairs & Policy','Internal Controls & SOX','Third-Party & Vendor Risk','Climate & ESG Risk']],
+['Quantitative Finance, Fintech & Data',['Quantitative Analyst & Strats','Quantitative Developer','Financial Engineering & Derivatives Pricing','Data Science & Analytics','Fintech Product Management','Payments','Digital Assets & Crypto','Lending Technology & Credit Modeling','Insurtech','Wealthtech & Robo-Advisory','Banking Technology & Financial Software','Financial Data & Index Providers','Exchanges & Market Infrastructure','Trading Technology']],
+['Insurance & Actuarial',['Actuarial (Life, P&C, Health, Pensions)','Underwriting','Claims','Reinsurance','Insurance Brokerage','Insurance Investments & ALM','Insurance Product & Pricing','Catastrophe Modeling','Insurance Strategy & Operations']],
+['Public Finance, Policy & Economics',['Municipal Advisory','Central Banking','Financial Regulation (SEC, FDIC, OCC, CFPB, FINRA)','Government Finance & Budget','Economic Research & Think Tanks','Development Finance (World Bank, IFC, IDB, DFC)','Housing Finance Agencies','International Trade & Economics','Public Policy Analysis','Nonprofit & CDFI Finance']],
+['Operations & Middle Office',['Trade Support & Middle Office','Settlements & Clearing','Fund Administration','Custody & Securities Services','Client Onboarding & KYC Operations','Product Control & Valuation Control','Collateral & Margin','Business Management & COO Office','Transformation & Change Management','Data Management & Governance']],
+['Specialty Finance',['Equipment & Vehicle Finance','Aviation & Shipping Finance','Fund Finance & NAV Lending','Litigation Finance','Royalty, Music & Film Finance','Sports Finance','Art & Collectibles Finance','Factoring & Receivables Finance']],
+['General Management & Business Operations',['General Management Rotational Programs','Business Operations & Strategy','Chief of Staff & Business Management','Operations Management','Supply Chain & Logistics','Procurement & Sourcing','Project & Program Management','Product Management','Business Development & Partnerships','B2B Sales & Account Management','Revenue Operations & Customer Success','Marketing & Brand Management','Market Research & Consumer Insights','Human Resources & Talent','Communications & Public Relations','Corporate Social Responsibility','Retail & Franchise Management','Hospitality & Tourism Management','Healthcare Administration','Sports Business & Management','Media & Entertainment Business','Fashion & Luxury Business','Nonprofit Management']],
+['Entrepreneurship & Startups',['Startup Generalist & Founder\'s Associate','Venture Studio, Incubator & Accelerator','Social Enterprise','Small Business Operations','Entrepreneur-in-Residence Programs']]
+];
+class Component extends DCLogic {
+  renderVals(){
+    return { cats: TAX.map(([name, fams]) => ({name, count: fams.length, fams: fams.map(f => ({name: f}))})), catCount: TAX.length, famCount: TAX.reduce((n, t) => n + t[1].length, 0) };
+  }
+}
+</script>
+</body>
+</html>

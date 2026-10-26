@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><style>body{margin:0;background:#f4f4f1;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#160f29;font-variant-numeric:tabular-nums}a{color:#160f29}a:hover{color:#31572c}select,input,textarea{font:inherit;color:inherit}select:focus,input:focus,textarea:focus{outline:2px solid #81bc4e;outline-offset:1px}</style></helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;font-size:13px;line-height:1.35">
+<sc-if value="{{ signedOut }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Sign in" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:120px 20px;text-align:center">
+<div style="display:flex;align-items:center;gap:10px;font-weight:600;font-size:28px;letter-spacing:-.01em"><span style="width:12px;height:12px;border-radius:50%;background:#81bc4e"></span>Kodama</div>
+<div style="color:#4d4a5e;font-size:14px">Internship postings for USF club members, checked at the source.</div>
+<div style="display:flex;flex-wrap:wrap;justify-content:center;border:1px solid #c9c6bb;border-radius:3px;background:#fff;font-size:12.5px;font-weight:500"><span style="padding:8px 16px;border-right:1px solid #c9c6bb">USF Investment Club</span><span style="padding:8px 16px;border-right:1px solid #c9c6bb">USF Consulting Club</span><span style="padding:8px 16px">USF Women in Business</span></div>
+<span onClick="{{ signIn }}" style="display:inline-block;background:#31572c;color:#fff;border-radius:3px;padding:11px 22px;font-weight:600;font-size:14px;cursor:pointer;user-select:none" style-hover="background:#264521">Sign in with USF</span>
+<span style="font-size:11.5px;color:#6b6880">Access comes with club membership. Officers manage the roster.</span>
+</div>
+</sc-if>
+<sc-if value="{{ signedIn }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:26px;padding:0 20px;height:48px;background:#fff;border-bottom:1px solid #160f29;position:sticky;top:0;z-index:5">
+<span data-tour="brand" style="font-weight:600;font-size:16px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;border-radius:50%;background:#81bc4e"></span>Kodama</span>
+<span style="font-size:12px;color:#6b6880;border-left:1px solid #c9c6bb;padding-left:14px;margin-left:-8px;white-space:nowrap">USF Investment Club · USF Consulting Club</span>
+<div style="display:flex;gap:20px;height:100%;align-items:stretch;font-size:13px"><sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3"><span onClick="{{ t.go }}" style="{{ t.style }}">{{ t.label }}</span></sc-for></div>
+<span onClick="{{ tourStart }}" style="margin-left:auto;font-size:12px;color:#6b6880;text-decoration:underline;cursor:pointer;user-select:none" style-hover="color:#160f29">Tour</span>
+<span onClick="{{ goProfile }}" style="font-size:12px;color:#6b6880;cursor:pointer" style-hover="color:#160f29">Maya Chen</span>
+<span onClick="{{ goProfile }}" title="Profile" style="width:26px;height:26px;border-radius:50%;background:#160f29;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:600;cursor:pointer;user-select:none;box-shadow:0 0 0 2px {{ avatarRing }}">MC</span>
+</div>
+
+<sc-if value="{{ isMatches }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Matches" style="display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 20px 12px">
+<span style="font-weight:600;font-size:18px">Matches <span style="display:inline-block;background:#81bc4e;color:#160f29;border-radius:3px;padding:1px 7px;font-size:12px;font-weight:600;vertical-align:3px;margin-left:4px">{{ matchCount }}</span></span>
+<div style="display:flex;border:1px solid #c9c6bb;border-radius:3px;overflow:hidden;font-size:12px;font-weight:500;background:#fff"><sc-for list="{{ sortOpts }}" as="o" hint-placeholder-count="3"><span onClick="{{ o.pick }}" style="{{ o.style }}">{{ o.label }}</span></sc-for></div>
+<input value="{{ search }}" onChange="{{ onSearch }}" placeholder="Search" style="margin-left:auto;width:200px;border:1px solid #c9c6bb;border-radius:3px;padding:5px 10px;font-size:12px;background:#fff;outline:none">
+<span data-tour="filters" onClick="{{ toggleFilters }}" style="{{ filtersBtnStyle }}">{{ filtersLabel }}</span>
+</div>
+<sc-if value="{{ showFilters }}" hint-placeholder-val="{{ false }}">
+<div data-tour="filterpanel" style="margin:0 20px 12px;border:1px solid #160f29;border-radius:3px;background:#fff;font-size:12.5px;overflow:hidden">
+<div style="display:flex;align-items:center;gap:14px;padding:9px 14px;background:#f1f1ee;border-bottom:1px solid #160f29"><span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e">Filters</span><span style="color:#6b6880;font-size:12px">{{ filterSummary }}</span><span onClick="{{ clearFilters }}" style="margin-left:auto;color:#6b6880;font-size:12px;text-decoration:underline;cursor:pointer">Clear all</span><span onClick="{{ toggleFilters }}" style="display:inline-block;background:#160f29;color:#fff;border-radius:3px;padding:4px 12px;font-weight:600;font-size:12px;cursor:pointer;user-select:none" style-hover="background:#31572c">Done</span></div>
+<sc-for list="{{ filterGroups }}" as="g" hint-placeholder-count="6">
+<div style="display:grid;grid-template-columns:150px 1fr;border-bottom:1px solid #e4e3dd"><div style="padding:11px 14px;border-right:1px solid #e4e3dd;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">{{ g.label }}</span><span style="font-size:11px;color:#6b6880">{{ g.sub }}</span></div><div style="padding:9px 14px;display:flex;flex-direction:column;gap:8px;min-width:0"><sc-if value="{{ g.isLocation }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><sc-for list="{{ g.picked }}" as="pk" hint-placeholder-count="2"><span onClick="{{ pk.remove }}" style="{{ pk.style }}">{{ pk.label }}</span></sc-for><div data-loc="1" style="position:relative"><input value="{{ locQ }}" onChange="{{ onLocQ }}" onFocus="{{ openLoc }}" placeholder="{{ g.placeholder }}" style="width:240px;border:1px solid #c9c6bb;border-radius:3px;padding:4px 10px;font-size:12.5px;background:#fff;outline:none"><sc-if value="{{ locOpen }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;top:100%;left:0;margin-top:4px;width:300px;max-height:260px;overflow-y:auto;background:#fff;border:1px solid #160f29;border-radius:3px;box-shadow:0 6px 18px rgba(22,15,41,.12);z-index:20"><sc-for list="{{ locOptions }}" as="lo" hint-placeholder-count="5"><div onClick="{{ lo.pick }}" style="display:flex;align-items:center;gap:10px;padding:7px 12px;border-bottom:1px solid #e4e3dd;cursor:pointer;font-size:12.5px;padding-left:{{ lo.indent }}" style-hover="background:#f3f8ef"><span style="flex:1;font-weight:{{ lo.fw }}">{{ lo.label }}</span><span style="color:#6b6880;font-size:11px">{{ lo.meta }}</span><span style="color:#31572c;font-weight:600;width:12px">{{ lo.check }}</span></div></sc-for><sc-if value="{{ locEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:9px 12px;color:#6b6880;font-size:12px">No matching city or region</div></sc-if></div></sc-if></div></div></sc-if><sc-if value="{{ g.isChips }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ g.chips }}" as="ch" hint-placeholder-count="4"><span onClick="{{ ch.toggle }}" style="{{ ch.style }}">{{ ch.label }}</span></sc-for></div></sc-if></div></div>
+</sc-for>
+<div style="display:grid;grid-template-columns:150px 1fr"><div style="padding:11px 14px;border-right:1px solid #e4e3dd;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">Columns</span><span style="font-size:11px;color:#6b6880">Firm, Program, Checked always on</span></div><div style="padding:11px 14px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center"><sc-for list="{{ colOpts }}" as="c" hint-placeholder-count="6"><label style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" checked="{{ c.on }}" onChange="{{ c.toggle }}" style="margin:0;accent-color:#31572c">{{ c.label }}</label></sc-for></div></div>
+</div>
+</sc-if>
+<div ref="{{ scrollerRef }}" style="overflow-x:auto;background:#fff;border-top:1px solid #160f29;border-bottom:1px solid #160f29"><div style="min-width:{{ tableMin }}px;white-space:nowrap">
+<div data-tour="header" style="display:flex;align-items:stretch;background:#f1f1ee;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e"><span style="width:26px;flex:none"></span><sc-for list="{{ headers }}" as="h" hint-placeholder-count="6"><span data-tour="{{ h.tourKey }}" onClick="{{ h.sort }}" style="{{ h.style }}">{{ h.label }}</span></sc-for></div>
+<sc-for list="{{ rows }}" as="p" hint-placeholder-count="8">
+<div data-tour="{{ p.tourKey }}">
+<div onClick="{{ p.toggle }}" style="display:flex;align-items:stretch;border-bottom:1px solid #e4e3dd;cursor:pointer;font-weight:{{ p.fw }};background:{{ p.bg }};box-shadow:inset 3px 0 {{ p.edge }}" style-hover="background:#f7f7f4"><span style="width:26px;flex:none;padding:8px 0 8px 10px;color:#9a97a8">{{ p.chev }}</span><sc-for list="{{ p.cells }}" as="cell" hint-placeholder-count="6"><span style="{{ cell.style }}"><sc-if value="{{ cell.dot }}" hint-placeholder-val="{{ false }}"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:{{ cell.dotColor }};margin-right:6px;vertical-align:1px"></span></sc-if><sc-if value="{{ cell.tag }}" hint-placeholder-val="{{ false }}"><span style="{{ cell.tagStyle }}">{{ cell.t }}</span></sc-if><sc-if value="{{ cell.plain }}" hint-placeholder-val="{{ true }}">{{ cell.t }}</sc-if><sc-if value="{{ cell.hasAfter }}" hint-placeholder-val="{{ false }}"><span style="{{ cell.afterStyle }}">{{ cell.after }}</span></sc-if></span></sc-for></div>
+<sc-if value="{{ p.open }}" hint-placeholder-val="{{ false }}">
+<div style="position:sticky;left:0;width:{{ panelW }}px;box-sizing:border-box;display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;padding:14px 20px 18px 33px;border-left:3px solid #81bc4e;border-bottom:1px solid #160f29;background:#fafaf7;white-space:normal;font-weight:400">
+<div style="flex:1;min-width:320px;display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+<sc-if value="{{ p.pick }}" hint-placeholder-val="{{ false }}"><span style="display:inline-block;border:1px solid #160f29;border-radius:3px;padding:1px 8px;font-size:11px;font-weight:600;letter-spacing:.03em;background:#fff">Club pick · {{ p.pickBy }}</span></sc-if>
+<div style="display:grid;grid-template-columns:150px 1fr;gap:7px 16px;width:100%;font-size:12.5px;align-content:start">
+<span style="color:#6b6880">Checked</span><span style="color:#31572c;font-weight:600">{{ p.domain }} · {{ p.checkedFull }} · open</span>
+<span style="color:#6b6880">Division</span><span>{{ p.cat }} · {{ p.family }}</span>
+<span style="color:#6b6880">Program dates</span><span>{{ p.dates }}</span>
+<span style="color:#6b6880">Pay</span><span>{{ p.pay }}</span>
+<span style="color:#6b6880">Class of</span><span>{{ p.classOf }}</span>
+<span style="color:#6b6880">Majors</span><span>{{ p.majors }}</span>
+<span style="color:#6b6880">Work authorization</span><span>{{ p.auth }}</span>
+<span style="color:#6b6880">Minimum GPA</span><span>{{ p.gpa }}</span>
+<span style="color:#6b6880">Posted</span><span>{{ p.postedFull }}</span>
+<span style="color:#6b6880">Deadline</span><span style="font-weight:700;color:{{ p.dueColor }}">{{ p.dueLong }}</span>
+</div>
+</div>
+<div style="width:280px;flex:none;display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+<a href="#" onClick="{{ noop }}" style="display:inline-block;background:#31572c;color:#fff;border-radius:3px;padding:10px 18px;font-weight:600;font-size:13px;text-decoration:none;user-select:none" style-hover="background:#264521">Apply on company site →</a>
+<span onClick="{{ p.toggleWatch }}" style="{{ p.watchStyle }}">{{ p.watchLabel }}</span>
+<span onClick="{{ p.toggleReport }}" style="color:#6b6880;font-size:12px;text-decoration:underline;cursor:pointer">Report a problem</span>
+<sc-if value="{{ p.reporting }}" hint-placeholder-val="{{ false }}">
+<div style="border:1px solid #160f29;border-radius:3px;background:#fff;padding:12px;display:flex;flex-direction:column;gap:7px;width:100%;box-sizing:border-box;font-size:12.5px">
+<sc-for list="{{ p.reasons }}" as="rs" hint-placeholder-count="3"><label style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="radio" checked="{{ rs.checked }}" onChange="{{ rs.pick }}" style="margin:0;accent-color:#31572c">{{ rs.label }}</label></sc-for>
+<textarea rows="2" placeholder="Notes" style="border:1px solid #c9c6bb;border-radius:3px;padding:6px 8px;font-size:12.5px;resize:vertical;outline:none;margin-top:2px"></textarea>
+<span onClick="{{ p.sendReport }}" style="display:inline-block;background:#160f29;color:#fff;border-radius:3px;padding:7px 14px;font-weight:600;font-size:12px;cursor:pointer;user-select:none;align-self:flex-start" style-hover="background:#31572c">Send</span>
+</div>
+</sc-if>
+<sc-if value="{{ p.reported }}" hint-placeholder-val="{{ false }}"><span style="color:#31572c;font-weight:600;font-size:12px">Report sent</span></sc-if>
+</div>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div></div>
+<div style="height:28px"></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isWatching }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Watching" style="display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 20px 12px">
+<span style="font-weight:600;font-size:18px">Firms <span style="color:#6b6880;font-weight:400;margin-left:4px">212</span></span>
+<input value="{{ csearch }}" onChange="{{ onCsearch }}" placeholder="Search" style="margin-left:auto;width:200px;border:1px solid #c9c6bb;border-radius:3px;padding:5px 10px;font-size:12px;background:#fff;outline:none">
+<span onClick="{{ chipWatching.toggle }}" style="{{ chipWatching.style }}">{{ chipWatching.label }}</span>
+<span onClick="{{ chipHiring.toggle }}" style="{{ chipHiring.style }}">{{ chipHiring.label }}</span>
+<select value="{{ sector }}" onChange="{{ onSector }}" style="border:1px solid #c9c6bb;border-radius:3px;padding:5px 8px;font-size:12px;background:#fff;cursor:pointer"><sc-for list="{{ sectorOpts }}" as="so" hint-placeholder-count="3"><option value="{{ so.v }}">{{ so.v }}</option></sc-for></select>
+</div>
+<div style="overflow-x:auto;background:#fff;border-top:1px solid #160f29;border-bottom:1px solid #160f29"><div style="min-width:860px;white-space:nowrap">
+<div style="display:grid;grid-template-columns:26px minmax(190px,1.4fr) minmax(150px,1fr) minmax(150px,1fr) 150px 110px 60px;background:#f1f1ee;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e"><span></span><span style="padding:7px 10px;border-right:1px solid #dcdbd4">Firm</span><span style="padding:7px 10px;border-right:1px solid #dcdbd4">Sector</span><span style="padding:7px 10px;border-right:1px solid #dcdbd4">HQ</span><span style="padding:7px 10px;border-right:1px solid #dcdbd4">Open roles for you</span><span style="padding:7px 10px;border-right:1px solid #dcdbd4">Checked</span><span style="padding:7px 10px">Watch</span></div>
+<sc-for list="{{ crows }}" as="c" hint-placeholder-count="8">
+<div data-tour="{{ c.tourKey }}">
+<sc-if value="{{ c.isDivider }}" hint-placeholder-val="{{ false }}"><div style="padding:9px 10px 5px;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#31572c;background:#fafaf7">{{ c.label }}</div></sc-if>
+<sc-if value="{{ c.isRow }}" hint-placeholder-val="{{ true }}">
+<div onClick="{{ c.toggle }}" style="display:grid;grid-template-columns:26px minmax(190px,1.4fr) minmax(150px,1fr) minmax(150px,1fr) 150px 110px 60px;align-items:center;border-bottom:1px solid #e4e3dd;cursor:pointer;box-shadow:inset 3px 0 {{ c.edge }}" style-hover="background:#f7f7f4">
+<span style="padding:8px 0 8px 10px;color:#9a97a8">{{ c.chev }}</span><span style="padding:8px 10px;border-right:1px solid #e4e3dd;font-weight:{{ c.fw }};overflow:hidden;text-overflow:ellipsis">{{ c.name }}</span><span style="padding:8px 10px;border-right:1px solid #e4e3dd"><span style="{{ c.sectorStyle }}">{{ c.sector }}</span></span><span style="padding:8px 10px;border-right:1px solid #e4e3dd;overflow:hidden;text-overflow:ellipsis">{{ c.hq }}</span><span style="padding:8px 10px;border-right:1px solid #e4e3dd;color:{{ c.countColor }};font-weight:{{ c.countFw }}">{{ c.count }}</span><span style="padding:8px 10px;border-right:1px solid #e4e3dd;color:{{ c.checkedColor }}"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:{{ c.dotColor }};margin-right:6px;vertical-align:1px"></span>{{ c.checked }}</span>
+<span style="padding:8px 10px;display:flex;align-items:center"><span onClick="{{ c.toggleWatch }}" style="display:inline-block;width:30px;height:16px;border:1px solid {{ c.toggleBorder }};background:{{ c.toggleBg }};border-radius:999px;position:relative;cursor:pointer"><span style="position:absolute;top:2px;left:{{ c.knobLeft }};width:10px;height:10px;border-radius:50%;background:{{ c.knobColor }};transition:left .15s"></span></span></span>
+</div>
+<sc-if value="{{ c.open }}" hint-placeholder-val="{{ false }}">
+<div style="padding:12px 20px 16px 33px;border-left:3px solid #81bc4e;border-bottom:1px solid #160f29;background:#fafaf7;font-size:12.5px;display:flex;flex-direction:column;gap:8px;white-space:normal">
+<sc-for list="{{ c.roleRows }}" as="rp" hint-placeholder-count="1">
+<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span style="font-weight:600;min-width:260px">{{ rp.program }}</span><span style="color:#6b6880">{{ rp.division }} · {{ rp.where }} · Class of {{ rp.classOf }} · {{ rp.payShort }} · due {{ rp.dueLong }}</span><a href="#" onClick="{{ noop }}" style="margin-left:auto;display:inline-block;background:#31572c;color:#fff;border-radius:3px;padding:5px 12px;font-weight:600;font-size:12px;text-decoration:none" style-hover="background:#264521">Apply →</a></div>
+</sc-for>
+<sc-if value="{{ c.noRoles }}" hint-placeholder-val="{{ false }}"><span style="color:#6b6880">No open roles for you right now.</span></sc-if>
+<span style="color:#6b6880">{{ c.url }} ↗ · checked {{ c.checked }}</span>
+</div>
+</sc-if>
+</sc-if>
+</div>
+</sc-for>
+<div style="padding:9px 10px;font-size:12px;color:#6b6880">… {{ moreCount }} more</div>
+</div></div>
+<div style="padding:12px 20px 28px"><span style="font-size:12px;color:#6b6880;text-decoration:underline;cursor:pointer">Suggest a firm</span></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Profile" style="display:flex;flex-direction:column;gap:18px;padding:16px 20px 32px;max-width:1100px">
+<div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap"><span style="font-weight:600;font-size:18px">Maya Chen</span><span style="color:#6b6880">maya.chen@dons.usfca.edu · {{ eligRest }}</span><span onClick="{{ reset }}" style="margin-left:auto;color:#6b6880;font-size:12px;text-decoration:underline;cursor:pointer">Sign out</span></div>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:-8px"><span style="color:#6b6880;font-size:12px">Clubs</span><span style="display:inline-block;border:1px solid #c9c6bb;border-radius:3px;padding:1px 8px;font-size:11.5px;background:#fff">USF Investment Club · since Sep 2025</span><span style="display:inline-block;border:1px solid #c9c6bb;border-radius:3px;padding:1px 8px;font-size:11.5px;background:#fff">USF Consulting Club · since Jan 2026</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px">
+<div style="border:1px solid #160f29;border-radius:3px;background:#fff">
+<div style="padding:8px 14px;background:#f1f1ee;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e">Résumé</div>
+<div style="padding:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-height:30px">
+<sc-if value="{{ noResume }}" hint-placeholder-val="{{ true }}"><span onClick="{{ upload }}" style="display:inline-block;border:1px dashed #9a97a8;border-radius:3px;color:#4d4a5e;padding:6px 14px;font-size:12px;font-weight:500;cursor:pointer;user-select:none;background:#fff" style-hover="border-color:#31572c;color:#31572c">Upload PDF</span><span style="color:#6b6880;font-size:12px">PDF, up to 5 MB</span></sc-if>
+<sc-if value="{{ hasResume }}" hint-placeholder-val="{{ false }}"><span style="font-weight:600">{{ resume }}</span><span style="color:#6b6880;font-size:12px">Updated today</span><span onClick="{{ upload }}" style="margin-left:auto;display:inline-block;border:1px solid #160f29;border-radius:3px;padding:5px 12px;font-weight:500;font-size:12px;cursor:pointer;user-select:none;background:#fff" style-hover="background:#f1f1ee">Replace</span><span onClick="{{ removeResume }}" style="color:#6b6880;font-size:12px;text-decoration:underline;cursor:pointer">Remove</span></sc-if>
+</div></div>
+<div data-tour="tracking" style="border:1px solid #160f29;border-radius:3px;background:#fff">
+<div style="padding:8px 14px;background:#f1f1ee;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e">Application tracking</div>
+<div style="padding:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-height:30px"><span onClick="{{ toggleTrack }}" style="display:inline-block;width:30px;height:16px;border:1px solid {{ trackBorder }};background:{{ trackBg }};border-radius:999px;position:relative;cursor:pointer;flex:none"><span style="position:absolute;top:2px;left:{{ trackKnob }};width:10px;height:10px;border-radius:50%;background:{{ trackKnobColor }};transition:left .15s"></span></span><span>USF inbox</span><span style="color:#6b6880;font-size:12px">{{ trackMeta }}</span><span onClick="{{ toggleAddApp }}" style="{{ addAppBtnStyle }}">{{ addAppLabel }}</span></div>
+<sc-if value="{{ addApp }}" hint-placeholder-val="{{ false }}"><div style="padding:0 14px 14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center"><input value="{{ newFirm }}" onChange="{{ onNewFirm }}" placeholder="Firm" style="width:160px;border:1px solid #c9c6bb;border-radius:3px;padding:5px 10px;font-size:12.5px;background:#fff;outline:none"><input value="{{ newProgram }}" onChange="{{ onNewProgram }}" placeholder="Program" style="flex:1;min-width:200px;border:1px solid #c9c6bb;border-radius:3px;padding:5px 10px;font-size:12.5px;background:#fff;outline:none"><span onClick="{{ saveApp }}" style="display:inline-block;background:#160f29;color:#fff;border-radius:3px;padding:6px 14px;font-weight:600;font-size:12px;cursor:pointer;user-select:none" style-hover="background:#31572c">Add</span></div></sc-if>
+</div>
+</div>
+<div data-tour="stats" style="display:flex;flex-direction:column;gap:18px">
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid #160f29;border-radius:3px;background:#fff;overflow:hidden"><sc-for list="{{ stats }}" as="st" hint-placeholder-count="4"><div style="{{ st.style }}"><span style="font-size:24px;font-weight:600;line-height:1.1">{{ st.value }}</span><span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e">{{ st.label }}</span></div></sc-for></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px">
+<div style="border:1px solid #160f29;border-radius:3px;background:#fff;display:flex;flex-direction:column">
+<div style="padding:8px 14px;background:#f1f1ee;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e">Applications by week</div>
+<div style="padding:14px 14px 0;display:flex;align-items:flex-end;gap:8px;height:150px;box-sizing:border-box;border-bottom:1px solid #160f29;margin:0 14px 0 0;margin-left:0"><sc-for list="{{ weekBars }}" as="w" hint-placeholder-count="8"><div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%"><span style="font-size:11px;font-weight:600;color:#4d4a5e">{{ w.n }}</span><div style="width:100%;height:{{ w.h }}px;background:{{ w.bg }}"></div></div></sc-for></div>
+<div style="padding:6px 14px 12px;display:flex;gap:8px"><sc-for list="{{ weekBars }}" as="w" hint-placeholder-count="8"><span style="flex:1;text-align:center;font-size:10.5px;color:#6b6880;white-space:nowrap">{{ w.label }}</span></sc-for></div>
+</div>
+<div style="border:1px solid #160f29;border-radius:3px;background:#fff">
+<div style="padding:8px 14px;background:#f1f1ee;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e">Match to offer</div>
+<div style="padding:14px;display:flex;flex-direction:column;gap:9px"><sc-for list="{{ funnelRows }}" as="fr" hint-placeholder-count="5"><div style="display:grid;grid-template-columns:72px 1fr 30px;align-items:center;gap:10px;font-size:12.5px"><span style="color:#4d4a5e">{{ fr.label }}</span><div style="height:14px;background:#f1f1ee"><div style="height:100%;width:{{ fr.w }}%;background:{{ fr.bg }}"></div></div><span style="text-align:right;font-weight:600">{{ fr.n }}</span></div></sc-for></div>
+</div>
+<div style="border:1px solid #160f29;border-radius:3px;background:#fff">
+<div style="padding:8px 14px;background:#f1f1ee;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e">Applied by division</div>
+<div style="padding:14px;display:flex;flex-direction:column;gap:9px"><sc-for list="{{ divRows }}" as="dr" hint-placeholder-count="5"><div style="display:grid;grid-template-columns:130px 1fr 30px;align-items:center;gap:10px;font-size:12.5px"><span style="color:#4d4a5e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ dr.label }}</span><div style="height:14px;background:#f1f1ee"><div style="height:100%;width:{{ dr.w }}%;background:#31572c"></div></div><span style="text-align:right;font-weight:600">{{ dr.n }}</span></div></sc-for></div>
+</div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<span style="font-weight:600;font-size:14px">Applications <span style="color:#6b6880;font-weight:400;margin-left:4px">{{ appCount }}</span></span>
+<div style="overflow-x:auto;background:#fff;border-top:1px solid #160f29;border-bottom:1px solid #160f29"><div style="min-width:860px;white-space:nowrap">
+<div style="display:grid;grid-template-columns:170px minmax(240px,1.6fr) 150px 96px 110px 130px;background:#f1f1ee;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e"><span style="padding:7px 10px;border-right:1px solid #dcdbd4">Firm</span><span style="padding:7px 10px;border-right:1px solid #dcdbd4">Program</span><span style="padding:7px 10px;border-right:1px solid #dcdbd4">Division</span><span style="padding:7px 10px;border-right:1px solid #dcdbd4">Applied</span><span style="padding:7px 10px;border-right:1px solid #dcdbd4">Status</span><span style="padding:7px 10px">Source</span></div>
+<sc-for list="{{ appRows }}" as="a" hint-placeholder-count="8"><div style="display:grid;grid-template-columns:170px minmax(240px,1.6fr) 150px 96px 110px 130px;border-bottom:1px solid #e4e3dd;align-items:center" style-hover="background:#f7f7f4"><span style="padding:8px 10px;border-right:1px solid #e4e3dd;font-weight:{{ a.fw }};overflow:hidden;text-overflow:ellipsis">{{ a.firm }}</span><span style="padding:8px 10px;border-right:1px solid #e4e3dd;overflow:hidden;text-overflow:ellipsis">{{ a.program }}</span><span style="padding:8px 10px;border-right:1px solid #e4e3dd;overflow:hidden;text-overflow:ellipsis">{{ a.div }}</span><span style="padding:8px 10px;border-right:1px solid #e4e3dd;color:#6b6880">{{ a.applied }}</span><span style="padding:8px 10px;border-right:1px solid #e4e3dd"><span style="{{ a.tagStyle }}">{{ a.status }}</span></span><span style="padding:8px 10px;color:#6b6880">{{ a.source }}</span></div></sc-for>
+</div></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Settings" style="display:flex;flex-direction:column;gap:18px;padding:16px 20px 32px;max-width:1100px">
+<span style="font-weight:600;font-size:18px">Settings</span>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:18px;align-items:start">
+<div style="border:1px solid #160f29;border-radius:3px;background:#fff">
+<div style="padding:8px 14px;background:#f1f1ee;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e">Eligibility</div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr);border-bottom:1px solid #e4e3dd"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;display:flex;align-items:center">Class standing</div><div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:32px;box-sizing:border-box"><select value="{{ standing }}" onChange="{{ onStanding }}" style="border:1px solid #c9c6bb;border-radius:3px;padding:4px 8px;font-size:12.5px;background:#fff;cursor:pointer"><option>Freshman</option><option>Sophomore</option><option>Junior</option><option>Senior</option></select><select value="{{ classOf }}" onChange="{{ onClassOf }}" style="border:1px solid #c9c6bb;border-radius:3px;padding:4px 8px;font-size:12.5px;background:#fff;cursor:pointer"><option>2027</option><option>2028</option><option>2029</option><option>2030</option></select></div></div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr);border-bottom:1px solid #e4e3dd"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;display:flex;align-items:center">Majors</div><div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:32px;box-sizing:border-box"><sc-for list="{{ majorChips }}" as="mc" hint-placeholder-count="2"><span onClick="{{ mc.remove }}" style="{{ mc.style }}">{{ mc.label }}</span></sc-for><sc-for list="{{ majorAdd }}" as="ma" hint-placeholder-count="3"><span onClick="{{ ma.add }}" style="{{ ma.style }}">{{ ma.label }}</span></sc-for></div></div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr);border-bottom:1px solid #e4e3dd"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;display:flex;align-items:center">GPA</div><div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:32px;box-sizing:border-box"><input value="{{ gpa }}" onChange="{{ onGpa }}" style="width:56px;border:1px solid #c9c6bb;border-radius:3px;padding:4px 8px;font-size:12.5px;background:#fff;outline:none"></div></div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr)"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;display:flex;align-items:center">Work authorization</div><div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:32px;box-sizing:border-box"><select value="{{ auth }}" onChange="{{ onAuth }}" style="border:1px solid #c9c6bb;border-radius:3px;padding:4px 8px;font-size:12.5px;background:#fff;cursor:pointer"><option>US citizen</option><option>Permanent resident</option><option>F-1 (CPT / OPT)</option><option>Other</option></select></div></div>
+</div>
+<div style="border:1px solid #160f29;border-radius:3px;background:#fff">
+<div style="padding:8px 14px;background:#f1f1ee;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e">Account</div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr);border-bottom:1px solid #e4e3dd"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;display:flex;align-items:center">Email</div><div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:32px;box-sizing:border-box">maya.chen@dons.usfca.edu</div></div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr);border-bottom:1px solid #e4e3dd"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;display:flex;align-items:center">Clubs</div><div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:32px;box-sizing:border-box"><span>USF Investment Club, USF Consulting Club</span><span style="color:#6b6880;font-size:12px">Managed by club officers</span></div></div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr)"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;display:flex;align-items:center">Signed in with</div><div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:32px;box-sizing:border-box">USF single sign-on</div></div>
+</div>
+</div>
+<div data-tour="roles" style="border:1px solid #160f29;border-radius:3px;background:#fff">
+<div style="padding:8px 14px;background:#f1f1ee;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e">Roles · ranked</div>
+<sc-for list="{{ rolesRows }}" as="rr" hint-placeholder-count="3"><div style="display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;border-bottom:1px solid #e4e3dd;box-shadow:inset 3px 0 {{ rr.edge }}"><span style="padding:9px 0;font-weight:700;text-align:center;border-right:1px solid #e4e3dd">{{ rr.n }}</span><span style="padding:9px 14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ rr.label }} <span style="color:#6b6880;font-size:11.5px;margin-left:6px">{{ rr.sub }}</span></span><span style="padding:0 14px;display:flex;align-items:center;gap:2px"><span onClick="{{ rr.up }}" style="cursor:pointer;color:#6b6880;user-select:none;padding:4px 5px" style-hover="color:#160f29">▲</span><span onClick="{{ rr.down }}" style="cursor:pointer;color:#6b6880;user-select:none;padding:4px 5px" style-hover="color:#160f29">▼</span><span onClick="{{ rr.remove }}" style="cursor:pointer;color:#6b6880;user-select:none;padding:4px 0 4px 12px" style-hover="color:#160f29">×</span></span></div></sc-for>
+<div style="padding:10px 14px;display:flex;align-items:center;gap:12px"><span onClick="{{ togglePicker }}" style="{{ pickerBtnStyle }}">{{ pickerLabel }}</span></div>
+<sc-if value="{{ pickerOpen }}" hint-placeholder-val="{{ false }}">
+<div style="border-top:1px solid #160f29;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
+<input value="{{ pickQ }}" onChange="{{ onPickQ }}" placeholder="Search 220 role families" style="width:260px;border:1px solid #c9c6bb;border-radius:3px;padding:5px 10px;font-size:12.5px;background:#fff;outline:none">
+<sc-for list="{{ catRows }}" as="cr" hint-placeholder-count="6">
+<div style="display:flex;flex-direction:column;gap:8px;border-top:1px solid #e4e3dd;padding-top:8px">
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span onClick="{{ cr.toggleOpen }}" style="cursor:pointer;user-select:none;display:flex;gap:8px;align-items:center;flex:1;min-width:0"><span style="color:#9a97a8;width:12px">{{ cr.chev }}</span><span style="font-weight:600">{{ cr.name }}</span><span style="color:#6b6880">{{ cr.count }}</span></span><span onClick="{{ cr.all.toggle }}" style="{{ cr.all.style }}">{{ cr.all.label }}</span></div>
+<sc-if value="{{ cr.open }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-wrap:wrap;gap:6px;padding-left:20px"><sc-for list="{{ cr.fams }}" as="f" hint-placeholder-count="6"><span onClick="{{ f.toggle }}" style="{{ f.style }}">{{ f.label }}</span></sc-for></div></sc-if>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<div style="border:1px solid #160f29;border-radius:3px;background:#fff">
+<div style="padding:8px 14px;background:#f1f1ee;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e">Preferences</div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr);border-bottom:1px solid #e4e3dd"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;display:flex;align-items:center">Terms</div><div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:32px;box-sizing:border-box"><sc-for list="{{ termChips }}" as="ch" hint-placeholder-count="3"><span onClick="{{ ch.toggle }}" style="{{ ch.style }}">{{ ch.label }}</span></sc-for></div></div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr);border-bottom:1px solid #e4e3dd"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;display:flex;align-items:center">Locations</div><div style="padding:9px 14px;display:flex;flex-direction:column;gap:9px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span onClick="{{ toggleAnywhere }}" style="display:inline-block;width:30px;height:16px;border:1px solid {{ anywhereBorder }};background:{{ anywhereBg }};border-radius:999px;position:relative;cursor:pointer;flex:none"><span style="position:absolute;top:2px;left:{{ anywhereKnob }};width:10px;height:10px;border-radius:50%;background:{{ anywhereKnobColor }};transition:left .15s"></span></span><span>Open to anywhere</span><span style="color:#6b6880;font-size:12px">{{ anywhereNote }}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ locChips }}" as="ch" hint-placeholder-count="4"><span onClick="{{ ch.toggle }}" style="{{ ch.style }}">{{ ch.label }}</span></sc-for></div></div></div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr)"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;display:flex;align-items:center">Firm size</div><div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:32px;box-sizing:border-box"><sc-for list="{{ sizeChips }}" as="ch" hint-placeholder-count="3"><span onClick="{{ ch.toggle }}" style="{{ ch.style }}">{{ ch.label }}</span></sc-for></div></div>
+</div>
+<div style="border:1px solid #160f29;border-radius:3px;background:#fff">
+<div style="padding:8px 14px;background:#f1f1ee;border-bottom:1px solid #160f29;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e">Email alerts</div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr);border-bottom:1px solid #e4e3dd"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;display:flex;align-items:center">Top 3</div><div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:32px;box-sizing:border-box"><div style="display:flex;gap:6px"><sc-for list="{{ dayChips }}" as="dc" hint-placeholder-count="7"><span onClick="{{ dc.toggle }}" style="{{ dc.style }}">{{ dc.label }}</span></sc-for></div><span style="color:#6b6880;margin:0 4px 0 8px">at</span><select value="{{ time }}" onChange="{{ onTime }}" style="border:1px solid #c9c6bb;border-radius:3px;padding:4px 8px;font-size:12.5px;background:#fff;cursor:pointer"><option>6:00 am</option><option>7:00 am</option><option>8:00 am</option><option>9:00 am</option><option>12:00 pm</option><option>5:00 pm</option><option>8:00 pm</option></select></div></div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr);border-bottom:1px solid #e4e3dd"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;display:flex;align-items:center">Watched firms</div><div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:32px;box-sizing:border-box"><span onClick="{{ toggleInstant }}" style="display:inline-block;width:30px;height:16px;border:1px solid {{ instantBorder }};background:{{ instantBg }};border-radius:999px;position:relative;cursor:pointer;flex:none"><span style="position:absolute;top:2px;left:{{ instantKnob }};width:10px;height:10px;border-radius:50%;background:{{ instantKnobColor }};transition:left .15s"></span></span><span style="margin-left:4px">Instant</span></div></div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr);border-bottom:1px solid #e4e3dd"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;color:#9a97a8;display:flex;align-items:center">Text</div><div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:32px;box-sizing:border-box"><span style="display:inline-block;width:30px;height:16px;border:1px solid #d6d4cc;border-radius:999px;position:relative;background:#fff;flex:none"><span style="position:absolute;top:2px;left:2px;width:10px;height:10px;border-radius:50%;background:#d6d4cc"></span></span><span style="display:inline-block;border:1px solid #c9c6bb;color:#6b6880;border-radius:3px;padding:0 6px;font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase">Coming soon</span></div></div>
+<div style="display:grid;grid-template-columns:150px minmax(0,1fr)"><div style="padding:10px 14px;border-right:1px solid #e4e3dd;font-weight:500;color:#9a97a8;display:flex;align-items:center">Push</div><div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:32px;box-sizing:border-box"><span style="display:inline-block;width:30px;height:16px;border:1px solid #d6d4cc;border-radius:999px;position:relative;background:#fff;flex:none"><span style="position:absolute;top:2px;left:2px;width:10px;height:10px;border-radius:50%;background:#d6d4cc"></span></span><span style="display:inline-block;border:1px solid #c9c6bb;color:#6b6880;border-radius:3px;padding:0 6px;font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase">Coming soon</span></div></div>
+</div>
+<div style="display:flex;align-items:center;gap:14px"><span onClick="{{ save }}" style="display:inline-block;background:#31572c;color:#fff;border-radius:3px;padding:9px 18px;font-weight:600;font-size:13px;cursor:pointer;user-select:none" style-hover="background:#264521">Save</span><span style="color:#31572c;font-weight:600;font-size:12.5px">{{ savedLabel }}</span></div>
+</div>
+</sc-if>
+</sc-if>
+</div>
+<sc-if value="{{ tourOn }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;inset:0;z-index:40;pointer-events:none">
+<sc-if value="{{ tourHasRect }}" hint-placeholder-val="{{ false }}"><div style="position:fixed;top:{{ tourSpot.top }}px;left:{{ tourSpot.left }}px;width:{{ tourSpot.width }}px;height:{{ tourSpot.height }}px;border:2px solid #81bc4e;border-radius:4px;box-shadow:0 0 0 9999px rgba(22,15,41,.28);transition:top .2s,left .2s,width .2s,height .2s;box-sizing:border-box"></div></sc-if>
+<div style="position:fixed;top:{{ tourCard.top }}px;left:{{ tourCard.left }}px;width:300px;background:#fff;border:1px solid #160f29;border-radius:3px;box-shadow:0 10px 30px rgba(22,15,41,.18);pointer-events:auto;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:12.5px;line-height:1.45;color:#160f29;transition:top .2s,left .2s">
+<div style="padding:8px 14px;background:#f1f1ee;border-bottom:1px solid #160f29;display:flex;align-items:center;gap:10px"><span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#4d4a5e">Tour</span><span style="font-size:11px;color:#6b6880">{{ tourCounter }}</span><span onClick="{{ tourEnd }}" style="margin-left:auto;font-size:12px;color:#6b6880;text-decoration:underline;cursor:pointer;user-select:none">Skip</span></div>
+<div style="padding:12px 14px 4px;display:flex;flex-direction:column;gap:5px"><span style="font-weight:600;font-size:14px">{{ tourTitle }}</span><span style="color:#4d4a5e;text-wrap:pretty">{{ tourBody }}</span></div>
+<div style="padding:10px 14px 12px;display:flex;align-items:center;gap:14px"><span onClick="{{ tourBack }}" style="{{ tourBackStyle }}">Back</span><span onClick="{{ tourNext }}" style="display:inline-block;background:#160f29;color:#fff;border-radius:3px;padding:6px 14px;font-weight:600;font-size:12px;cursor:pointer;user-select:none" style-hover="background:#31572c">{{ tourNextLabel }}</span></div>
+</div>
+</div>
+</sc-if></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;skipSignIn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;autoTour&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+const INK = '#160f29', FOREST = '#31572c', LIME = '#81bc4e', AMBER = '#a9540b', MUTED = '#6b6880', RULE = '#e4e3dd';
+const CHIP = {display:'inline-block',borderRadius:3,padding:'3px 10px',fontSize:12,lineHeight:'16px',whiteSpace:'nowrap',cursor:'pointer',userSelect:'none',background:'#fff'};
+const CHIP_ON = {...CHIP,border:'1px solid ' + FOREST,color:FOREST,fontWeight:600,background:'#f3f8ef'};
+const CHIP_OFF = {...CHIP,border:'1px solid #c9c6bb',color:INK};
+const CHIP_DIM = {...CHIP,border:'1px solid #dcdbd4',color:'#4d4a5e'};
+const SEG = {padding:'5px 12px',fontSize:12,cursor:'pointer',userSelect:'none',whiteSpace:'nowrap'};
+const SEG_ON = {...SEG,background:INK,color:'#fff'};
+const SEG_OFF = {...SEG,background:'#fff',color:INK,borderLeft:'1px solid #c9c6bb'};
+const TAB_ON = {display:'flex',alignItems:'center',borderBottom:'3px solid ' + LIME,fontWeight:600,cursor:'pointer',userSelect:'none',marginBottom:-1};
+const TAB_OFF = {display:'flex',alignItems:'center',borderBottom:'3px solid transparent',color:MUTED,cursor:'pointer',userSelect:'none',marginBottom:-1};
+const BTN_OUT = {display:'inline-block',border:'1px solid ' + INK,borderRadius:3,padding:'7px 14px',fontWeight:500,fontSize:12,cursor:'pointer',userSelect:'none',background:'#fff',whiteSpace:'nowrap'};
+const BTN_OUT_ON = {...BTN_OUT,border:'1px solid ' + FOREST,color:FOREST,fontWeight:600,background:'#f3f8ef'};
+const TAG = {display:'inline-block',border:'1px solid #c9c6bb',color:'#4d4a5e',borderRadius:3,padding:'0 6px',fontSize:11,fontWeight:500,lineHeight:'16px'};
+const TAG_TOP = {...TAG,border:'1px solid ' + FOREST,color:FOREST};
+const cellBase = {padding:'8px 10px',borderRight:'1px solid ' + RULE,minWidth:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',boxSizing:'border-box'};
+const FIRM = {...cellBase,flex:'0 0 170px'};
+const PROG = {...cellBase,flex:'1 1 260px',minWidth:200};
+const fixed = (w, extra) => ({...cellBase,flex:'none',width:w,...extra});
+const HEAD = {padding:'7px 10px',borderRight:'1px solid #dcdbd4',cursor:'pointer',userSelect:'none',boxSizing:'border-box',whiteSpace:'nowrap'};
+const TOUR = [
+  {tab:'matches', key:'header', title:'Your matches', body:"Only postings you're eligible for, confirmed on each firm's own site."},
+  {tab:'matches', key:'top3', title:'Top 3', body:'Bold with a lime edge. Open any row for the facts and Apply.'},
+  {tab:'matches', key:'checked', title:'Checked', body:"Last confirmed on the firm's site. Amber: more than a day ago."},
+  {tab:'matches', key:'filterpanel', title:'All filters', body:'Program, location, division, deadline, pay, class year, columns.'},
+  {tab:'watching', key:'watch', title:'Watching', body:'Toggle a firm on. Instant email when it posts something for you.'},
+  {tab:'profile', key:'stats', title:'Applications', body:'Tracked from your USF inbox. Your résumé lives here too.'},
+  {tab:'settings', key:'roles', title:'Ranked roles', body:'Eligibility filters first. Your ranking sets the order.'}
+];
+let D = null;
+const initial = () => ({
+  signedIn:false, tab:'matches', openPosting:null, openFirm:null, tourStep:null, tourRect:null,
+  watched:['halcyonpartners','marlowereed','ashcombestrategy','wexfordco'],
+  search:'', sort:'Best match', cols:['division','where','classOf','pay','due','posted'], showFilters:false,
+  f: {ptype:[], region:[], where:[], due:[], pay:[], classOf:[], cat:[], watched:[], pick:[]}, locQ:'', locOpen:false,
+  reporting:null, reason:null, reported:[],
+  csearch:'', fWatching:false, fHiring:false, sector:'All sectors',
+  editElig:false, standing:'Junior', classOf:'2028', majors:['Finance','Economics'], gpa:'3.7', auth:'US citizen',
+  roles:['Mergers & Acquisitions','Investment Banking','Buyout Private Equity','Management & Strategy Consulting','Growth Equity'], pickerOpen:false, pickQ:'', openCat:null,
+  terms:['Summer 2027'], locations:['New York','SF Bay Area'], anywhere:true, sizes:['Boutique','Large'], resume:null,
+  days:['Tu','Th'], time:'8:00 am', instant:true, saved:false, panelW:0,
+  track:true, addApp:false, newFirm:'', newProgram:'', addedApps:[]
+});
+class Component extends DCLogic {
+  state = initial();
+  componentDidMount(){ import('./kodama-data.js').then(m => { D = m; this.forceUpdate(); }); this._doc = e => { if (this.state.locOpen && !e.target.closest('[data-loc]')) this.setState({locOpen:false}); }; document.addEventListener('mousedown', this._doc); this._onWin = () => { if (this.state.tourStep !== null) { cancelAnimationFrame(this._raf); this._raf = requestAnimationFrame(this.measure); } }; window.addEventListener('resize', this._onWin); window.addEventListener('scroll', this._onWin, true); }
+  componentDidUpdate(){ const s = this.state; if (s.tourStep === null) { this._lastKey = null; return; } const key = s.tourStep + '|' + s.tab; if (key !== this._lastKey || !s.tourRect) { this._lastKey = key; cancelAnimationFrame(this._raf); this._raf = requestAnimationFrame(this.measure); } }
+  tourGo(n){ if (n < 0 || n >= TOUR.length) return this.tourEnd(); const step = TOUR[n], extra = {showFilters: step.key === 'filterpanel', pickerOpen:false, locOpen:false}; if (D) { if (step.key === 'top3') { const t = D.POSTINGS.find(x => x.top); if (t) extra.openPosting = t.id; } if (step.key === 'watch') { const w = D.FIRMS.find(f => this.state.watched.includes(f.id)) || D.FIRMS[0]; extra.openFirm = w.id; } } this._scrolled = false; cancelAnimationFrame(this._raf); this.setState({tourStep:n, tab:step.tab, tourRect:null, ...extra}); }
+  tourEnd(){ cancelAnimationFrame(this._raf); this.setState({tourStep:null, tourRect:null, showFilters:false}); }
+  measure = () => { const s = this.state; if (s.tourStep === null) return; const el = document.querySelector('[data-tour="' + TOUR[s.tourStep].key + '"]'); if (!el) return; const r = el.getBoundingClientRect(), vh = window.innerHeight, vw = window.innerWidth;
+    if (!this._scrolled) { this._scrolled = true; let moved = false; const isScroll = (cs, a) => /(auto|scroll)/.test(cs[a]);
+      for (let n = el.parentElement; n; n = n.parentElement) { const cs = getComputedStyle(n); if (isScroll(cs, 'overflowX') && n.scrollWidth > n.clientWidth + 1) { if (r.width >= vw - 32) break; if (r.right > vw - 16) { n.scrollLeft += r.right - vw + 40; moved = true; } else if (r.left < 0) { n.scrollLeft += r.left - 40; moved = true; } break; } }
+      if (r.top < 60 || r.bottom > vh - 20) { let sp = null; for (let n = el.parentElement; n; n = n.parentElement) { const cs = getComputedStyle(n); if (isScroll(cs, 'overflowY') && n.scrollHeight > n.clientHeight + 1) { sp = n; break; } } sp = sp || document.scrollingElement || document.documentElement; const want = r.height > vh - 160 ? 64 : Math.min(140, Math.max(64, (vh - r.height) / 2)); sp.scrollTop += r.top - want; moved = true; }
+      if (moved) { this._raf = requestAnimationFrame(this.measure); return; } }
+    const rect = {top: Math.round(r.top) - 4, left: Math.round(r.left) - 4, width: Math.round(r.width) + 8, height: Math.round(r.height) + 8}; const c = s.tourRect; if (!c || c.top !== rect.top || c.left !== rect.left || c.width !== rect.width || c.height !== rect.height) this.setState({tourRect: rect}); };
+  scrollerRef = el => { if (this._ro) { this._ro.disconnect(); this._ro = null; } if (!el) return; const upd = () => { const w = el.clientWidth; if (w && w !== this.state.panelW) this.setState({panelW: w}); }; this._ro = new ResizeObserver(upd); this._ro.observe(el); upd(); };
+  componentWillUnmount(){ if (this._ro) this._ro.disconnect(); clearTimeout(this._t); cancelAnimationFrame(this._raf); document.removeEventListener('mousedown', this._doc); window.removeEventListener('resize', this._onWin); window.removeEventListener('scroll', this._onWin, true); }
+  tog(key, v){ this.setState(s => ({[key]: s[key].includes(v) ? s[key].filter(x => x !== v) : [...s[key], v], saved:false})); }
+  move(key, i, d){ this.setState(s => { const a = [...s[key]], j = i + d; if (j < 0 || j >= a.length) return null; [a[i], a[j]] = [a[j], a[i]]; return {[key]: a, saved:false}; }); }
+  chips(options, key){ return options.map(o => { const on = this.state[key].includes(o); return {label: on ? o + ' ✓' : o, style: on ? CHIP_ON : CHIP_OFF, toggle: () => this.tog(key, o)}; }); }
+  renderVals(){
+    const s = this.state, p = this.props;
+    const signedIn = s.signedIn || !!p.skipSignIn;
+    const tabs = [['matches','Matches'],['watching','Watching'],['profile','Profile'],['settings','Settings']].map(([k, l]) => ({label: l, style: s.tab === k ? TAB_ON : TAB_OFF, go: () => this.setState({tab: k})}));
+    const ts = s.tourStep, tourOn = signedIn && ts !== null, step = tourOn ? TOUR[ts] : null;
+    const vw = window.innerWidth, vh = window.innerHeight, CW = 300, CH = 150, tr = s.tourRect;
+    let card;
+    if (tr) { const below = tr.top + tr.height + 12, above = tr.top - CH - 12; let left = Math.min(Math.max(12, tr.left), Math.max(12, vw - CW - 12)), top; if (below + CH <= vh - 12) top = below; else if (above >= 12) top = above; else { top = vh - CH - 20; left = Math.max(12, vw - CW - 20); } card = {top, left}; } else card = {top: Math.max(12, (vh - CH) / 2), left: Math.max(12, (vw - CW) / 2)};
+    const base = {signedOut: !signedIn, signedIn, signIn: () => { this.setState({signedIn:true}); if (p.autoTour !== false) this.tourGo(0); }, reset: () => this.setState(initial()), noop: e => e.preventDefault(), tabs, isMatches: s.tab === 'matches', isWatching: s.tab === 'watching', isProfile: s.tab === 'profile', isSettings: s.tab === 'settings', goProfile: () => this.setState({tab:'profile'}), avatarRing: s.tab === 'profile' ? LIME : 'transparent', panelW: s.panelW || 900, scrollerRef: this.scrollerRef,
+      tourOn, tourHasRect: !!tr, tourSpot: tr || {top:0, left:0, width:0, height:0}, tourCard: card, tourCounter: step ? (ts + 1) + ' of ' + TOUR.length : '', tourTitle: step ? step.title : '', tourBody: step ? step.body : '', tourBack: () => { if (ts > 0) this.tourGo(ts - 1); }, tourBackStyle: {fontSize:12, textDecoration:'underline', userSelect:'none', color: ts > 0 ? INK : '#c9c6bb', cursor: ts > 0 ? 'pointer' : 'default'}, tourNext: () => this.tourGo(ts + 1), tourNextLabel: step && ts === TOUR.length - 1 ? 'Done' : 'Next', tourEnd: () => this.tourEnd(), tourStart: () => this.tourGo(0)};
+    if (!D) return {...base, rows: [], headers: [], crows: [], tableMin: 900, matchCount: '', sortOpts: [], colOpts: [], filterGroups: [], filtersLabel: 'All filters ▾', filtersBtnStyle: {...CHIP_OFF, padding:'5px 12px'}, rolesRows: [], catRows: [], termChips: [], locChips: [], sizeChips: [], dayChips: [], majorChips: [], majorAdd: [], eligView: true, stats: [], weekBars: [], funnelRows: [], divRows: [], appRows: [], sectorOpts: []};
+    const {TAX, CAT_OF, CATS, POSTINGS, FIRMS, COLS, REASONS, TERM_OPTIONS, LOC_OPTIONS, SIZE_OPTIONS, MAJOR_OPTIONS, DAYS, APPLICATIONS, WEEKS, FUNNEL_TOP} = D;
+    const apps = [...s.addedApps, ...APPLICATIONS];
+    const weekCounts = WEEKS.map((_, i) => apps.filter(a => a.week === i).length);
+    const maxWeek = Math.max(1, ...weekCounts);
+    const weekBars = WEEKS.map((label, i) => ({label, n: weekCounts[i] || '', h: Math.max(weekCounts[i] ? 3 : 1, Math.round(weekCounts[i] / maxWeek * 100)), bg: weekCounts[i] ? (i === WEEKS.length - 1 ? LIME : FOREST) : RULE}));
+    const interviews = apps.filter(a => a.status === 'Interview').length;
+    const funnel = [...FUNNEL_TOP, ['Applied', apps.length], ['Interview', interviews], ['Offer', 0]];
+    const funnelRows = funnel.map(([label, n], i) => ({label, n, w: n ? Math.max(1.5, n / funnel[0][1] * 100) : 0, bg: i < 2 ? INK : FOREST}));
+    const divCounts = apps.reduce((m, a) => { m[a.div] = (m[a.div] || 0) + 1; return m; }, {});
+    const maxDiv = Math.max(1, ...Object.values(divCounts));
+    const divRows = Object.entries(divCounts).sort((a, b) => b[1] - a[1]).map(([label, n]) => ({label, n, w: n / maxDiv * 100}));
+    const replies = apps.filter(a => a.replyDays != null).map(a => a.replyDays).sort((a, b) => a - b);
+    const median = !replies.length ? null : replies.length % 2 ? replies[(replies.length - 1) / 2] : (replies[replies.length / 2 - 1] + replies[replies.length / 2]) / 2;
+    const stats = [[apps.length, 'Applied'], [interviews, 'Interviews'], [Math.round(replies.length / Math.max(1, apps.length) * 100) + '%', 'Reply rate'], [median === null ? '—' : median + ' days', 'Median time to reply']].map(([value, label], i, arr) => ({value, label, style: {padding:'12px 14px', borderRight: i < arr.length - 1 ? '1px solid ' + RULE : 'none', display:'flex', flexDirection:'column', gap:3, minWidth:0}}));
+    const TAG_DIM = {...TAG, color: MUTED, border: '1px solid #dcdbd4'};
+    const appRows = apps.map(a => ({...a, fw: a.status === 'Interview' ? 600 : 400, tagStyle: a.status === 'Interview' ? TAG_TOP : a.status === 'Applied' ? TAG : TAG_DIM}));
+    const profileVals = {stats, weekBars, funnelRows, divRows, appRows, appCount: apps.length,
+      trackBorder: s.track ? FOREST : '#c9c6bb', trackBg: s.track ? FOREST : '#fff', trackKnob: s.track ? '16px' : '2px', trackKnobColor: s.track ? '#fff' : '#9a97a8', toggleTrack: () => this.setState(t => ({track: !t.track})), trackMeta: s.track ? 'Last scan today 9:14am' : 'Off',
+      addApp: s.addApp, addAppLabel: s.addApp ? 'Cancel' : 'Add an application', addAppBtnStyle: {...BTN_OUT, marginLeft:'auto', padding:'5px 12px'}, toggleAddApp: () => this.setState(t => ({addApp: !t.addApp, newFirm:'', newProgram:''})),
+      newFirm: s.newFirm, onNewFirm: e => this.setState({newFirm: e.target.value}), newProgram: s.newProgram, onNewProgram: e => this.setState({newProgram: e.target.value}),
+      saveApp: () => { if (!s.newFirm.trim()) return; this.setState(t => ({addedApps: [{firm: t.newFirm.trim(), program: t.newProgram.trim() || '—', div: '—', applied: 'Oct 26', status: 'Applied', source: 'Added by you', week: WEEKS.length - 1}, ...t.addedApps], addApp:false, newFirm:'', newProgram:''})); }};
+    const firmId = name => (FIRMS.find(c => c.name === name) || {}).id;
+    const q = s.search.trim().toLowerCase();
+    const f = s.f, any = k => f[k].length > 0;
+    const payBand = x => /\/ yr|\/yr/.test(x.pay) ? 'Salaried' : /hour/.test(x.pay) ? 'Hourly' : /month/.test(x.pay) ? 'Monthly stipend' : 'Unpaid or travel only';
+    const dueBand = x => x.rolling ? 'Rolling' : x.dueDays <= 14 ? 'Within 2 weeks' : x.dueDays <= 30 ? 'Within 30 days' : x.dueDays <= 60 ? '31–60 days' : 'Later';
+    const postedBand = x => x.postedH <= 24 ? 'Today' : x.postedH <= 168 ? 'This week' : 'Earlier';
+    const classBands = x => x.classOf.split(', ').map(c => 'Class of ' + c);
+    const {REGIONS, REGION_ORDER, PTYPES} = D;
+    const ptypeOf = x => PTYPES.includes(x.ptype) ? x.ptype : 'Other';
+    const regionOf = x => REGIONS[x.where] || 'Other';
+    const filtered = POSTINGS.filter(x => {
+      const id = firmId(x.firm);
+      const locOk = !any('region') && !any('where') ? true : f.where.includes(x.where) || (f.region.includes(regionOf(x)) && !f.where.some(w => REGIONS[w] === regionOf(x)));
+      return (!any('ptype') || f.ptype.includes(ptypeOf(x))) && locOk && (!any('due') || f.due.includes(dueBand(x))) && (!any('pay') || f.pay.includes(payBand(x))) && (!any('classOf') || classBands(x).some(c => f.classOf.includes(c))) && (!any('cat') || f.cat.includes(x.cat)) && (!any('watched') || s.watched.includes(id)) && (!any('pick') || x.pick) && (!q || (x.firm + ' ' + x.program + ' ' + x.family + ' ' + x.division).toLowerCase().includes(q));
+    });
+    const togF = (k, v) => this.setState(t => ({f: {...t.f, [k]: t.f[k].includes(v) ? t.f[k].filter(x => x !== v) : [...t.f[k], v]}}));
+    const uniq = a => [...new Set(a)];
+    const countBy = fn => POSTINGS.reduce((m, x) => { const k = fn(x); m[k] = (m[k] || 0) + 1; return m; }, {});
+    const fchips = (k, opts, counts) => opts.map(o => { const on = f[k].includes(o); const n = counts ? counts[o] || 0 : null; return {label: (on ? o + ' ✓' : o) + (n !== null ? ' · ' + n : ''), style: on ? CHIP_ON : n === 0 ? CHIP_DIM : CHIP_OFF, toggle: () => togF(k, o)}; });
+    const regionCounts = countBy(regionOf), cityCounts = countBy(x => x.where);
+    const ALL_CITIES = Object.keys(REGIONS).filter(c => c !== 'Remote');
+    const lq = s.locQ.trim().toLowerCase();
+    const locOptions = [];
+    REGION_ORDER.forEach(r => {
+      const citiesIn = ALL_CITIES.filter(c => REGIONS[c] === r).sort();
+      const rHit = !lq || r.toLowerCase().includes(lq), cHits = citiesIn.filter(c => c.toLowerCase().includes(lq));
+      if (!rHit && !cHits.length) return;
+      const rOn = f.region.includes(r);
+      locOptions.push({label: r, meta: (regionCounts[r] || 0) + (r === 'Remote' ? '' : ' · ' + citiesIn.length + ' cities'), fw: 600, indent: '12px', check: rOn ? '✓' : '', pick: () => { togF('region', r); this.setState({locQ:''}); }});
+      if (r !== 'Remote') (lq ? cHits : citiesIn).forEach(c => { const cOn = f.where.includes(c); locOptions.push({label: c, meta: String(cityCounts[c] || 0), fw: 400, indent: '28px', check: cOn ? '✓' : '', pick: () => { togF('where', c); this.setState({locQ:''}); }}); });
+    });
+    const picked = [...f.region.map(r => ({label: r + ' ×', style: CHIP_ON, remove: () => togF('region', r)})), ...f.where.map(c => ({label: c + ' ×', style: CHIP_ON, remove: () => togF('where', c)}))];
+    const filterGroups = [
+      {label:'Program', sub:'Type of posting', isChips:true, chips: fchips('ptype', PTYPES, countBy(ptypeOf))},
+      {label:'Location', sub:'Cities and regions', isLocation:true, isChips:false, picked, placeholder: picked.length ? 'Add another' : 'Type a city or region'},
+      {label:'Division', sub:'Role category', isChips:true, chips: fchips('cat', uniq(POSTINGS.map(x => x.cat)).sort(), countBy(x => x.cat))},
+      {label:'Deadline', sub:'Time left to apply', isChips:true, chips: fchips('due', ['Rolling','Within 2 weeks','Within 30 days','31–60 days','Later'], countBy(dueBand))},
+      {label:'Pay', sub:'As stated by the firm', isChips:true, chips: fchips('pay', ['Salaried','Hourly','Monthly stipend','Unpaid or travel only'], countBy(payBand))},
+      {label:'Class of', sub:'Eligible graduation year', isChips:true, chips: fchips('classOf', ['Class of 2027','Class of 2028','Class of 2029','Class of 2030'], POSTINGS.reduce((m, x) => { classBands(x).forEach(c => { m[c] = (m[c] || 0) + 1; }); return m; }, {}))},
+      {label:'Lists', sub:'Watching and club picks', isChips:true, chips: [{label: (any('watched') ? 'Watched firms only ✓' : 'Watched firms only') + ' · ' + POSTINGS.filter(x => s.watched.includes(x.firmId)).length, style: any('watched') ? CHIP_ON : CHIP_OFF, toggle: () => togF('watched', 'on')}, {label: (any('pick') ? 'Club picks only ✓' : 'Club picks only') + ' · ' + POSTINGS.filter(x => x.pick).length, style: any('pick') ? CHIP_ON : CHIP_OFF, toggle: () => togF('pick', 'on')}]}
+    ];
+    const activeCount = Object.values(f).reduce((n, a) => n + a.length, 0);
+    const rankOf = x => { let r = Infinity; s.roles.forEach((pick, i) => { if (i < r && (pick === x.family || pick === x.cat)) r = i; }); return r; };
+    const cmp = {'Best match': (a, b) => ((b.top ? 1 : 0) - (a.top ? 1 : 0)) || (rankOf(a) - rankOf(b)) || (a.postedH - b.postedH), 'Newest': (a, b) => a.postedH - b.postedH, 'Deadline': (a, b) => (a.dueDays ?? -1) - (b.dueDays ?? -1)}[s.sort];
+    const sorted = filtered.slice().sort(cmp);
+    const colOn = COLS.filter(([k]) => s.cols.includes(k));
+    const sortFor = k => k === 'posted' ? () => this.setState({sort:'Newest'}) : k === 'due' ? () => this.setState({sort:'Deadline'}) : null;
+    const hdrStyle = (k, w, right) => ({...HEAD, ...(w ? {flex:'none', width:w} : k === 'firm' ? {flex:'0 0 170px'} : {flex:'1 1 260px', minWidth:200}), ...(right ? {textAlign:'right'} : {}), color: (k === 'posted' && s.sort === 'Newest') || (k === 'due' && s.sort === 'Deadline') ? FOREST : '#4d4a5e'});
+    const headers = [{label:'Firm', style:hdrStyle('firm'), sort:null}, {label:'Program', style:hdrStyle('program'), sort:null}, ...colOn.map(([k, l, w]) => ({label: (k === 'posted' && s.sort === 'Newest') || (k === 'due' && s.sort === 'Deadline') ? l + ' ▴' : l, style:hdrStyle(k, w, k === 'pay'), sort: sortFor(k)})), {label:'Checked', style:{...hdrStyle('checked', 110), borderRight:'none'}, sort:null, tourKey:'checked'}];
+    const firstId = sorted.length ? sorted[0].id : null;
+    const tableMin = 26 + 170 + 260 + 110 + colOn.reduce((n, c) => n + c[2], 0);
+    const rows = sorted.map(x => { const id = firmId(x.firm); const watching = s.watched.includes(id); const open = s.openPosting === x.id; const soon = x.dueDays !== null && x.dueDays <= 30;
+      const cells = [{t:x.firm, style:FIRM, plain:true}, {t:x.program, style: x.pick ? {...PROG, display:'flex', alignItems:'center', gap:8} : PROG, plain:true, hasAfter: x.pick, after:'Club pick', afterStyle: {...TAG, flex:'none', fontWeight:600, border:'1px solid ' + INK, color:INK, order:-1}},
+        ...colOn.map(([k, l, w]) => {
+          if (k === 'division') return {t:x.division, style:fixed(w), tag:true, plain:false, tagStyle: x.top ? TAG_TOP : TAG};
+          if (k === 'pay') return {t:x.payShort, style:fixed(w, {textAlign:'right'}), plain:true};
+          if (k === 'due') return {t: x.rolling ? 'Rolling' : x.due + ' · ' + x.dueDays + 'd', style:fixed(w, {color: soon ? FOREST : INK, fontWeight: soon ? 700 : 'inherit'}), plain:true};
+          if (k === 'posted') return {t:x.posted, style:fixed(w, {color:MUTED}), plain:true};
+          return {t:x[k], style:fixed(w), plain:true}; }),
+        {t:x.checked, style:fixed(110, {borderRight:'none', color: x.stale ? AMBER : MUTED}), plain:true, dot:true, dotColor: x.stale ? AMBER : LIME}];
+      return {...x, open, chev: open ? '▾' : '▸', bg: open ? '#fbfbf9' : '#fff', fw: x.top ? 600 : 400, edge: x.top ? LIME : 'transparent', dueColor: soon ? FOREST : INK, cells, tourKey: x.id === firstId ? 'top3' : undefined,
+        toggle: () => this.setState(t => ({openPosting: t.openPosting === x.id ? null : x.id, reporting:null})),
+        watchLabel: watching ? 'Watching ' + x.firm + ' ✓' : 'Watch ' + x.firm, watchStyle: watching ? BTN_OUT_ON : BTN_OUT,
+        toggleWatch: e => { e.stopPropagation(); this.tog('watched', id); },
+        reporting: s.reporting === x.id,
+        toggleReport: () => this.setState(t => ({reporting: t.reporting === x.id ? null : x.id, reason:null})),
+        reasons: REASONS.map(r => ({label: r, checked: s.reason === r, pick: () => this.setState({reason: r})})),
+        sendReport: () => this.setState(t => ({reported: [...t.reported, x.id], reporting:null})),
+        reported: s.reported.includes(x.id)}; });
+    const cq = s.csearch.trim().toLowerCase();
+    const firms = FIRMS.map(c => ({...c, roles: POSTINGS.filter(x => x.firm === c.name)})).filter(c => (!cq || c.name.toLowerCase().includes(cq)) && (s.sector === 'All sectors' || c.sector === s.sector) && (!s.fHiring || c.roles.length));
+    const crow = c => { const watching = s.watched.includes(c.id); const open = s.openFirm === c.id; return {...c, isRow:true, isDivider:false, open, chev: open ? '▾' : '▸', count: c.roles.length, noRoles: !c.roles.length, roleRows: c.roles, fw: watching ? 600 : 400, edge: watching ? LIME : 'transparent', sectorStyle: watching ? TAG_TOP : TAG, countColor: c.roles.length ? INK : MUTED, countFw: c.roles.length ? 600 : 400, checkedColor: c.stale ? AMBER : MUTED, dotColor: c.stale ? AMBER : LIME, toggleBorder: watching ? FOREST : '#c9c6bb', toggleBg: watching ? FOREST : '#fff', knobLeft: watching ? '16px' : '2px', knobColor: watching ? '#fff' : '#9a97a8',
+      toggle: () => this.setState(t => ({openFirm: t.openFirm === c.id ? null : c.id})),
+      toggleWatch: e => { e.stopPropagation(); this.tog('watched', c.id); }}; };
+    const wl = firms.filter(c => s.watched.includes(c.id)), ol = s.fWatching ? [] : firms.filter(c => !s.watched.includes(c.id));
+    const crows = [];
+    if (wl.length) crows.push({isDivider:true, isRow:false, label:'Watching · ' + wl.length});
+    wl.forEach(c => crows.push(crow(c)));
+    if (ol.length) crows.push({isDivider:true, isRow:false, label:'All firms'});
+    ol.forEach(c => crows.push(crow(c)));
+    const firstRow = crows.find(r => r.isRow); if (firstRow) firstRow.tourKey = 'watch';
+    const hiring = FIRMS.filter(c => POSTINGS.some(x => x.firm === c.name)).length;
+    const roleChip = (val, label) => { const on = s.roles.includes(val); return {label: on ? label + ' ✓' : label, style: on ? CHIP_ON : CHIP_DIM, toggle: () => this.tog('roles', val)}; };
+    const pq = s.pickQ.trim().toLowerCase();
+    const catRows = TAX.map(([cat, fams]) => { const shown = pq ? fams.filter(f => f.toLowerCase().includes(pq)) : fams; if (pq && !shown.length && !cat.toLowerCase().includes(pq)) return null; const open = pq ? true : s.openCat === cat;
+      return {name: cat, count: fams.length, open, chev: open ? '▾' : '▸', toggleOpen: () => this.setState(t => ({openCat: t.openCat === cat ? null : cat})), all: roleChip(cat, 'All'), fams: shown.map(f => roleChip(f, f))}; }).filter(Boolean);
+    const set = key => e => this.setState({[key]: e.target.value, saved:false});
+    return {...base, ...profileVals,
+      matchCount: filtered.length, search: s.search, onSearch: e => this.setState({search: e.target.value}),
+      showFilters: s.showFilters, toggleFilters: () => this.setState(t => ({showFilters: !t.showFilters})), filtersLabel: activeCount ? 'All filters · ' + activeCount : 'All filters ▾', filtersBtnStyle: s.showFilters || activeCount ? {...CHIP_ON, padding:'5px 12px'} : {...CHIP_OFF, padding:'5px 12px'},
+      filterGroups, clearFilters: () => this.setState({f: initial().f, locQ:''}), filterSummary: filtered.length + ' of ' + POSTINGS.length + ' postings',
+      locQ: s.locQ, onLocQ: e => this.setState({locQ: e.target.value, locOpen:true}), openLoc: () => this.setState({locOpen:true}), locOpen: s.locOpen, locOptions, locEmpty: locOptions.length === 0,
+      sortOpts: ['Best match','Newest','Deadline'].map((o, i) => ({label: o, style: s.sort === o ? {...SEG_ON, borderLeft: i ? '1px solid ' + INK : 'none'} : {...SEG_OFF, borderLeft: i ? '1px solid #c9c6bb' : 'none'}, pick: () => this.setState({sort: o})})),
+      colOpts: COLS.map(([k, l]) => ({label: l, on: s.cols.includes(k), toggle: () => this.tog('cols', k)})),
+      headers, tableMin, rows,
+      csearch: s.csearch, onCsearch: e => this.setState({csearch: e.target.value}),
+      chipWatching: {label: 'Watching · ' + s.watched.length, style: s.fWatching ? {...CHIP_ON, padding:'5px 10px'} : {...CHIP_OFF, padding:'5px 10px'}, toggle: () => this.setState(t => ({fWatching: !t.fWatching}))},
+      chipHiring: {label: 'Hiring now · ' + hiring, style: s.fHiring ? {...CHIP_ON, padding:'5px 10px'} : {...CHIP_OFF, padding:'5px 10px'}, toggle: () => this.setState(t => ({fHiring: !t.fHiring}))},
+      sector: s.sector, onSector: set('sector'), crows, moreCount: 212 - FIRMS.length, sectorOpts: ['All sectors', ...uniq(FIRMS.map(c => c.sector)).sort()].map(v => ({v})),
+      eligView: !s.editElig, eligEdit: s.editElig, editElig: () => this.setState({editElig:true}), doneElig: () => this.setState({editElig:false}),
+      standing: s.standing, onStanding: set('standing'), classOf: s.classOf, onClassOf: set('classOf'),
+      eligRest: 'Class of ' + s.classOf + ' · ' + s.majors.join(', ') + ' · GPA ' + s.gpa + ' · ' + s.auth,
+      majorChips: s.majors.map(m => ({label: m + ' ×', style: CHIP_ON, remove: () => this.tog('majors', m)})), majorAdd: MAJOR_OPTIONS.filter(m => !s.majors.includes(m)).map(m => ({label: m, style: CHIP_DIM, add: () => this.tog('majors', m)})),
+      gpa: s.gpa, onGpa: set('gpa'), auth: s.auth, onAuth: set('auth'),
+      rolesRows: s.roles.map((r, i) => { const isCat = CATS.includes(r); return {n: i + 1, label: isCat ? 'All ' + r : r, sub: isCat ? '' : CAT_OF[r], edge: i < 3 ? LIME : 'transparent', up: () => this.move('roles', i, -1), down: () => this.move('roles', i, 1), remove: () => this.tog('roles', r)}; }),
+      pickerOpen: s.pickerOpen, pickerLabel: s.pickerOpen ? 'Done' : '+ Add roles', pickerBtnStyle: {...BTN_OUT, ...(s.pickerOpen ? {border:'1px solid ' + FOREST, color:FOREST, fontWeight:600} : {})}, togglePicker: () => this.setState(t => ({pickerOpen: !t.pickerOpen, pickQ:''})), pickQ: s.pickQ, onPickQ: e => this.setState({pickQ: e.target.value}), catRows,
+      termChips: this.chips(TERM_OPTIONS, 'terms'), locChips: this.chips(LOC_OPTIONS, 'locations'), sizeChips: this.chips(SIZE_OPTIONS, 'sizes'),
+      anywhereBorder: s.anywhere ? FOREST : '#c9c6bb', anywhereBg: s.anywhere ? FOREST : '#fff', anywhereKnob: s.anywhere ? '16px' : '2px', anywhereKnobColor: s.anywhere ? '#fff' : '#9a97a8', toggleAnywhere: () => this.setState(t => ({anywhere: !t.anywhere, saved:false})), anywhereNote: s.anywhere ? 'Picked locations rank first' : 'Only picked locations',
+      hasResume: !!s.resume, noResume: !s.resume, resume: s.resume, upload: () => this.setState({resume:'maya-chen-resume.pdf', saved:false}), removeResume: () => this.setState({resume:null, saved:false}),
+      dayChips: this.chips(DAYS, 'days'), time: s.time, onTime: set('time'),
+      instantBorder: s.instant ? FOREST : '#c9c6bb', instantBg: s.instant ? FOREST : '#fff', instantKnob: s.instant ? '16px' : '2px', instantKnobColor: s.instant ? '#fff' : '#9a97a8', toggleInstant: () => this.setState(t => ({instant: !t.instant, saved:false})),
+      save: () => { this.setState({saved:true}); clearTimeout(this._t); this._t = setTimeout(() => this.setState({saved:false}), 2500); }, savedLabel: s.saved ? 'Saved' : ''
+    };
+  }
+}
+</script>
+</body>
+</html>
